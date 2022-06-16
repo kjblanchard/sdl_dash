@@ -1,5 +1,5 @@
-# include(GenerateExportHeader)
-cmake_minimum_required(VERSION 3.23.2)
+include(GenerateExportHeader)
+cmake_minimum_required(VERSION 3.2)
 #Random status message
 message(STATUS "Starting Engine Cmake..")
 
@@ -10,6 +10,7 @@ add_library(supergoon_engine SHARED ${FILES})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h
 # generate_export_header(supergoon_engine)
+generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
 
 #Define library names / references to their link files that we depend on, shared is dynamic linking.  Imported needs a specific location.
 # set(libnames libfmod libfmodstudio SDL2 SDL2_image)
@@ -41,6 +42,7 @@ target_include_directories(supergoon_engine
         PUBLIC
         # ${libpaths}
         "${CMAKE_CURRENT_SOURCE_DIR}/"
+        "${CMAKE_BINARY_DIR}/exports/"
         )
 #Set c++20 standard for this.
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
@@ -82,7 +84,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     message(STATUS "Setting MSVC flags")
     # MSVC
-    # target_compile_options(roukavici PRIVATE /EHsc /W2 /c)
+    target_compile_options(supergoon_engine PRIVATE /EHsc /W2 /c)
     # Set the DLLEXPORT variable to export symbols
     # target_compile_definitions(roukavici PRIVATE WIN_EXPORT)
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
@@ -92,4 +94,10 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     message(STATUS "Setting Apple Clang Flags")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
+else()
+    message(STATUS ${CMAKE_CXX_COMPILER_ID})
+    message(STATUS "How did we get here")
+    target_compile_options(supergoon_engine PRIVATE /EHsc /W2 /c)
+    target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
+
 endif()
