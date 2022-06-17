@@ -1,6 +1,7 @@
 #include <iostream>
 #include <supergoon_engine/test.h>
 
+
 int main(int, char**) {
     std::cout << "Hello, world!\n";
     auto vec2 = Vector2();
