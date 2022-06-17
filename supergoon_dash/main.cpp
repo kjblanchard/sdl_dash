@@ -1,13 +1,13 @@
 #include <iostream>
-#include <primitives/Vector2.h>
+#include <supergoon_engine/test.h>
 
 int main(int, char**) {
     std::cout << "Hello, world!\n";
-    auto key = Vector2();
-    key.x = 10;
-    key.y = 0;
+    auto vec2 = Vector2();
+    auto num = vec2.Help();
+    std::cout << num << std::endl;
 
-    std::cout << key.x << std::endl;
+
 }
 
 

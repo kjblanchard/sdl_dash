@@ -6,6 +6,7 @@ message(STATUS "Starting Engine Cmake..")
 #Add all of our source files and headers to this library.
 # file(GLOB FILES "sgengine/**/*.?pp")
 file(GLOB FILES "${CMAKE_SOURCE_DIR}/**/*.?pp")
+add_subdirectory(./lib/SDL2-2.0.22)
 add_library(supergoon_engine SHARED ${FILES})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h
@@ -37,13 +38,6 @@ generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exp
 #         set_target_properties(${library} PROPERTIES LINK_FLAGS "-Wl,-rpath,./libs")
 # endforeach()
 
-#Include directories for the sgengine.
-target_include_directories(supergoon_engine
-        PUBLIC
-        # ${libpaths}
-        "${CMAKE_CURRENT_SOURCE_DIR}/"
-        "${CMAKE_BINARY_DIR}/exports/"
-        )
 #Set c++20 standard for this.
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
@@ -77,6 +71,19 @@ set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 #                 ${CMAKE_CURRENT_BINARY_DIR}/libsgengine.dylib
 #                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/libsgengine.dylib)
 
+#Test compiling SDL from source.
+# You may want to add their include directories since your code might use their header files. If libdependency is exporting its symbols properly you shouldn't have to do this though.
+# target_include_directories(supergoon_engine PRIVATE )
+# We can now add their CMakeList as a child to ours.
+# add_subdirectory(./lib/SDL2-2.022)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+find_package(SDL2 REQUIRED)
+
+# And now, we tell CMake that libdependency should be linked to our library
+target_link_libraries(supergoon_engine PUBLIC SDL2)
+
+
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     message(STATUS "Setting G++ flags")
     # G++
@@ -101,3 +108,11 @@ else()
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
 
 endif()
+#Include directories for the sgengine.
+target_include_directories(supergoon_engine
+        PUBLIC
+        # ${libpaths}
+        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        "${CMAKE_BINARY_DIR}/exports/"
+        "./lib/SDL2-2.0.22/include/"
+        )
