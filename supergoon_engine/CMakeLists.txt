@@ -2,10 +2,10 @@ include(GenerateExportHeader)
 cmake_minimum_required(VERSION 3.2)
 #Random status message
 message(STATUS "Starting Engine Cmake..")
+message(STATUS ${CMAKE_SOURCE_DIR})
 
 #Add all of our source files and headers to this library.
-# file(GLOB FILES "sgengine/**/*.?pp")
-file(GLOB FILES "${CMAKE_SOURCE_DIR}/**/*.?pp")
+file(GLOB FILES supergoon_engine/**/*.?pp)
 add_subdirectory(./lib/SDL2-2.0.22)
 add_library(supergoon_engine SHARED ${FILES})
 
