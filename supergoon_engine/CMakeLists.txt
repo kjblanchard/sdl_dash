@@ -18,10 +18,13 @@ set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
 # Sets the module path, this is so that we can use the find sdl package below with the FindSDL2.cmake file in the location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
+# We are building this from source
 find_package(SDL2 REQUIRED)
+# This package has a config.cmake file in its download, so it is different
+find_package(SDL2_image CONFIG REQUIRED)
 
 
-# Add external libraries.
+# Add external libraries, these don't use cmake at all so we have a longer process.
 add_library(fmod SHARED IMPORTED)
 add_library(fmodstudio SHARED IMPORTED)
 if(WIN32)
@@ -46,11 +49,7 @@ elseif(APPLE)
 elseif(UNIX)
     message(STATUS "Setting Up Linux")
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmod.so)
-    # set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmod.so.13)
-    # set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmod.so.13.7)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmodstudio.so)
-    # set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmodstudio.so.13)
-    # set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmodstudio.so.13.7)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(COPY_LIBS libfmod.so libfmodstudio.so libfmodstudio.so.13 libfmodstudio.so.13.7)
 endif()
@@ -75,7 +74,7 @@ target_include_directories(supergoon_engine
         )
 
 message(STATUS "Linking to the external libraries.")
-target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio)
+target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image)
 
 
 message(STATUS "Copying the Libraries to the output folder.")

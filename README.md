@@ -1,4 +1,9 @@
-Commented out a section in 
+License:
+
+Pixel art: https://pixelfrog-assets.itch.io/pixel-adventure-1
+
+
+Commented out a section in
 SDL_audiocvt.c
 That was causing build errors inside of windows, did not reach out currently.
 
