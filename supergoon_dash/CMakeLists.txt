@@ -13,7 +13,8 @@ add_custom_command(
         TARGET supergoon_dash POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_CURRENT_SOURCE_DIR}/assets
-                ${CMAKE_CURRENT_BINARY_DIR}/assets)
+                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+        )
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     message(STATUS "Setting G++ flags")

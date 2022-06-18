@@ -1,12 +1,12 @@
 #include <supergoon_engine/sound/sound.hpp>
-#include <fmod/include/fmod.hpp>
+#include <fmod.hpp>
+#include <fmod_studio.hpp>
 #include <iostream>
-#include <fmod/include/fmod_studio.hpp>
 
-FMOD::Studio::System *SoundSystem::loaded_system = nullptr;
-FMOD::Studio::EventInstance *SoundSystem::current_music = nullptr;
+FMOD::Studio::System *Sound::loaded_system = nullptr;
+FMOD::Studio::EventInstance *Sound::current_music = nullptr;
 
-void SoundSystem::play_sfx_oneshot()
+void Sound::play_sfx_oneshot()
 {
 
     FMOD::Studio::EventDescription *event;
@@ -15,14 +15,14 @@ void SoundSystem::play_sfx_oneshot()
     event->createInstance(&loaded_event);
     loaded_event->start();
 }
-void SoundSystem::restart()
+void Sound::restart()
 {
     auto result = current_music->stop(FMOD_STUDIO_STOP_IMMEDIATE);
     result = current_music->start();
 }
 
 FMOD::Studio::System *
-SoundSystem::Setup()
+Sound::Setup()
 {
     FMOD::Studio::System *system = nullptr;
     auto result = FMOD::Studio::System::create(&system);
@@ -45,15 +45,15 @@ SoundSystem::Setup()
     coreSystem->getMasterChannelGroup(&main_channel_group);
 
     std::cout << result;
-    SoundSystem::loaded_system = system;
+    Sound::loaded_system = system;
     return system;
 }
-void SoundSystem::stop_music_with_fadeout()
+void Sound::stop_music_with_fadeout()
 {
     current_music->stop(FMOD_STUDIO_STOP_ALLOWFADEOUT);
 }
 
-void SoundSystem::Update()
+void Sound::Update()
 {
-    SoundSystem::loaded_system->update();
+    Sound::loaded_system->update();
 }

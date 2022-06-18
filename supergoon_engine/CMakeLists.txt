@@ -45,10 +45,15 @@ generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exp
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 find_package(SDL2 REQUIRED)
 
 # And now, we tell CMake that libdependency should be linked to our library
+message(STATUS "Setting Up Fmod for Mac")
+add_library(fmod SHARED IMPORTED)
+add_library(fmodstudio SHARED IMPORTED)
+set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/mac/libfmod.dylib)
+set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/mac/libfmodstudio.dylib)
 
 
 
@@ -69,16 +74,16 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     message(STATUS "Setting Apple Clang Flags")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
-    message(STATUS "Setting Up Fmod for Mac")
-    add_library(fmod SHARED IMPORTED)
-    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION "./lib/fmod/lib/mac/libfmod.dylib")
-    add_library(fmodstudio SHARED IMPORTED)
-    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION "./lib/fmod/lib/mac/libfmodstudio.dylib")
     add_custom_command(
             TARGET supergoon_engine POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/mac/libfmod.dylib
             ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libfmod.dylib)
+    add_custom_command(
+            TARGET supergoon_engine POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/mac/libfmodstudio.dylib
+            ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libfmodstudio.dylib)
     # Add relative paths to link to for distribution.
     set_target_properties(fmod PROPERTIES LINK_FLAGS "-Wl,-rpath,./lib")
     set_target_properties(fmodstudio PROPERTIES LINK_FLAGS "-Wl,-rpath,./lib")
@@ -90,13 +95,12 @@ else()
 
 endif()
 # target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio)
-target_link_libraries(supergoon_engine PUBLIC SDL2 )
 #Include directories for the sgengine.
 target_include_directories(supergoon_engine
         PUBLIC
-        # ${libpaths}
         "${CMAKE_CURRENT_SOURCE_DIR}/"
         "${CMAKE_BINARY_DIR}/exports/"
         "./lib/SDL2-2.0.22/include/"
         "./lib/fmod/include/"
         )
+target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio)
