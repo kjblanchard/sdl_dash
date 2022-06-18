@@ -1,3 +1,5 @@
+#include <supergoon_engine_export.h>
+
 namespace FMOD{
     namespace Studio{
         class System;
@@ -6,7 +8,7 @@ namespace FMOD{
 }
 
 
-class Sound
+class SUPERGOON_ENGINE_EXPORT Sound
 {
 private:
     static FMOD::Studio::System *loaded_system;
