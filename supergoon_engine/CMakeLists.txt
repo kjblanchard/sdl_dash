@@ -2,7 +2,6 @@ include(GenerateExportHeader)
 cmake_minimum_required(VERSION 3.2)
 #Random status message
 message(STATUS "Starting Engine Cmake..")
-message(STATUS ${CMAKE_SOURCE_DIR})
 
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
@@ -10,20 +9,24 @@ add_subdirectory(./lib/SDL2-2.0.22)
 add_library(supergoon_engine SHARED ${FILES})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h
-# generate_export_header(supergoon_engine)
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
 
-#Define library names / references to their link files that we depend on, shared is dynamic linking.  Imported needs a specific location.
-# set(libnames libfmod libfmodstudio SDL2 SDL2_image)
+
+# add_library(fmod SHARED IMPORTED)
+# set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ./lib/fmod/lib/libfmod.dylib)
+# add_library(fmodstudio SHARED IMPORTED)
+# set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ./lib/fmod/lib/libfmodstudio.dylib)
+# set(libnames fmod fmodstudio)
 # foreach(library ${libnames})
 #         add_library(${library} SHARED IMPORTED)
 # endforeach()
 
-#Set a variable for our external library paths
-# set (libpaths
-#         "/Library/Frameworks/FMOD Programmers API/api/studio/inc/"
-#         "/Library/Frameworks/FMOD Programmers API/api/core/inc/"
-#         )
+# foreach(library ${libnames})
+#     set_target_properties( ${library}
+#                             PROPERTIES IMPORTED_LOCATION
+#                             ./lib/${library}.dylib
+#                             )
+
 
 #Add absolute paths to link to for development.
 # foreach(library ${libnames})
@@ -41,46 +44,11 @@ generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exp
 #Set c++20 standard for this.
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
-#Actually create the links.
-# target_link_libraries(sgengine PUBLIC ${libnames})
 
-#POST BUILD - Copy the libraries required for this project from my PC to the build folder for easy distribution.  For some reason, for each wasn't working.
-# add_custom_command(
-#         TARGET sgengine POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 /usr/local/lib/libfmod.dylib
-#                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/libfmod.dylib)
-# add_custom_command(
-#         TARGET sgengine POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 /usr/local/lib/libfmodstudio.dylib
-#                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/libfmodstudio.dylib)
-# add_custom_command(
-#         TARGET sgengine POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 /usr/local/lib/SDL2.dylib
-#                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/SDL2.dylib)
-# add_custom_command(
-#         TARGET sgengine POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 /usr/local/lib/SDL2_image.dylib
-#                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/SDL2_image.dylib)
-# add_custom_command(
-#         TARGET sgengine POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 ${CMAKE_CURRENT_BINARY_DIR}/libsgengine.dylib
-#                 ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}/lib/libsgengine.dylib)
-
-#Test compiling SDL from source.
-# You may want to add their include directories since your code might use their header files. If libdependency is exporting its symbols properly you shouldn't have to do this though.
-# target_include_directories(supergoon_engine PRIVATE )
-# We can now add their CMakeList as a child to ours.
-# add_subdirectory(./lib/SDL2-2.022)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(SDL2 REQUIRED)
 
 # And now, we tell CMake that libdependency should be linked to our library
-target_link_libraries(supergoon_engine PUBLIC SDL2)
 
 
 
@@ -101,6 +69,19 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     message(STATUS "Setting Apple Clang Flags")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
+    message(STATUS "Setting Up Fmod for Mac")
+    add_library(fmod SHARED IMPORTED)
+    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION "./lib/fmod/lib/mac/libfmod.dylib")
+    add_library(fmodstudio SHARED IMPORTED)
+    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION "./lib/fmod/lib/mac/libfmodstudio.dylib")
+    add_custom_command(
+            TARGET supergoon_engine POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/mac/libfmod.dylib
+            ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libfmod.dylib)
+    # Add relative paths to link to for distribution.
+    set_target_properties(fmod PROPERTIES LINK_FLAGS "-Wl,-rpath,./lib")
+    set_target_properties(fmodstudio PROPERTIES LINK_FLAGS "-Wl,-rpath,./lib")
 else()
     message(STATUS ${CMAKE_CXX_COMPILER_ID})
     message(STATUS "How did we get here")
@@ -108,6 +89,8 @@ else()
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
 
 endif()
+# target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio)
+target_link_libraries(supergoon_engine PUBLIC SDL2 )
 #Include directories for the sgengine.
 target_include_directories(supergoon_engine
         PUBLIC
@@ -115,4 +98,5 @@ target_include_directories(supergoon_engine
         "${CMAKE_CURRENT_SOURCE_DIR}/"
         "${CMAKE_BINARY_DIR}/exports/"
         "./lib/SDL2-2.0.22/include/"
+        "./lib/fmod/include/"
         )

@@ -1,5 +1,6 @@
  #define SDL_MAIN_HANDLED
  #include <SDL.h>
+ #include <supergoon_engine/sound/sound.hpp>
 class Vector2{
 	public:
 	int Help()

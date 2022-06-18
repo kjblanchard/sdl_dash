@@ -8,16 +8,12 @@ target_include_directories(supergoon_dash
         "${CMAKE_CURRENT_SOURCE_DIR}/"
         )
 target_link_libraries(supergoon_dash PUBLIC supergoon_engine)
-# add_custom_command(
-#         TARGET main POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 ${CMAKE_SOURCE_DIR}/geometrydash/sfx/Master.bank
-#                 ${CMAKE_CURRENT_BINARY_DIR}/sfx/Master.bank)
-# add_custom_command(
-#         TARGET main POST_BUILD
-#         COMMAND ${CMAKE_COMMAND} -E copy
-#                 ${CMAKE_SOURCE_DIR}/geometrydash/sfx/Master.strings.bank
-#                 ${CMAKE_CURRENT_BINARY_DIR}/sfx/Master.strings.bank)
+
+add_custom_command(
+        TARGET supergoon_dash POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_CURRENT_SOURCE_DIR}/assets
+                ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     message(STATUS "Setting G++ flags")
