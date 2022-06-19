@@ -27,16 +27,20 @@ SDL_Renderer *World::renderer;
 
 void World::Initialize()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
+    if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
-    if (TTF_Init() != 0)
+    auto sdl_ttf_init_result = TTF_Init();
+    if (sdl_ttf_init_result != 0)
         throw std::runtime_error(TTF_GetError());
-    if (IMG_Init(IMG_INIT_JPG) != 0)
+    auto sdl_image_init_result = IMG_Init(IMG_INIT_PNG);
+    if (sdl_image_init_result == 0)
         throw std::runtime_error(IMG_GetError());
 
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
+    // TODO remove the hard coding here.
     windowWidth = 1920;
     windowHeight = 1080;
     unscaledWidth = 256;

@@ -3,9 +3,6 @@
 #include <SDL.h>
 #include <supergoon_engine_export.h>
 
-const int FPS = 60;
-const int MILLISECS_PER_FRAME = 1000 / FPS;
-
 class SUPERGOON_ENGINE_EXPORT World
 {
 private:
@@ -15,12 +12,10 @@ private:
     // SDL_Renderer *renderer;
     SDL_Rect camera;
 
-
     const char *windowWidthStr = "window_width";
     const char *windowHeightStr = "window_height";
     const char *unscaledWidthStr = "unscaled_width";
     const char *unscaledHeightStr = "unscaled_height";
-
 
 public:
     World();
@@ -43,4 +38,8 @@ public:
     static int screenScaleRatioWidth;
     static int screenScaleRatioHeight;
     static bool isDebug;
+
+    const int FPS = 60;
+    // The amount of Milliseconds per frame
+    const double MILLISECS_PER_FRAME = 1000.00 / FPS;
 };
