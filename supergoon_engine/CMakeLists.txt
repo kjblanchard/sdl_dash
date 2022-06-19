@@ -7,7 +7,7 @@ message(STATUS "Starting Supergoon Engine Cmake")
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
 # Add the SDL folder as we are building it as source.
-add_subdirectory(./lib/SDL2-2.0.22)
+add_subdirectory(./external/SDL2-2.0.22)
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES})
 
@@ -20,25 +20,29 @@ set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 # We are building this from source
 find_package(SDL2 REQUIRED)
-# This package has a config.cmake file in its download, so it is different
-
 
 # Add external libraries, these don't use cmake at all so we have a longer process.
 add_library(fmod SHARED IMPORTED)
 add_library(fmodstudio SHARED IMPORTED)
+# Define where our files are to be copied from.
+set(EXTERNAL_BIN_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/external/bin)
 if(WIN32)
     message(STATUS "Setting up windows build information.")
 # Set the filenames for the libs, this is due to the libs being built for different platforms, windows has different names.
-    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/fmod.dll)
-    set_target_properties(fmod PROPERTIES IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/fmod_vc.lib)
-    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/fmodstudio.dll)
-    set_target_properties(fmodstudio PROPERTIES IMPORTED_IMPLIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/fmodstudio_vc.lib)
+    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmod.dll)
+    set_target_properties(fmod PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmod_vc.lib)
+    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmodstudio.dll)
+    set_target_properties(fmodstudio PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmodstudio_vc.lib)
+    add_library(SDL2_image::SDL2_image SHARED IMPORTED)
+    set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_image.dll)
+    set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_image.lib)
+    target_include_directories(supergoon_engine PRIVATE "./lib/SDL2_Image/include/")
     # We need to use the exports on windows as dlls are funky business
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
     # Set the output of external libs to the runtime folder, due to dlls not getting the proper linking flags in other folders.
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     # Windows libs to copy over, they have different names
-    set(COPY_LIBS fmod.dll fmodstudio.dll)
+    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
     # Find the SDL2_image package in the frameworks folder.
@@ -71,12 +75,13 @@ target_include_directories(supergoon_engine
         PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/"
         "${CMAKE_BINARY_DIR}/exports/"
-        "./lib/SDL2-2.0.22/include/"
-        "./lib/fmod/include/"
+        "./external/SDL2-2.0.22/include/"
+        "./external/include/"
         )
 
 message(STATUS "Linking to the external libraries.")
-target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+# target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmodstudio SDL2_image::SDL2_image )
 
 
 message(STATUS "Copying the Libraries to the output folder.")
@@ -85,7 +90,7 @@ foreach( file_i ${COPY_LIBS})
     TARGET supergoon_engine
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/${file_i} ${EXTERNAL_LIBRARY_OUTPUT_DIR}/${file_i}
+    ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/external/bin/${file_i} ${EXTERNAL_LIBRARY_OUTPUT_DIR}/${file_i}
     )
 endforeach( file_i )
 

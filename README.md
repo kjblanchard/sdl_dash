@@ -2,6 +2,12 @@ License:
 
 Pixel art: https://pixelfrog-assets.itch.io/pixel-adventure-1
 
+Commented out a section in the SDL cmake that causes windows dll to have a d
+# Set defaults preventing destination file conflicts
+
+# set(SDL_CMAKE_DEBUG_POSTFIX "d"
+#     CACHE STRING "Name suffix for debug builds")
+
 
 Commented out a section in
 SDL_audiocvt.c
