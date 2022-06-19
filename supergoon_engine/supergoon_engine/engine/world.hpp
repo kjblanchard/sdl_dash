@@ -1,11 +1,12 @@
 #pragma once
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <supergoon_engine_export.h>
 
 const int FPS = 60;
 const int MILLISECS_PER_FRAME = 1000 / FPS;
 
-class World
+class SUPERGOON_ENGINE_EXPORT World
 {
 private:
     bool isRunning;

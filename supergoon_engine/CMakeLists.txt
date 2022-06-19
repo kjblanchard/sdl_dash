@@ -38,13 +38,15 @@ if(WIN32)
     add_library(SDL2_image::SDL2_image SHARED IMPORTED)
     set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_image.dll)
     set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_image.lib)
-    target_include_directories(supergoon_engine PRIVATE "./lib/SDL2_Image/include/")
+    add_library(SDL2_ttf::SDL2_ttf SHARED IMPORTED)
+    set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.dll)
+    set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.lib)
     # We need to use the exports on windows as dlls are funky business
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
     # Set the output of external libs to the runtime folder, due to dlls not getting the proper linking flags in other folders.
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     # Windows libs to copy over, they have different names
-    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll)
+    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll SDL2_ttf.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
     # Find the SDL2_image package in the frameworks folder.

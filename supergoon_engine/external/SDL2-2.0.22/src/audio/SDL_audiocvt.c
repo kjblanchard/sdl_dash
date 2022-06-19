@@ -79,10 +79,10 @@ SDL_ConvertStereoToMono_SSE3(SDL_AudioCVT * cvt, SDL_AudioFormat format)
     /* Do SSE blocks as long as we have 16 bytes available.
        Just use unaligned load/stores, if the memory at runtime is
        aligned it'll be just as fast on modern processors */
-    while (i >= 4) {   /* 4 * float32 */
-        _mm_storeu_ps(dst, _mm_mul_ps(_mm_hadd_ps(_mm_loadu_ps(src), _mm_loadu_ps(src+4)), divby2));
-        i -= 4; src += 8; dst += 4;
-    }
+    // while (i >= 4) {   /* 4 * float32 */
+    //     _mm_storeu_ps(dst, _mm_mul_ps(_mm_hadd_ps(_mm_loadu_ps(src), _mm_loadu_ps(src+4)), divby2));
+    //     i -= 4; src += 8; dst += 4;
+    // }
 
     /* Finish off any leftovers with scalar operations. */
     while (i) {

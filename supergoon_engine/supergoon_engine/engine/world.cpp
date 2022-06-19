@@ -31,7 +31,7 @@ void World::Initialize()
         throw std::runtime_error(SDL_GetError());
     if (TTF_Init() != 0)
         throw std::runtime_error(TTF_GetError());
-    if (!(IMG_Init(IMG_INIT_PNG)))
+    if (IMG_Init(IMG_INIT_JPG) != 0)
         throw std::runtime_error(IMG_GetError());
 
     SDL_DisplayMode displayMode;
