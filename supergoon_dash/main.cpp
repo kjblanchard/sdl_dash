@@ -7,9 +7,11 @@ int main(int, char**) {
     auto vec2 = Vector2();
     auto num = vec2.Help();
     std::cout << num << std::endl;
-	while(true)
+	bool sound_playing = false;
+	std::cout << "About to start the musif if you have it enabled, which is : " << sound_playing << std::endl;
+	while(sound_playing)
 	{
-		std::cout << "num" << std::endl;
+		Sound::Setup();
 		SDL_Delay(10);
 		Sound::Update();
 	}

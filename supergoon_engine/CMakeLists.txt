@@ -86,7 +86,7 @@ target_include_directories(supergoon_engine
 
 message(STATUS "Linking to the external libraries.")
 # target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
-target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmodstudio SDL2_image::SDL2_image )
+target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf )
 
 
 message(STATUS "Copying the Libraries to the output folder.")
