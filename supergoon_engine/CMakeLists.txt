@@ -1,5 +1,7 @@
 # Needed for windows defining declspecs automatically
 include(GenerateExportHeader)
+# Used for linux.
+include(FindPkgConfig)
 # Use the most current version.
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
@@ -54,8 +56,11 @@ elseif(APPLE)
     set(COPY_LIBS libfmod.dylib libfmodstudio.dylib)
 elseif(UNIX)
     message(STATUS "Setting Up Linux")
-    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmod.so)
-    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmodstudio.so)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(SDL2_image REQUIRED SDL2_image)
+    pkg_check_modules(SDL2_ttf REQUIRED SDL2_ttf)
+    set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.so)
+    set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.so)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(COPY_LIBS libfmod.so libfmodstudio.so libfmodstudio.so.13 libfmodstudio.so.13.7)
 endif()
