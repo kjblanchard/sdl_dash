@@ -117,33 +117,6 @@ Latest commit 9413e76 on Apr 6
 #
 # Normal rules (sorted alphabetically)
 #
-.*
-*.a
-*.asn1.[ch]
-*.bin
-*.bz2
-*.c.[012]*.*
-*.dt.yaml
-*.dtb
-*.dtbo
-*.dtb.S
-*.dwo
-*.elf
-*.gcno
-*.gz
-*.i
-*.ko
-*.lex.c
-*.ll
-*.lst
-*.lz4
-*.lzma
-*.lzo
-*.mod
-*.mod.c
-*.o
-*.o.*
-*.patch
 *.s
 *.so
 *.so.*
@@ -267,3 +240,5 @@ x509.genkey
 
 # Clang's compilation database file
 /compile_commands.json
+
+!supergoon_engine/external/SDL2-2.0.22/
