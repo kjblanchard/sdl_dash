@@ -1,6 +1,6 @@
 #pragma once
-//  #define SDL_MAIN_HANDLED
-// #include <SDL.h>
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 
 const int FPS = 60;
 const int MILLISECS_PER_FRAME = 1000 / FPS;
@@ -10,9 +10,9 @@ class World
 private:
     bool isRunning;
     int millisecsPreviousFrame = 0;
-    // SDL_Window *window;
-    // // SDL_Renderer *renderer;
-    // SDL_Rect camera;
+    SDL_Window *window;
+    // SDL_Renderer *renderer;
+    SDL_Rect camera;
 
 
     const char *windowWidthStr = "window_width";
@@ -24,14 +24,14 @@ private:
 public:
     World();
     ~World();
-    // void Initialize();
-    // void Run();
-    // void Setup();
-    // void ProcessInput();
-    // void Update();
-    // void Render();
-    // void Destroy();
-    // static SDL_Renderer *renderer;
+    void Initialize();
+    void Run();
+    void Setup();
+    void ProcessInput();
+    void Update();
+    void Render();
+    void Destroy();
+    static SDL_Renderer *renderer;
 
     static int windowWidth;
     static int windowHeight;
@@ -42,5 +42,4 @@ public:
     static int screenScaleRatioWidth;
     static int screenScaleRatioHeight;
     static bool isDebug;
-    // static constexpr char *config_file_string = (char*)"cfg.lua";
 };
