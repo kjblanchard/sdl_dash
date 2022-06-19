@@ -21,7 +21,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 # We are building this from source
 find_package(SDL2 REQUIRED)
 # This package has a config.cmake file in its download, so it is different
-find_package(SDL2_image CONFIG REQUIRED)
 
 
 # Add external libraries, these don't use cmake at all so we have a longer process.
@@ -42,6 +41,9 @@ if(WIN32)
     set(COPY_LIBS fmod.dll fmodstudio.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
+    # Find the SDL2_image package in the frameworks folder.
+    find_package(SDL2_image CONFIG REQUIRED)
+    find_package(SDL2_ttf CONFIG REQUIRED)
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmod.dylib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmod/lib/libfmodstudio.dylib)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -74,7 +76,7 @@ target_include_directories(supergoon_engine
         )
 
 message(STATUS "Linking to the external libraries.")
-target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image)
+target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
 
 
 message(STATUS "Copying the Libraries to the output folder.")

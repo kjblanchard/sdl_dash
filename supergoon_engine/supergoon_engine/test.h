@@ -1,7 +1,7 @@
  #define SDL_MAIN_HANDLED
  #include <SDL.h>
  #include <SDL_image.h>
-//  #include <SDL_image.h>
+ #include <SDL_ttf.h>
  #include <supergoon_engine/sound/sound.hpp>
 class Vector2{
 	public:
@@ -23,6 +23,15 @@ class Vector2{
 	SDL_RenderClear(renderer);
 	SDL_RenderSetVSync(renderer, 1);
 	SDL_RenderPresent(renderer);
+	int imgFlags = IMG_INIT_PNG;
+	if( !( IMG_Init( imgFlags ) & imgFlags ) )
+	{
+		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+	}
+	if( TTF_Init() == -1 )
+	{
+		printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
 
 	Sound::Setup();
 
