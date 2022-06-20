@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
+
 World* World::instance = nullptr;
 World::World() : isRunning{false}, vsync_enabled{false}
 {
