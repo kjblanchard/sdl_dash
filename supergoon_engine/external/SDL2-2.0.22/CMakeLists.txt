@@ -75,8 +75,8 @@ set(DYLIB_CURRENT_VERSION 23.0.0)
 set(DYLIB_COMPATIBILITY_VERSION 1.0.0)
 
 # Set defaults preventing destination file conflicts
-set(SDL_CMAKE_DEBUG_POSTFIX "d"
-    CACHE STRING "Name suffix for debug builds")
+# set(SDL_CMAKE_DEBUG_POSTFIX "d"
+#     CACHE STRING "Name suffix for debug builds")
 
 mark_as_advanced(CMAKE_IMPORT_LIBRARY_SUFFIX SDL_CMAKE_DEBUG_POSTFIX)
 

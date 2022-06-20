@@ -29,9 +29,12 @@ void World::Initialize()
     auto sdl_ttf_init_result = TTF_Init();
     if (sdl_ttf_init_result != 0)
         throw std::runtime_error(TTF_GetError());
-    auto sdl_image_init_result = IMG_Init(IMG_INIT_PNG);
-    if (sdl_image_init_result == 0)
-        throw std::runtime_error(IMG_GetError());
+    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+    int initted = IMG_Init(flags);
+    if ((initted & flags) != flags) {
+        printf("IMG_Init: Failed to init required jpg and png support!\n");
+        printf("IMG_Init: %s\n", IMG_GetError());
+    }
 
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);

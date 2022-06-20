@@ -44,9 +44,9 @@ if(WIN32)
     # We need to use the exports on windows as dlls are funky business
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
     # Set the output of external libs to the runtime folder, due to dlls not getting the proper linking flags in other folders.
-    set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+    set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
     # Windows libs to copy over, they have different names
-    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll SDL2_ttf.dll)
+    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll SDL2_ttf.dll libjpeg-9.dll libpng16-16.dll zlib1.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
     # Find the SDL2_image package in the frameworks folder.
@@ -92,6 +92,8 @@ target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmo
 
 
 message(STATUS "Copying the Libraries to the output folder.")
+
+
 foreach( file_i ${COPY_LIBS})
     add_custom_command(
     TARGET supergoon_engine

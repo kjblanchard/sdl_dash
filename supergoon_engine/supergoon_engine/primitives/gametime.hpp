@@ -62,7 +62,7 @@ public:
      * Checks to see if we should sleep between frames.  Useful to not have 100% cpu when not using vsync.
      * @return The amount of time that we should sleep on this tick
      */
-    ushort CheckForSleepTime();
+    unsigned short CheckForSleepTime();
     /**
      * This function should run all the time to determine if it should run a new frame
      */

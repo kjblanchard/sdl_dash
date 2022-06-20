@@ -21,11 +21,11 @@ void Gametime::UpdateClockTimer()
         time_since_last_update = 0;
 }
 
-ushort Gametime::CheckForSleepTime()
+unsigned short Gametime::CheckForSleepTime()
 {
     auto timeToWait = MillisecondsPerFrame() - time_since_last_update;
     if (timeToWait < 0)
         return 0;
-    auto wait_time_int = static_cast<ushort>(ceil(timeToWait));
+    auto wait_time_int = static_cast<unsigned short>(ceil(timeToWait));
     return wait_time_int;
 }

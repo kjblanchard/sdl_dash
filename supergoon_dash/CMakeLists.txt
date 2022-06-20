@@ -9,11 +9,17 @@ target_include_directories(supergoon_dash
         )
 target_link_libraries(supergoon_dash PUBLIC supergoon_engine)
 
+if(WIN32)
+    set(ASSET_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/assets)
+else()
+    set(ASSET_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets)
+endif()
+
 add_custom_command(
         TARGET supergoon_dash POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_CURRENT_SOURCE_DIR}/assets
-                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+                ${ASSET_OUTPUT_DIR}
         )
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
