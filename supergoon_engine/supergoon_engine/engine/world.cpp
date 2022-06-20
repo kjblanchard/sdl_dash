@@ -2,11 +2,19 @@
 #include <stdexcept>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
+#include <supergoon_engine/primitives/gametime.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-World::World() : isRunning{false}, vsync_enabled{true}
+World* World::instance = nullptr;
+World::World() : isRunning{false}, vsync_enabled{false}
 {
+    world_gametime = std::make_unique<Gametime>();
+    if(World::instance == nullptr)
+    World::instance = this;
+    else{
+        throw std::runtime_error("World was already created");
+    }
 }
 
 World::~World()
@@ -88,25 +96,9 @@ void World::Setup()
     Sound::Setup();
 }
 
-void World::Update()
+void World::Update(Gametime &gametime)
 {
-    // Since we want to only update a specific number of times, lets do some wait time.
-    auto total_ticks_update_begin = SDL_GetTicks64();
-    if (vsync_enabled == false)
-    {
-        auto ticks_since_last_update = total_ticks_update_begin - millisecsPreviousFrame;
-        auto timeToWait = MILLISECS_PER_FRAME - ticks_since_last_update;
-        auto wait_time_int = (int)floor(timeToWait);
-        if (wait_time_int >= 1 && wait_time_int <= MILLISECS_PER_FRAME)
-        {
-            SDL_Delay(wait_time_int);
-            total_ticks_update_begin = SDL_GetTicks64();
-        }
-    }
-    auto delta_time_in_ms = (total_ticks_update_begin - millisecsPreviousFrame);
-    auto delta_time_in_sec = delta_time_in_ms / 1000.0000;
-    std::cout << "Deltat time in ms is " << delta_time_in_ms << "Dalta time in sec is " << delta_time_in_sec << std::endl;
-    millisecsPreviousFrame = SDL_GetTicks64();
+    /// Actually do update stuff
     Sound::Update();
 }
 
@@ -118,16 +110,35 @@ void World::Render()
     SDL_RenderPresent(renderer);
 }
 /**
-* Calls setup, and then does a loop of processing input, update, and render.
-*/
+ * Calls setup, and then does a loop of processing input, update, and render.
+ */
 void World::Run()
 {
     Setup();
     while (isRunning)
     {
-        ProcessInput();
-        Update();
-        Render();
+
+        if (vsync_enabled == false)
+        {
+            auto wait_time = world_gametime->CheckForSleepTime();
+
+            if (wait_time >= 1 && wait_time <= MILLISECS_PER_FRAME)
+                SDL_Delay(wait_time);
+        }
+        world_gametime->Tick();
+        if (world_gametime->ShouldUpdate())
+        {
+            // TODO move this into a debug class.
+            if (world_gametime->GameIsLagging())
+                printf("Game is lagging!");
+            while (world_gametime->ShouldUpdate())
+            {
+                ProcessInput();
+                Update(*world_gametime);
+                world_gametime->UpdateClockTimer();
+            }
+            Render();
+        }
     }
 }
 

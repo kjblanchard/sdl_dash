@@ -2,13 +2,18 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <supergoon_engine_export.h>
+#include <memory>
 
+class Gametime;
 class SUPERGOON_ENGINE_EXPORT World
 {
 private:
     bool isRunning;
     bool vsync_enabled;
-    Uint64 millisecsPreviousFrame = 0;
+    // double gametime_residual = 0.0;
+    // Uint64 millisecsPreviousFrame = 0;
+    std::unique_ptr<Gametime> world_gametime;
+
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Rect camera;
@@ -22,7 +27,7 @@ protected:
     void Initialize();
     void Setup();
     void ProcessInput();
-    void Update();
+    void Update(Gametime &gametime);
     void Render();
     void Destroy();
 
@@ -37,9 +42,14 @@ protected:
 
     const int FPS = 60;
     const double MILLISECS_PER_FRAME = 1000.0000 / FPS;
+    static World* instance;
 
 public:
     World();
     ~World();
     void Run();
+    static World* GetWorld()
+    {
+        return instance;
+    }
 };
