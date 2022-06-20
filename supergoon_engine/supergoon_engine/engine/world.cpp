@@ -1,8 +1,10 @@
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
+#include <supergoon_engine/ini/ini.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -23,6 +25,16 @@ World::~World()
 
 void World::Initialize()
 {
+    // Read from INI file to get FPS
+    mINI::INIFile file("./assets/config/cfg.ini");
+    mINI::INIStructure ini;
+    file.read(ini);
+    std::string& amountOfApples = ini["game"]["fps"];
+    std::cout << "FPS should be : " << amountOfApples << std::endl;
+    auto fps = stoi(amountOfApples);
+    std::cout << "FPS should be : " << fps << std::endl;
+
+
     auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
