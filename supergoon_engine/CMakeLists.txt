@@ -9,7 +9,9 @@ message(STATUS "Starting Supergoon Engine Cmake")
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
 # Add the SDL folder as we are building it as source.
-add_subdirectory(./external/SDL2-2.0.22)
+if(NOT UNIX)
+    add_subdirectory(./external/SDL2-2.0.22)
+endif()
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES})
 
@@ -88,7 +90,11 @@ target_include_directories(supergoon_engine
 
 message(STATUS "Linking to the external libraries.")
 # target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
-target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf )
+if(NOT UNIX)
+    target_link_libraries(supergoon_engine PUBLIC SDL2::SDL2 SDL2::SDL2main fmod fmodstudio SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf )
+else()
+    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image SDL2_ttf )
+endif()
 
 
 message(STATUS "Copying the Libraries to the output folder.")

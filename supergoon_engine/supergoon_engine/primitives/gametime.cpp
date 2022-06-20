@@ -1,5 +1,6 @@
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <iostream>
+#include <cmath>
 
 Gametime::Gametime() : start_time{SDL_GetTicks64()}, current_time{SDL_GetTicks64()}
 {
