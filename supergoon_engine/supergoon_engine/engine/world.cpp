@@ -8,14 +8,13 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-
-World* World::instance = nullptr;
+World *World::instance = nullptr;
 World::World() : isRunning{false}, vsync_enabled{false}
 {
-    world_gametime = std::make_unique<Gametime>();
-    if(World::instance == nullptr)
-    World::instance = this;
-    else{
+    if (World::instance == nullptr)
+        World::instance = this;
+    else
+    {
         throw std::runtime_error("World was already created");
     }
 }
@@ -26,46 +25,34 @@ World::~World()
 
 void World::Initialize()
 {
-    // Read from INI file to get FPS
     mINI::INIFile file("./assets/config/cfg.ini");
     mINI::INIStructure ini;
     file.read(ini);
-    std::string& amountOfApples = ini["game"]["fps"];
-    std::cout << "FPS should be : " << amountOfApples << std::endl;
-    auto fps = stoi(amountOfApples);
-    std::cout << "FPS should be : " << fps << std::endl;
+
+    std::string &fps_string = ini["game"]["fps"];
+    world_gametime = std::make_unique<Gametime>(stoi(fps_string));
+
+    InitializeSdl();
 
 
-    auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
-    if (sdl_video_init_result != 0)
-        throw std::runtime_error(SDL_GetError());
-    auto sdl_ttf_init_result = TTF_Init();
-    if (sdl_ttf_init_result != 0)
-        throw std::runtime_error(TTF_GetError());
-    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
-    int initted = IMG_Init(flags);
-    if ((initted & flags) != flags) {
-        printf("IMG_Init: Failed to init required jpg and png support!\n");
-        printf("IMG_Init: %s\n", IMG_GetError());
-    }
 
+    //TODO Move this to graphics class.
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
-    // TODO remove the hard coding here.
-    windowWidth = 1920;
-    windowHeight = 1080;
-    unscaledWidth = 256;
-    unscaledHeight = 144;
-    screenScaleRatioWidth = windowWidth / unscaledWidth;
-    screenScaleRatioHeight = windowWidth / unscaledWidth;
+    window_width = stoi(ini[window_ini_section_name][window_width_string]);
+    window_height = stoi(ini[window_ini_section_name][window_height_string]);
+    unscaled_width = stoi(ini[window_ini_section_name][game_width_string]);
+    unscaled_height = stoi(ini[window_ini_section_name][game_height_string]);
+    screenScaleRatioWidth = window_width / unscaled_width;
+    screenScaleRatioHeight = window_width / unscaled_width;
 
     window = SDL_CreateWindow(
         NULL,
         0,
         0,
-        windowWidth,
-        windowHeight,
+        window_width,
+        window_height,
         SDL_WINDOW_OPENGL);
     if (!window)
         throw std::runtime_error(SDL_GetError());
@@ -79,10 +66,27 @@ void World::Initialize()
     // Initialize the camera view with the entire screen area
     camera.x = 0;
     camera.y = 0;
-    camera.w = unscaledWidth;
-    camera.h = unscaledHeight;
-    SDL_RenderSetLogicalSize(renderer, unscaledWidth, unscaledHeight);
+    camera.w = unscaled_width;
+    camera.h = unscaled_height;
+    SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
+}
+
+void World::InitializeSdl()
+{
+    auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
+    if (sdl_video_init_result != 0)
+        throw std::runtime_error(SDL_GetError());
+    auto sdl_ttf_init_result = TTF_Init();
+    if (sdl_ttf_init_result != 0)
+        throw std::runtime_error(TTF_GetError());
+    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+    int initted = IMG_Init(flags);
+    if ((initted & flags) != flags)
+    {
+        printf("IMG_Init: Failed to init required jpg and png support!\n");
+        printf("IMG_Init: %s\n", IMG_GetError());
+    }
 }
 
 void World::ProcessInput()
@@ -125,9 +129,7 @@ void World::Render()
 
     SDL_RenderPresent(renderer);
 }
-/**
- * Calls setup, and then does a loop of processing input, update, and render.
- */
+
 void World::Run()
 {
     Setup();

@@ -18,10 +18,13 @@ private:
     SDL_Renderer *renderer;
     SDL_Rect camera;
 
-    const char *windowWidthStr = "window_width";
-    const char *windowHeightStr = "window_height";
-    const char *unscaledWidthStr = "unscaled_width";
-    const char *unscaledHeightStr = "unscaled_height";
+    const char *window_ini_section_name = "window";
+    const char *window_width_string = "window_width";
+    const char *window_height_string = "window_height";
+    const char *game_width_string = "game_width";
+    const char *game_height_string = "game_height";
+
+    void InitializeSdl();
 
 protected:
     void Initialize();
@@ -31,12 +34,12 @@ protected:
     void Render();
     void Destroy();
 
-    int windowWidth;
-    int windowHeight;
-    int unscaledHeight;
-    int unscaledWidth;
-    int mapWidth;
-    int mapHeight;
+    int window_width;
+    int window_height;
+    int unscaled_height;
+    int unscaled_width;
+    // int mapWidth;
+    // int mapHeight;
     int screenScaleRatioWidth;
     int screenScaleRatioHeight;
 

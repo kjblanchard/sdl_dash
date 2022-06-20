@@ -34,6 +34,10 @@ private:
     }
 
 public:
+    Gametime(int fps) : Gametime()
+    {
+        game_fps = fps;
+    }
     Gametime();
     /**
      * The amount of seconds in this update tick.  Used by gameobjects when calculating frame independant movement in their update.
@@ -42,7 +46,7 @@ public:
      */
     double ElapsedTimeInSeconds()
     {
-        return game_fps / 1000.00;
+        return MillisecondsPerFrame() / 1000.00;
     }
     /**
      * Gets the amount of milliseconds on this update frame.
