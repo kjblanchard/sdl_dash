@@ -5,25 +5,13 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-World::World() : isRunning{false}
+World::World() : isRunning{false}, vsync_enabled{true}
 {
-    std::cout << "Making a world..." << std::endl;
 }
 
 World::~World()
 {
 }
-
-int World::windowWidth;
-int World::windowHeight;
-int World::mapWidth;
-int World::mapHeight;
-int World::unscaledHeight;
-int World::unscaledWidth;
-int World::screenScaleRatioHeight;
-int World::screenScaleRatioWidth;
-bool World::isDebug = false;
-SDL_Renderer *World::renderer;
 
 void World::Initialize()
 {
@@ -57,7 +45,10 @@ void World::Initialize()
         SDL_WINDOW_OPENGL);
     if (!window)
         throw std::runtime_error(SDL_GetError());
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (vsync_enabled)
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    else
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer)
         throw std::runtime_error(SDL_GetError());
 
@@ -67,8 +58,6 @@ void World::Initialize()
     camera.w = unscaledWidth;
     camera.h = unscaledHeight;
     SDL_RenderSetLogicalSize(renderer, unscaledWidth, unscaledHeight);
-    SDL_RenderSetVSync(renderer, 1);
-
     isRunning = true;
 }
 
@@ -101,13 +90,23 @@ void World::Setup()
 
 void World::Update()
 {
-    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
-    if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME)
-        SDL_Delay(5);
-    double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
-    millisecsPreviousFrame = SDL_GetTicks();
-
-    // TODO remove this
+    // Since we want to only update a specific number of times, lets do some wait time.
+    auto total_ticks_update_begin = SDL_GetTicks64();
+    if (vsync_enabled == false)
+    {
+        auto ticks_since_last_update = total_ticks_update_begin - millisecsPreviousFrame;
+        auto timeToWait = MILLISECS_PER_FRAME - ticks_since_last_update;
+        auto wait_time_int = (int)floor(timeToWait);
+        if (wait_time_int >= 1 && wait_time_int <= MILLISECS_PER_FRAME)
+        {
+            SDL_Delay(wait_time_int);
+            total_ticks_update_begin = SDL_GetTicks64();
+        }
+    }
+    auto delta_time_in_ms = (total_ticks_update_begin - millisecsPreviousFrame);
+    auto delta_time_in_sec = delta_time_in_ms / 1000.0000;
+    std::cout << "Deltat time in ms is " << delta_time_in_ms << "Dalta time in sec is " << delta_time_in_sec << std::endl;
+    millisecsPreviousFrame = SDL_GetTicks64();
     Sound::Update();
 }
 
@@ -118,7 +117,9 @@ void World::Render()
 
     SDL_RenderPresent(renderer);
 }
-
+/**
+* Calls setup, and then does a loop of processing input, update, and render.
+*/
 void World::Run()
 {
     Setup();
