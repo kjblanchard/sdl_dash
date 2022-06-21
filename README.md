@@ -1,30 +1,32 @@
-License:
+# Supergoon Dash
 
-Pixel art: https://pixelfrog-assets.itch.io/pixel-adventure-1
+A C++ cross platform application that is "runner" game, where you can control your speed and jump height.  Goal is to learn more about cross compiling in C++, lean CMake a bit better, and get a little better with C++ (only using vscode and cmake for everything)
 
-Commented out a section in the SDL cmake that causes windows dll to have a d
-# Set defaults preventing destination file conflicts
+[Trello Board](https://trello.com/b/mirFjXRE/geometry-dash-board)
 
-# set(SDL_CMAKE_DEBUG_POSTFIX "d"
-#     CACHE STRING "Name suffix for debug builds")
+Currently Compiling on Windows(32bit), Mac (apple silicon/arm64), and Ubuntu linux(64bit)
 
 
-Commented out a section in
-SDL_audiocvt.c
-That was causing build errors inside of windows, did not reach out currently.
 
-When adding fmod:
-if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    if (${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-        target_link_libraries(Test lib1_linux64)
-    else()
-        target_link_libraries(Test lib1_linux32)
-    endif()
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    if (${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-        target_link_libraries(Test lib1_win64)
-    else()
-        target_link_libraries(Test lib1_win32)
-    endif()
-# ETC
-endif()
+## Components
+
+- **SDL** - Used for low level handling of windows, timers, events, and input.
+- **SDL_Image** - Used for loading png/jpeg
+- **SDL_TTF** - Used for loading true type fonts.
+- **CMake** - Build system
+- **FMOD** - Low level handling of sound
+- **Tiled** - Used for creating the maps and outputting data for it
+- [TinyXML2](https://github.com/leethomason/tinyxml2) Used for low level handling of xml
+- **ImGui** - Development Debugging and GUI
+## License
+
+All of the licenses that I'm using will be listed here.
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+[Pixel art](https://pixelfrog-assets.itch.io/pixel-adventure-1) - Creative Commons License
+## Authors
+
+- [@Kevin Blanchard](https://www.github.com/kjblanchard)
+
+
