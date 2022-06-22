@@ -1,3 +1,4 @@
+#pragma once
 #include <supergoon_engine_export.h>
 
 namespace FMOD{

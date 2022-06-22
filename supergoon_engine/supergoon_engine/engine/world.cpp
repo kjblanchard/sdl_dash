@@ -4,7 +4,6 @@
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
-#include <supergoon_engine/ini/ini.hpp>
 #include <supergoon_engine/ini/config_reader.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
@@ -67,7 +66,6 @@ void World::Initialize()
     if (!renderer)
         throw std::runtime_error(SDL_GetError());
 
-    // Initialize the camera view with the entire screen area
     camera.x = 0;
     camera.y = 0;
     camera.w = unscaled_width;
@@ -98,7 +96,6 @@ void World::ProcessInput()
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent))
     {
-        // Handle core SDL events (close window, key pressed, etc.)
         switch (sdlEvent.type)
         {
         case SDL_QUIT:

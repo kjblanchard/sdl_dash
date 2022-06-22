@@ -13,8 +13,6 @@ class SUPERGOON_ENGINE_EXPORT World
 private:
     bool isRunning;
     bool vsync_enabled;
-    // double gametime_residual = 0.0;
-    // Uint64 millisecsPreviousFrame = 0;
     std::unique_ptr<Gametime> world_gametime;
 
     SDL_Window *window;
@@ -41,8 +39,6 @@ protected:
     int window_height;
     int unscaled_height;
     int unscaled_width;
-    // int mapWidth;
-    // int mapHeight;
     int screenScaleRatioWidth;
     int screenScaleRatioHeight;
 
