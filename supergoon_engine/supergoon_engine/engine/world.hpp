@@ -5,6 +5,9 @@
 #include <memory>
 
 class Gametime;
+class ConfigReader;
+
+
 class SUPERGOON_ENGINE_EXPORT World
 {
 private:
@@ -50,7 +53,9 @@ protected:
 public:
     World();
     ~World();
+
     void Run();
+    ConfigReader* config_reader;
     static World* GetWorld()
     {
         return instance;

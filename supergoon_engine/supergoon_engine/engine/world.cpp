@@ -1,15 +1,16 @@
-#include <iostream>
 #include <stdexcept>
 #include <string>
+#include <iostream>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <supergoon_engine/ini/ini.hpp>
+#include <supergoon_engine/ini/config_reader.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
 World *World::instance = nullptr;
-World::World() : isRunning{false}
+World::World() : isRunning{false}, vsync_enabled{false}, config_reader{nullptr}
 {
     if (World::instance == nullptr)
         World::instance = this;
@@ -25,24 +26,28 @@ World::~World()
 
 void World::Initialize()
 {
-    mINI::INIFile file("./assets/config/cfg.ini");
-    mINI::INIStructure ini;
-    file.read(ini);
-    auto vsync_string = ini["game"]["vsync"];
-    vsync_enabled = mINI::INIStringUtil::string_to_bool(vsync_string);
-    std::string &fps_string = ini["game"]["fps"];
-    world_gametime = std::make_unique<Gametime>(stoi(fps_string));
+    config_reader = new ConfigReader("cfg.ini");
+    vsync_enabled = ConfigReader::GetValueFromCfgBool("game", "vsync");
 
     InitializeSdl();
 
-    // TODO Move this to graphics class.
+    // TODO Move this to graphics class, this handles the correct fps when reading refresh rate for updates.
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
+    if (vsync_enabled)
+    {
+        auto fps = displayMode.refresh_rate;
+        world_gametime = std::make_unique<Gametime>(fps);
+    }
+    else
+    {
+        world_gametime = std::make_unique<Gametime>(ConfigReader::GetValueFromCfgInt("game", "fps"));
+    }
 
-    window_width = stoi(ini[window_ini_section_name][window_width_string]);
-    window_height = stoi(ini[window_ini_section_name][window_height_string]);
-    unscaled_width = stoi(ini[window_ini_section_name][game_width_string]);
-    unscaled_height = stoi(ini[window_ini_section_name][game_height_string]);
+    window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
+    window_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_height_string);
+    unscaled_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_width_string);
+    unscaled_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_height_string);
     screenScaleRatioWidth = window_width / unscaled_width;
     screenScaleRatioHeight = window_width / unscaled_width;
 
@@ -118,6 +123,7 @@ void World::Setup()
 void World::Update(Gametime &gametime)
 {
     /// Actually do update stuff
+    std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << std::endl;
     Sound::Update();
 }
 

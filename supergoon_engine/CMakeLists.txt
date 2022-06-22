@@ -76,7 +76,7 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     message(STATUS "Setting Apple Clang Flags")
-    target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
+    # target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
 endif()
 
 message(STATUS "Adding include Directories to the project.")

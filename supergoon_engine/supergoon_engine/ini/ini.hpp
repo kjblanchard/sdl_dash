@@ -124,12 +124,6 @@ namespace mINI
 			}
 		}
 
-		inline bool string_to_bool(std::string &str)
-		{
-			if (str == "0")
-				return false;
-			return true;
-		}
 #ifdef _WIN32
 		const char *const endl = "\r\n";
 #else
