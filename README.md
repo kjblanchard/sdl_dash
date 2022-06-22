@@ -16,15 +16,17 @@ Currently Compiling on Windows(32bit), Mac (apple silicon/arm64), and Ubuntu lin
 - **CMake** - Build system
 - **FMOD** - Low level handling of sound
 - **Tiled** - Used for creating the maps and outputting data for it
-- [TinyXML2](https://github.com/leethomason/tinyxml2) Used for low level handling of xml
+- **[TinyXML2]** (https://github.com/leethomason/tinyxml2) Used for low level handling of xml
+- **[minINI]** (https://github.com/pulzed/mINI) - Used for low level handling of ini files for reading config.
 - **ImGui** - Development Debugging and GUI
 ## License
 
 All of the licenses that I'm using will be listed here.
 
-[MIT](https://choosealicense.com/licenses/mit/)
-
+[minINI](https://github.com/pulzed/mINI) - MIT
 [Pixel art](https://pixelfrog-assets.itch.io/pixel-adventure-1) - Creative Commons License
+[tinyxml2](https://github.com/leethomason/tinyxml2/blob/master/LICENSE.txt) - zlib license - not altered.
+
 ## Authors
 
 - [@Kevin Blanchard](https://www.github.com/kjblanchard)
