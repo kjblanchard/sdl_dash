@@ -9,7 +9,7 @@
 #include <SDL_image.h>
 
 World *World::instance = nullptr;
-World::World() : isRunning{false}, vsync_enabled{false}
+World::World() : isRunning{false}
 {
     if (World::instance == nullptr)
         World::instance = this;
@@ -28,15 +28,14 @@ void World::Initialize()
     mINI::INIFile file("./assets/config/cfg.ini");
     mINI::INIStructure ini;
     file.read(ini);
-
+    auto vsync_string = ini["game"]["vsync"];
+    vsync_enabled = mINI::INIStringUtil::string_to_bool(vsync_string);
     std::string &fps_string = ini["game"]["fps"];
     world_gametime = std::make_unique<Gametime>(stoi(fps_string));
 
     InitializeSdl();
 
-
-
-    //TODO Move this to graphics class.
+    // TODO Move this to graphics class.
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
