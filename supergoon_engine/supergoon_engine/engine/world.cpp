@@ -5,6 +5,7 @@
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <supergoon_engine/ini/config_reader.hpp>
+#include <supergoon_engine/xml/xml_parser.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -72,6 +73,8 @@ void World::Initialize()
     camera.h = unscaled_height;
     SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
+    xml_parser::LoadTiledMap("level_1");
+
 }
 
 void World::InitializeSdl()
