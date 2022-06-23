@@ -1,17 +1,19 @@
 #pragma once
 #include <memory>
 #include <vector>
-
-class TilesetInfo;
-class LayerGroup;
+#include <supergoon_engine/tiled/tileset_info.hpp>
+#include <supergoon_engine/tiled/layer_group.hpp>
 
 class Tilemap
 {
 private:
     /* data */
 public:
-    Tilemap(/* args */);
-    ~Tilemap();
+    inline ~Tilemap()
+    {
+        tileset_infos.clear();
+        layer_groups.clear();
+    }
     int width;
     int height;
     int tile_width;
@@ -21,12 +23,3 @@ public:
     std::vector<std::unique_ptr<LayerGroup>> layer_groups;
 };
 
-Tilemap::Tilemap(/* args */)
-{
-}
-
-Tilemap::~Tilemap()
-{
-    tileset_infos.clear();
-    layer_groups.clear();
-}

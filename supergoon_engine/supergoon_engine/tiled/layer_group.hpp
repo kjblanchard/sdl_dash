@@ -2,8 +2,9 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <iostream>
+#include <supergoon_engine/tiled/tile_layer.hpp>
 
-class TileLayer;
 class LayerGroup
 {
 private:
@@ -21,5 +22,7 @@ LayerGroup::LayerGroup(/* args */)
 
 LayerGroup::~LayerGroup()
 {
+    //TODO remove this, just for debugging destroying.
+    std::cout << "Layer group destroyed" << std::endl;
     tile_layers.clear();
 }

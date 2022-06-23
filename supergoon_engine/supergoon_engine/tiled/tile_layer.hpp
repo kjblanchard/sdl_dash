@@ -7,9 +7,6 @@ class TileLayer
 private:
     /* data */
 public:
-    TileLayer(/* args */);
-    ~TileLayer();
-
     int layer_id;
     std::string layer_name;
     int width;
@@ -17,10 +14,3 @@ public:
     std::vector<int> tiles;
 };
 
-TileLayer::TileLayer(/* args */)
-{
-}
-
-TileLayer::~TileLayer()
-{
-}

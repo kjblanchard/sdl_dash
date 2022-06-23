@@ -3,10 +3,11 @@
 #include <supergoon_engine/xml/tinyxml2.h>
 #include <string.h>
 #include <iostream>
+class Tilemap;
 class xml_parser
 {
 private:
 public:
-    static tinyxml2::XMLDocument* LoadTiledMap(std::string filename);
+    static Tilemap* LoadTiledMap(std::string filename);
 };
 
