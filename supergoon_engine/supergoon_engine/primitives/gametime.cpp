@@ -27,6 +27,6 @@ unsigned short Gametime::CheckForSleepTime()
     auto timeToWait = MillisecondsPerFrame() - time_since_last_update;
     if (timeToWait < 0)
         return 0;
-    auto wait_time_int = static_cast<unsigned short>(ceil(timeToWait));
+    auto wait_time_int = static_cast<unsigned short>(floor(timeToWait));
     return wait_time_int;
 }

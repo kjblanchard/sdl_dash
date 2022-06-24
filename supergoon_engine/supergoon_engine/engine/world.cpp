@@ -6,6 +6,7 @@
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <supergoon_engine/ini/config_reader.hpp>
 #include <supergoon_engine/xml/xml_parser.hpp>
+#include <supergoon_engine/engine/content.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -37,11 +38,13 @@ void World::Initialize()
     if (vsync_enabled)
     {
         auto fps = displayMode.refresh_rate;
-        world_gametime = std::make_unique<Gametime>(fps);
+        // world_gametime = std::make_unique<Gametime>(fps);
+        world_gametime = Gametime(fps);
     }
     else
     {
-        world_gametime = std::make_unique<Gametime>(ConfigReader::GetValueFromCfgInt("game", "fps"));
+        // world_gametime = std::make_unique<Gametime>(ConfigReader::GetValueFromCfgInt("game", "fps"));
+        world_gametime = Gametime(ConfigReader::GetValueFromCfgInt("game", "fps"));
     }
 
     window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
@@ -74,6 +77,12 @@ void World::Initialize()
     SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
     xml_parser::LoadTiledMap("level_1");
+    //Load in statics.
+    content = new Content(renderer);
+    GameObject::world = this;
+
+    gameObj = GameObject(Vector2(2,4));
+
 
 }
 
@@ -123,14 +132,17 @@ void World::Setup()
 void World::Update(Gametime &gametime)
 {
     /// Actually do update stuff
-    std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << std::endl;
+    std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << "And " << gametime.DeltaTime() << std::endl;
     Sound::Update();
+    gameObj.Update(gametime);
+
 }
 
 void World::Render()
 {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
+    gameObj.Draw(renderer);
 
     SDL_RenderPresent(renderer);
 }
@@ -143,22 +155,22 @@ void World::Run()
 
         if (vsync_enabled == false)
         {
-            auto wait_time = world_gametime->CheckForSleepTime();
+            auto wait_time = world_gametime.CheckForSleepTime();
 
             if (wait_time >= 1 && wait_time <= MILLISECS_PER_FRAME)
                 SDL_Delay(wait_time);
         }
-        world_gametime->Tick();
-        if (world_gametime->ShouldUpdate())
+        world_gametime.Tick();
+        if (world_gametime.ShouldUpdate())
         {
             // TODO move this into a debug class.
-            if (world_gametime->GameIsLagging())
+            if (world_gametime.GameIsLagging())
                 printf("Game is lagging!");
-            while (world_gametime->ShouldUpdate())
+            while (world_gametime.ShouldUpdate())
             {
                 ProcessInput();
-                Update(*world_gametime);
-                world_gametime->UpdateClockTimer();
+                Update(world_gametime);
+                world_gametime.UpdateClockTimer();
             }
             Render();
         }
