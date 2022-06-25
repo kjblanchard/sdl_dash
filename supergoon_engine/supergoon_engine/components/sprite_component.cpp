@@ -5,15 +5,15 @@
 #include <iostream>
 #include <SDL.h>
 
-SpriteComponent::SpriteComponent(GameObject *owner, Point size, Point src_loc) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, const char *filename, Point size, Point src_loc) : Component(owner)
 {
-    texture = NULL;
+    texture = World::GetWorld()->content->LoadTexture(filename);
     src_rect_ = Rectangle{src_loc, size};
     dst_rect_ = Rectangle{owner->location.ToPoint(), size};
 }
-SpriteComponent::SpriteComponent(GameObject *owner, Rectangle src_rectangle) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, const char *filename, Rectangle src_rectangle) : Component(owner)
 {
-    texture = NULL;
+    texture = World::GetWorld()->content->LoadTexture(filename);
     src_rect_ = src_rectangle;
     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.size};
 }

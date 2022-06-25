@@ -14,8 +14,8 @@ public:
     SDL_Texture *texture;
 
 public:
-    SpriteComponent(GameObject *owner, Point size = Point(), Point src_loc = Point());
-    SpriteComponent(GameObject *owner, Rectangle src_rectangle);
+    SpriteComponent(GameObject *owner, const char* filename, Point size = Point(), Point src_loc = Point());
+    SpriteComponent(GameObject *owner, const char* filename, Rectangle src_rectangle);
     ~SpriteComponent();
     void Update(const Gametime &gametime) override;
     void Draw(SDL_Renderer *renderer) override;

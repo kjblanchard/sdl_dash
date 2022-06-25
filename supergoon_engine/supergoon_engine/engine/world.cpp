@@ -81,11 +81,13 @@ void World::Initialize()
     content = new Content(renderer);
 
     // gameObj = GameObject(Vector2(2,4));
-    auto new_boi = Vector2(2,4);
+    auto new_boi = Vector2(2, 4);
     gameObj = new GameObject{new_boi};
-    auto sprite_comp = new SpriteComponent(gameObj, Point(16,16));
+    auto sprite_comp = new SpriteComponent(gameObj, "purple", Point(16, 16));
+    auto sprite_comp2 = new SpriteComponent(gameObj, "purple", Point(16, 16));
+    auto sprite_comp3 = new SpriteComponent(gameObj, "purple", Point(16, 16));
+    auto sprite_comp4 = new SpriteComponent(gameObj, "purple", Point(16, 16));
     gameObj->AddComponent(sprite_comp);
-
 }
 
 void World::InitializeSdl()
@@ -137,7 +139,6 @@ void World::Update(Gametime &gametime)
     std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << "And " << gametime.DeltaTime() << std::endl;
     Sound::Update();
     gameObj->Update(gametime);
-
 }
 
 void World::Render()

@@ -15,7 +15,6 @@ public:
     Component(GameObject *owner, Vector2 offset = Vector2());
     virtual ~Component() override;
 
-    // inline void Update(const Gametime &gametime) override {}
     inline void Update(const Gametime &) override {}
     inline Component operator<(const Component &rhs)
     {
