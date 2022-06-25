@@ -29,6 +29,12 @@ if(MSVC)
 endif(MSVC)
 
 
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
+  target_compile_definitions(sdl-build-options INTERFACE CLANG)
+endif()
+
+
+
 # !!! FIXME: this should probably do "MACOSX_RPATH ON" as a target property
 # !!! FIXME:  for the SDL2 shared library (so you get an
 # !!! FIXME:  install_name ("soname") of "@rpath/libSDL-whatever.dylib"
@@ -291,7 +297,7 @@ set(ORIG_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
 
 if(CYGWIN)
   # We build SDL on cygwin without the UNIX emulation layer
-  target_include_directories(sdl-build-options INTERFACE "/usr/include/mingw")
+  target_include_directories(sdl-build-options SYSTEM INTERFACE "/usr/include/mingw")
   set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mno-cygwin")
   check_c_source_compiles("int main(int argc, char **argv) { return 0; }"
     HAVE_GCC_NO_CYGWIN)
@@ -305,14 +311,14 @@ endif()
 
 # General includes
 target_compile_definitions(sdl-build-options INTERFACE "-DUSING_GENERATED_CONFIG_H")
-target_include_directories(sdl-build-options BEFORE INTERFACE "${SDL2_BINARY_DIR}/include")
-target_include_directories(sdl-build-options INTERFACE "${SDL2_SOURCE_DIR}/include")
+target_include_directories(sdl-build-options SYSTEM BEFORE INTERFACE "${SDL2_BINARY_DIR}/include")
+target_include_directories(sdl-build-options SYSTEM INTERFACE "${SDL2_SOURCE_DIR}/include")
 # Note: The clang toolset for Visual Studio does not support the '-idirafter' option.
 if(USE_GCC OR (USE_CLANG AND NOT MSVC_CLANG))
   # !!! FIXME: do we _need_ to mess with CMAKE_C_FLAGS here?
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter \"${SDL2_SOURCE_DIR}/src/video/khronos\"")
 else()
-  target_include_directories(sdl-build-options INTERFACE "${SDL2_SOURCE_DIR}/src/video/khronos")
+  target_include_directories(sdl-build-options SYSTEM INTERFACE "${SDL2_SOURCE_DIR}/src/video/khronos")
 endif()
 
 # All these ENABLED_BY_DEFAULT vars will default to ON if not specified, so
@@ -1352,7 +1358,7 @@ elseif(UNIX AND NOT APPLE AND NOT ANDROID AND NOT RISCOS AND NOT HAIKU)
       pkg_search_module(DBUS dbus-1 dbus)
       if(DBUS_FOUND)
         set(HAVE_DBUS_DBUS_H TRUE)
-        target_include_directories(sdl-build-options INTERFACE "${DBUS_INCLUDE_DIRS}")
+        target_include_directories(sdl-build-options SYSTEM INTERFACE "${DBUS_INCLUDE_DIRS}")
         list(APPEND EXTRA_LIBS ${DBUS_LIBRARIES})
         # Fcitx need only dbus.
         set(HAVE_FCITX TRUE)
@@ -1361,7 +1367,7 @@ elseif(UNIX AND NOT APPLE AND NOT ANDROID AND NOT RISCOS AND NOT HAIKU)
       pkg_search_module(IBUS ibus-1.0 ibus)
       if(IBUS_FOUND)
         set(HAVE_IBUS_IBUS_H TRUE)
-        target_include_directories(sdl-build-options INTERFACE "${IBUS_INCLUDE_DIRS}")
+        target_include_directories(sdl-build-options SYSTEM INTERFACE "${IBUS_INCLUDE_DIRS}")
         list(APPEND EXTRA_LIBS ${IBUS_LIBRARIES})
       endif()
 
@@ -1373,7 +1379,7 @@ elseif(UNIX AND NOT APPLE AND NOT ANDROID AND NOT RISCOS AND NOT HAIKU)
         pkg_search_module(INOTIFY libinotify)
         if(INOTIFY_FOUND)
           set(HAVE_INOTIFY 1)
-          target_include_directories(sdl-build-options INTERFACE "${INOTIFY_INCLUDE_DIRS}")
+          target_include_directories(sdl-build-options SYSTEM INTERFACE "${INOTIFY_INCLUDE_DIRS}")
           list(APPEND EXTRA_LIBS ${INOTIFY_LIBRARIES})
         endif()
       endif()
@@ -1570,7 +1576,7 @@ elseif(WINDOWS)
       if(NOT MINGW AND NOT USE_WINSDK_DIRECTX)
       # TODO: change $ENV{DXSDL_DIR} to get the path from the include checks
         target_link_directories(sdl-build-options INTERFACE "$$ENV{DXSDK_DIR}\\lib\\${PROCESSOR_ARCH}")
-        target_include_directories(sdl-build-options INTERFACE "$ENV{DXSDK_DIR}\\Include")
+        target_include_directories(sdl-build-options SYSTEM INTERFACE "$ENV{DXSDK_DIR}\\Include")
       endif()
     endif()
     set(CMAKE_REQUIRED_FLAGS ${ORIG_CMAKE_REQUIRED_FLAGS})
@@ -2867,15 +2873,15 @@ if(NOT WINDOWS_STORE AND NOT SDL2_DISABLE_SDL2MAIN)
   add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
   # alias target for in-tree builds
   add_library(SDL2::SDL2main ALIAS SDL2main)
-  target_include_directories(SDL2main BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
-  target_include_directories(SDL2main PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/SDL2>)
+  target_include_directories(SDL2main SYSTEM BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
+  target_include_directories(SDL2main SYSTEM PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/SDL2>)
   if (NOT ANDROID)
     set_target_properties(SDL2main PROPERTIES DEBUG_POSTFIX "${SDL_CMAKE_DEBUG_POSTFIX}")
   endif()
 endif()
 
 if(ANDROID)
-  target_include_directories(sdl-build-options INTERFACE "${ANDROID_NDK}/sources/android/cpufeatures")
+  target_include_directories(sdl-build-options SYSTEM INTERFACE "${ANDROID_NDK}/sources/android/cpufeatures")
 endif()
 
 if(IOS OR TVOS)
@@ -2918,8 +2924,8 @@ if(SDL_SHARED)
     set_target_properties(SDL2 PROPERTIES STATIC_LIBRARY_FLAGS "/NODEFAULTLIB")
   endif()
   target_link_libraries(SDL2 PRIVATE ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
-  target_include_directories(SDL2 BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
-  target_include_directories(SDL2 PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>;$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>;$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/SDL2>")
+  target_include_directories(SDL2 SYSTEM BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
+  target_include_directories(SDL2 SYSTEM PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>;$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>;$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/SDL2>")
   # This picks up all the compiler options and such we've accumulated up to here.
   target_link_libraries(SDL2 PRIVATE $<BUILD_INTERFACE:sdl-build-options>)
   if(NOT ANDROID)
@@ -2949,8 +2955,8 @@ if(SDL_STATIC)
   # TODO: Win32 platforms keep the same suffix .lib for import and static
   # libraries - do we need to consider this?
   target_link_libraries(SDL2-static PRIVATE ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
-  target_include_directories(SDL2-static BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
-  target_include_directories(SDL2-static PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/SDL2>)
+  target_include_directories(SDL2-static SYSTEM BEFORE PRIVATE "${SDL2_BINARY_DIR}/include")
+  target_include_directories(SDL2-static SYSTEM PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include> $<INSTALL_INTERFACE:include/SDL2>)
   # This picks up all the compiler options and such we've accumulated up to here.
   target_link_libraries(SDL2-static PRIVATE $<BUILD_INTERFACE:sdl-build-options>)
   if(NOT ANDROID)
@@ -2961,8 +2967,8 @@ endif()
 ##### Tests #####
 
 if(SDL_TEST)
-  include_directories(BEFORE "${SDL2_BINARY_DIR}/include")
-  include_directories(AFTER "${SDL2_SOURCE_DIR}/include")
+  include_directories(SYSTEM BEFORE "${SDL2_BINARY_DIR}/include")
+  include_directories(SYSTEM AFTER "${SDL2_SOURCE_DIR}/include")
   file(GLOB TEST_SOURCES ${SDL2_SOURCE_DIR}/src/test/*.c)
   add_library(SDL2_test STATIC ${TEST_SOURCES})
   add_subdirectory(test)

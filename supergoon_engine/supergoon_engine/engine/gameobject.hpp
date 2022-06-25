@@ -21,7 +21,7 @@ public:
 //TODO make this not public
     static World* world;
     GameObject(Vector2 loc = Vector2());
-    virtual ~GameObject();
+    virtual ~GameObject() override;
 
     void Update(const Gametime& gametime) override;
     void Draw(SDL_Renderer* renderer);

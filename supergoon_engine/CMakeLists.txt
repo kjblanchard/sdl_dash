@@ -80,12 +80,17 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
 endif()
 
 message(STATUS "Adding include Directories to the project.")
+# Try to reduce the amount of errors from 3rd party
+target_include_directories(supergoon_engine
+        SYSTEM
+        PRIVATE
+        "./external/SDL2-2.0.22/include/"
+        "./external/include/"
+        )
 target_include_directories(supergoon_engine
         PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/"
         "${CMAKE_BINARY_DIR}/exports/"
-        "./external/SDL2-2.0.22/include/"
-        "./external/include/"
         )
 
 message(STATUS "Linking to the external libraries.")

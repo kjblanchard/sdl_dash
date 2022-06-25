@@ -18,6 +18,10 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#ifdef CLANG
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#endif
 #include "../../SDL_internal.h"
 
 #if SDL_AUDIO_DRIVER_COREAUDIO
@@ -1179,5 +1183,9 @@ AudioBootStrap COREAUDIO_bootstrap = {
 };
 
 #endif /* SDL_AUDIO_DRIVER_COREAUDIO */
+
+#ifdef CLANG
+    #pragma clang diagnostic pop
+#endif
 
 /* vi: set ts=4 sw=4 expandtab: */

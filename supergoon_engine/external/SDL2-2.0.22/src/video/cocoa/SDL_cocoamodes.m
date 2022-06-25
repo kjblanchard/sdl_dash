@@ -18,6 +18,11 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#ifdef CLANG
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#endif
+#include "../../SDL_internal.h"
 #include "../../SDL_internal.h"
 
 #if SDL_VIDEO_DRIVER_COCOA
@@ -460,7 +465,7 @@ Cocoa_GetDisplayDPI(_THIS, SDL_VideoDisplay * display, float * ddpi, float * hdp
     NSSize displayNativeSize;
     displayNativeSize.width = (int) CGDisplayPixelsWide(data->display);
     displayNativeSize.height = (int) CGDisplayPixelsHigh(data->display);
-    
+
     for (NSScreen *screen in screens) {
         const CGDirectDisplayID dpyid = (const CGDirectDisplayID ) [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
         if (dpyid == data->display) {
@@ -477,7 +482,7 @@ Cocoa_GetDisplayDPI(_THIS, SDL_VideoDisplay * display, float * ddpi, float * hdp
                     CGFloat width = CGDisplayModeGetPixelWidth(m);
                     CGFloat height = CGDisplayModeGetPixelHeight(m);
                     CGFloat HiDPIWidth = CGDisplayModeGetWidth(m);
-                    
+
                     //Only check 1x mode
                     if(width == HiDPIWidth) {
                         if (CGDisplayModeGetIOFlags(m) & kDisplayModeNativeFlag) {
@@ -485,7 +490,7 @@ Cocoa_GetDisplayDPI(_THIS, SDL_VideoDisplay * display, float * ddpi, float * hdp
                             displayNativeSize.height = height;
                             break;
                         }
-                        
+
                         //Get the largest size even if kDisplayModeNativeFlag is not present e.g. iMac 27-Inch with 5K Retina
                         if(width > displayNativeSize.width) {
                             displayNativeSize.width = width;
@@ -726,3 +731,7 @@ Cocoa_QuitModes(_THIS)
 #endif /* SDL_VIDEO_DRIVER_COCOA */
 
 /* vi: set ts=4 sw=4 expandtab: */
+
+#ifdef CLANG
+    #pragma clang diagnostic pop
+#endif

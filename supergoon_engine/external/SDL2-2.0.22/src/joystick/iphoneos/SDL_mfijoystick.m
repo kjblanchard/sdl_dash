@@ -18,6 +18,10 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#ifdef CLANG
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#endif
 #include "../../SDL_internal.h"
 
 /* This is the iOS implementation of the SDL joystick API */
@@ -1797,5 +1801,9 @@ SDL_JoystickDriver SDL_IOS_JoystickDriver =
     IOS_JoystickQuit,
     IOS_JoystickGetGamepadMapping
 };
+
+#ifdef CLANG
+    #pragma clang diagnostic pop
+#endif
 
 /* vi: set ts=4 sw=4 expandtab: */

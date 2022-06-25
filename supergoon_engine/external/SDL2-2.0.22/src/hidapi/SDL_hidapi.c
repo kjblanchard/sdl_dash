@@ -27,6 +27,10 @@
  * This merges the two, at a small performance cost, until distributions
  * have granted access to /dev/hidraw*
  */
+#ifdef CLANG
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#endif
 #include "../SDL_internal.h"
 
 #include "SDL_loadso.h"
@@ -1587,3 +1591,7 @@ void SDL_EnableGameCubeAdaptors(void)
 #endif /* HAVE_ENABLE_GAMECUBE_ADAPTORS */
 
 /* vi: set sts=4 ts=4 sw=4 expandtab: */
+
+#ifdef CLANG
+    #pragma clang diagnostic pop
+#endif
