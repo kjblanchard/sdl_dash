@@ -5,7 +5,7 @@
 class SUPERGOON_ENGINE_EXPORT IUpdate
 {
 public:
-    virtual void Update(const Gametime& gametime) = 0;
+    virtual void Update(const Gametime &gametime) = 0;
     bool Enabled = true;
-
+    inline virtual ~IUpdate() {}
 };

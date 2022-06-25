@@ -7,6 +7,7 @@
 #include <supergoon_engine/ini/config_reader.hpp>
 #include <supergoon_engine/xml/xml_parser.hpp>
 #include <supergoon_engine/engine/content.hpp>
+#include <supergoon_engine/components/sprite_component.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -81,7 +82,11 @@ void World::Initialize()
     content = new Content(renderer);
     GameObject::world = this;
 
-    gameObj = GameObject(Vector2(2,4));
+    // gameObj = GameObject(Vector2(2,4));
+    auto new_boi = Vector2(2,4);
+    gameObj = new GameObject{new_boi};
+    auto sprite_comp = new SpriteComponent(gameObj);
+    gameObj->AddComponent(sprite_comp);
 
 
 }
@@ -134,7 +139,7 @@ void World::Update(Gametime &gametime)
     /// Actually do update stuff
     std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << "And " << gametime.DeltaTime() << std::endl;
     Sound::Update();
-    gameObj.Update(gametime);
+    gameObj->Update(gametime);
 
 }
 
@@ -142,7 +147,7 @@ void World::Render()
 {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
-    gameObj.Draw(renderer);
+    gameObj->Draw(renderer);
 
     SDL_RenderPresent(renderer);
 }

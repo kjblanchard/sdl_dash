@@ -2,15 +2,17 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/IUpdate.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
-
+#include <supergoon_engine/engine/component.hpp>
+#include <vector>
+#include <memory>
 
 class World;
 class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
 {
 private:
     /* data */
-    SDL_Texture* texture;
 protected:
+    std::vector<std::unique_ptr<Component>> components_;
 
 
 public:
@@ -22,4 +24,9 @@ public:
     void Update(const Gametime& gametime) override;
     void Draw(SDL_Renderer* renderer);
     Vector2 location;
+    inline void AddComponent(Component* component)
+    {
+        components_.push_back(std::unique_ptr<Component>(component));
+        std::sort(components_.begin(), components_.end());
+    }
 };

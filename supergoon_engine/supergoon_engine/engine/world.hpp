@@ -22,7 +22,7 @@ private:
     SDL_Rect camera;
 
     // TODO remove this
-    GameObject gameObj;
+    GameObject* gameObj;
 
     const char *window_ini_section_name = "window";
     const char *window_width_string = "window_width";

@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <supergoon_engine_export.h>
 
-class TileLayer
+class SUPERGOON_ENGINE_EXPORT TileLayer
 {
 private:
     /* data */
