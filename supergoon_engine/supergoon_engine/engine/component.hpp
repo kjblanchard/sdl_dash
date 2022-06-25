@@ -4,7 +4,8 @@
 #include <supergoon_engine/primitives/vector2.hpp>
 // class SUPERGOON_ENGINE_EXPORT Component : IUpdate
 class GameObject;
-class SUPERGOON_ENGINE_EXPORT Component
+// class SUPERGOON_ENGINE_EXPORT Component
+class Component
 {
 protected:
     Vector2 offset_;
@@ -28,5 +29,5 @@ public:
             return *this;
         return rhs;
     }
-    inline virtual void Draw(SDL_Renderer* renderer){}
+    inline virtual void Draw(SDL_Renderer *renderer) {}
 };

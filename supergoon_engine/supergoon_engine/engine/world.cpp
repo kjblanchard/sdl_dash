@@ -86,7 +86,7 @@ void World::Initialize()
     auto new_boi = Vector2(2,4);
     gameObj = new GameObject{new_boi};
     auto sprite_comp = new SpriteComponent(gameObj);
-    gameObj->AddComponent(sprite_comp);
+    // gameObj->AddComponent(sprite_comp);
 
 
 }

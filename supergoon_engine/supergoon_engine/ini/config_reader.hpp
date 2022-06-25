@@ -2,7 +2,7 @@
 #include <supergoon_engine/ini/ini.hpp>
 #include <supergoon_engine_export.h>
 
-class ConfigReader
+class SUPERGOON_ENGINE_EXPORT ConfigReader
 {
 private:
     static mINI::INIFile file;

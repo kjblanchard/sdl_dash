@@ -2,6 +2,7 @@
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/engine/content.hpp>
+#include <SDL.h>
 
 
 SpriteComponent::SpriteComponent(GameObject *owner) : Component(owner)

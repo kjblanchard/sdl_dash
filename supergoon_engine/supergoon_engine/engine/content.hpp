@@ -1,8 +1,8 @@
 #pragma once
 #include <supergoon_engine_export.h>
 
-class SDL_Renderer;
-class SDL_Texture;
+struct SDL_Renderer;
+struct SDL_Texture;
 
 class SUPERGOON_ENGINE_EXPORT Content
 {

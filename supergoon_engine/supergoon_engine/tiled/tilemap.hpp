@@ -2,8 +2,10 @@
 #include <memory>
 #include <vector>
 #include <supergoon_engine/tiled/tileset_info.hpp>
+#include <supergoon_engine_export.h>
 #include <supergoon_engine/tiled/layer_group.hpp>
 
+// class SUPERGOON_ENGINE_EXPORT Tilemap
 class Tilemap
 {
 private:

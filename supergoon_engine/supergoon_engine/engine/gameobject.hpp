@@ -5,6 +5,7 @@
 #include <supergoon_engine/engine/component.hpp>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 class World;
 class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
@@ -12,7 +13,7 @@ class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
 private:
     /* data */
 protected:
-    std::vector<std::unique_ptr<Component>> components_;
+    // std::vector<std::unique_ptr<Component>> components_;
 
 
 public:
@@ -24,9 +25,9 @@ public:
     void Update(const Gametime& gametime) override;
     void Draw(SDL_Renderer* renderer);
     Vector2 location;
-    inline void AddComponent(Component* component)
-    {
-        components_.push_back(std::unique_ptr<Component>(component));
-        std::sort(components_.begin(), components_.end());
-    }
+    // inline void AddComponent(Component* component)
+    // {
+    //     components_.push_back(std::unique_ptr<Component>(component));
+    //     std::sort(components_.begin(), components_.end());
+    // }
 };

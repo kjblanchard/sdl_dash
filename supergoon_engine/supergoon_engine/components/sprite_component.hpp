@@ -3,7 +3,8 @@
 #include <supergoon_engine/engine/component.hpp>
 
 
-class SUPERGOON_ENGINE_EXPORT SpriteComponent : public Component
+// class SUPERGOON_ENGINE_EXPORT SpriteComponent : public Component
+class SpriteComponent : public Component
 {
 private:
     /* data */
