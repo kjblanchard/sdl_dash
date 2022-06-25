@@ -83,7 +83,7 @@ void World::Initialize()
     // gameObj = GameObject(Vector2(2,4));
     auto new_boi = Vector2(2,4);
     gameObj = new GameObject{new_boi};
-    auto sprite_comp = new SpriteComponent(gameObj);
+    auto sprite_comp = new SpriteComponent(gameObj, Point(16,16));
     gameObj->AddComponent(sprite_comp);
 
 }
