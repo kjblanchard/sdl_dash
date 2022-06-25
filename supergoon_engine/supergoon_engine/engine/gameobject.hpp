@@ -13,7 +13,8 @@ class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
 private:
     /* data */
 protected:
-    // std::vector<std::unique_ptr<Component>> components_;
+//TODO for some reason unique ptrs don't compile on windows (msvc), spent a bit of time on this but couldn't get it to work so just used shared
+    std::vector<std::shared_ptr<Component>> components_;
 
 
 public:
@@ -25,9 +26,9 @@ public:
     void Update(const Gametime& gametime) override;
     void Draw(SDL_Renderer* renderer);
     Vector2 location;
-    // inline void AddComponent(Component* component)
-    // {
-    //     components_.push_back(std::unique_ptr<Component>(component));
-    //     std::sort(components_.begin(), components_.end());
-    // }
+     inline void AddComponent(Component* component)
+     {
+         components_.push_back(std::unique_ptr<Component>(component));
+         std::sort(components_.begin(), components_.end());
+     }
 };

@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/IUpdate.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
+#include <iostream>
 // class SUPERGOON_ENGINE_EXPORT Component : IUpdate
 class GameObject;
 // class SUPERGOON_ENGINE_EXPORT Component
@@ -19,7 +20,10 @@ public:
         owner_ = owner;
     }
 
-    inline virtual ~Component() {}
+    inline virtual ~Component() {
+        
+    std::cout << "Sprite component destructor called" << std::endl;
+    }
 
     // inline void Update(const Gametime &gametime) override {}
     inline void Update(const Gametime &gametime) {}

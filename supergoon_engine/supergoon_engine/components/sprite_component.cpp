@@ -2,6 +2,7 @@
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/engine/content.hpp>
+#include <iostream>
 #include <SDL.h>
 
 
@@ -12,6 +13,7 @@ SpriteComponent::SpriteComponent(GameObject *owner) : Component(owner)
 SpriteComponent::~SpriteComponent()
 {
     SDL_DestroyTexture(texture);
+    std::cout << "Sprite component destructor called" << std::endl;
 }
 
 void SpriteComponent::Draw(SDL_Renderer *renderer)

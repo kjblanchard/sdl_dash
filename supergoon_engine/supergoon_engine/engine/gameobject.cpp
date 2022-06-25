@@ -18,17 +18,17 @@ void GameObject::Update(const Gametime &gametime)
 {
     std::cout << "My location is X: " << location.x << "Y: " << location.y << std::endl;
     std::cout << "Total gametime is " << gametime.DeltaTime() << std::endl;
-    // for (auto &&component : components_)
-    // {
-    //    component.get()->Update(gametime);
-    // }
+     for (auto &&component : components_)
+     {
+        component.get()->Update(gametime);
+     }
 
 }
 
 void GameObject::Draw(SDL_Renderer *renderer)
 {
-    // for (auto &&component : components_)
-    // {
-    //    component.get()->Draw(renderer);
-    // }
+     for (auto &&component : components_)
+     {
+        component.get()->Draw(renderer);
+     }
 }
