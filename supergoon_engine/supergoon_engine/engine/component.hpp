@@ -3,10 +3,8 @@
 #include <supergoon_engine/interfaces/IUpdate.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
-// class SUPERGOON_ENGINE_EXPORT Component : IUpdate
 class GameObject;
-// class SUPERGOON_ENGINE_EXPORT Component
-class Component
+class SUPERGOON_ENGINE_EXPORT Component : IUpdate
 {
 protected:
     Vector2 offset_;
@@ -15,10 +13,10 @@ protected:
 public:
     unsigned char update_order = 255;
     Component(GameObject *owner, Vector2 offset = Vector2());
-    virtual ~Component();
+    virtual ~Component() override;
 
     // inline void Update(const Gametime &gametime) override {}
-    inline void Update(const Gametime &) {}
+    inline void Update(const Gametime &) override {}
     inline Component operator<(const Component &rhs)
     {
         if (update_order < rhs.update_order)

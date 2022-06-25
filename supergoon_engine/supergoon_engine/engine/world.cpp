@@ -78,9 +78,7 @@ void World::Initialize()
     SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
     xml_parser::LoadTiledMap("level_1");
-    //Load in statics.
     content = new Content(renderer);
-    GameObject::world = this;
 
     // gameObj = GameObject(Vector2(2,4));
     auto new_boi = Vector2(2,4);

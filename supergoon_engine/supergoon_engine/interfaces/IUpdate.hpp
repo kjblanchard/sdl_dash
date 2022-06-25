@@ -5,7 +5,13 @@
 class SUPERGOON_ENGINE_EXPORT IUpdate
 {
 public:
+IUpdate();
     virtual void Update(const Gametime &gametime) = 0;
     virtual ~IUpdate();
     bool Enabled = true;
+
+    IUpdate(const IUpdate &) = default;
+    IUpdate(IUpdate &&) = default;
+    IUpdate &operator=(const IUpdate &) = default;
+    IUpdate &operator=(IUpdate &&) = default;
 };

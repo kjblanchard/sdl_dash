@@ -20,7 +20,7 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
     if (texture == NULL)
     {
-        texture = owner_->world->content->LoadTexture("purple");
+        texture = World::GetWorld()->content->LoadTexture("purple");
     }
     SDL_Rect dst_rect;
     dst_rect.w = dst_rect.h = 16;

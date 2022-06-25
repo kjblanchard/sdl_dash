@@ -8,27 +8,47 @@
 #include <algorithm>
 
 class World;
+/**
+ * Base class for all objects in the engine, has a location, and a list of components.
+ */
 class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
 {
 private:
-    /* data */
 protected:
-//TODO for some reason unique ptrs don't compile on windows (msvc), spent a bit of time on this but couldn't get it to work so just used shared
+    /**
+     * Pointer to world, as a convenience function.
+     */
+    static World *world;
+    // TODO for some reason unique ptrs don't compile on windows (msvc), spent a bit of time on this but couldn't get it to work so just used shared
+    /**
+     * List of components on the gameObject
+     *
+     * This is in Shared pointer, so it is destructed automatically when this gameobject is destroyed.
+     */
     std::vector<std::shared_ptr<Component>> components_;
 
-
 public:
-//TODO make this not public
-    static World* world;
+    Vector2 location;
     GameObject(Vector2 loc = Vector2());
     virtual ~GameObject() override;
 
-    void Update(const Gametime& gametime) override;
-    void Draw(SDL_Renderer* renderer);
-    Vector2 location;
-     inline void AddComponent(Component* component)
-     {
-         components_.push_back(std::unique_ptr<Component>(component));
-         std::sort(components_.begin(), components_.end());
-     }
+    /**
+     * Calls update on all components on this gameobject.
+     * @param gametime Reference to the gametime
+     */
+    void Update(const Gametime &gametime) override;
+    /**
+     * Calls Draw all components on this gameobject.
+     * @param renderer pointer to the renderer currently.
+     */
+    void Draw(SDL_Renderer *renderer);
+    /**
+     * Adds a component to this gameobject, and then sorts them.
+     * @param component pointer to the component to add.
+     */
+    inline void AddComponent(Component *component)
+    {
+        components_.push_back(std::unique_ptr<Component>(component));
+        std::sort(components_.begin(), components_.end());
+    }
 };
