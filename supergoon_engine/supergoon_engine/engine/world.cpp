@@ -9,6 +9,7 @@
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
+#include <supergoon_engine/tiled/tiled.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -78,18 +79,11 @@ void World::Initialize()
     camera.h = unscaled_height;
     SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
-    xml_parser::LoadTiledMap("level_1");
+    auto tilemap = xml_parser::LoadTiledMap("level_1");
+    auto tiles = Tiled::LoadTilesFromTilemap(tilemap);
     content = new Content(renderer);
+    Tiled::LoadTexturesFromTilemap(tilemap, content);
 
-    // gameObj = GameObject(Vector2(2,4));
-    auto filename = "purple";
-    auto rect = Rectangle(Point(0, 0), Point(16, 16));
-
-    auto tile1 = new Tile(Vector2(0, 0), filename, rect);
-    auto tile2 = new Tile(Vector2(32, 0), filename, rect);
-    auto tile3 = new Tile(Vector2(0, 32), filename, rect);
-
-    tiles.insert(tiles.end(), {tile1, tile2, tile3});
 }
 
 void World::InitializeSdl()

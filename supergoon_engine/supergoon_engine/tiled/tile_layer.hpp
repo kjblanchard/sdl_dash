@@ -14,13 +14,4 @@ public:
     int width;
     int height;
     std::vector<int> tiles;
-
-    TileLayer();
-    ~TileLayer();
 };
-TileLayer::TileLayer()
-{
-}
-TileLayer::~TileLayer()
-{
-}

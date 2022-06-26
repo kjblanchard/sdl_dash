@@ -14,15 +14,16 @@ Content::~Content()
 }
 SDL_Texture *Content::LoadTexture(const char *filename)
 {
-    // TODO handle the location and postfix better.
-    //Check to see if we have already loaded it.
+    // TODO handle the location and postfix better, since we can only load tilesets currently.
+    // Check to see if we have already loaded it.
     if (loaded_textures.contains(filename))
         return loaded_textures.find(filename)->second;
     SDL_Surface *
-        surf;
-    SDL_Texture *tex;
+        surf = NULL;
+    SDL_Texture *tex = NULL;
     std::string prefix = "./assets/tiled/tilesets/";
-    auto full = prefix + filename + ".png";
+    std::string full = prefix + filename;
+    std::cout << "Full path is " << full << std::endl;
 
     surf = IMG_Load(full.c_str());
     if (surf == NULL)
@@ -35,6 +36,6 @@ SDL_Texture *Content::LoadTexture(const char *filename)
         std::cout << "Error loading: " << IMG_GetError() << std::endl;
     }
     SDL_FreeSurface(surf);
-    loaded_textures.emplace(filename,tex);
+    loaded_textures.emplace(filename, tex);
     return tex;
 }

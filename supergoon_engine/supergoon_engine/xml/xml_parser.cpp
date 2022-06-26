@@ -33,8 +33,8 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
 
         auto element = first_group->FirstChildElement("layer");
         auto last_element = first_group->LastChildElement("layer");
-        bool still_reading = true;
-        while (still_reading)
+        bool still_reading_layers = true;
+        while (still_reading_layers)
         {
             auto layer_ptr = new TileLayer();
             layer_ptr->layer_name = element->Attribute("name");
@@ -68,7 +68,7 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
             }
 
             if (element == last_element)
-                still_reading = false;
+                still_reading_layers = false;
             else
                 element = element->NextSiblingElement("layer");
             // Add this layer to the tile layers so that it is deleted properly.
@@ -76,6 +76,46 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
         }
         tile_map_ptr->layer_groups.push_back(std::unique_ptr<LayerGroup>(layer_group_ptr));
 
+        // Grab all the tilesets information.
+
+        element = root_element->FirstChildElement("tileset");
+        last_element = root_element->LastChildElement("tileset");
+        bool still_reading_tilesets = true;
+        while (still_reading_tilesets)
+        {
+            auto tsx = new Tsx();
+            tsx->first_gid = element->IntAttribute("firstgid");
+            std::string tsx_name = element->Attribute("source");
+            auto tsx_full_name = "./assets/tiled/" + tsx_name;
+            auto current_tsx = new tinyxml2::XMLDocument();
+            auto tsx_result = current_tsx->LoadFile(tsx_full_name.c_str());
+            if (tsx_result != tinyxml2::XMLError::XML_SUCCESS)
+                continue;
+            auto tsx_root_element = current_tsx->RootElement();
+            if (tsx_root_element)
+            {
+                tsx->layer_name = tsx_root_element->Attribute("name");
+                tsx->tile_height = tsx_root_element->IntAttribute("tileheight");
+                tsx->tile_width = tsx_root_element->IntAttribute("tilewidth");
+                // Check to see if this is a Image TSX
+                auto is_image_tsx = tsx_root_element->FirstChildElement("tile");
+                if (is_image_tsx != nullptr)
+                {
+                    auto image_element = is_image_tsx->FirstChildElement("image");
+                    tsx->image_source = image_element->Attribute("source");
+                }
+                else
+                {
+                    auto image_element = tsx_root_element->FirstChildElement("image");
+                    tsx->image_source = image_element->Attribute("source");
+                }
+            }
+            if (element == last_element)
+                still_reading_tilesets = false;
+            else
+                element = element->NextSiblingElement("tileset");
+            tile_map_ptr->tsx_in_tilemap.push_back(std::unique_ptr<Tsx>(tsx));
+        }
         return tile_map_ptr;
     }
     return nullptr;

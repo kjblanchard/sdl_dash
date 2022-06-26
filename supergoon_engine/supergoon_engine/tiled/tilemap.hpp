@@ -4,6 +4,7 @@
 #include <supergoon_engine/tiled/tileset_info.hpp>
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/tiled/layer_group.hpp>
+#include <supergoon_engine/tiled/tsx.hpp>
 
 // class SUPERGOON_ENGINE_EXPORT Tilemap
 class Tilemap
@@ -23,5 +24,6 @@ public:
 
     std::vector<std::unique_ptr<TilesetInfo>> tileset_infos;
     std::vector<std::unique_ptr<LayerGroup>> layer_groups;
+    std::vector<std::unique_ptr<Tsx>> tsx_in_tilemap;
 };
 

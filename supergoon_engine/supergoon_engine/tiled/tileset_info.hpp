@@ -11,10 +11,3 @@ public:
     ~TilesetInfo();
 };
 
-TilesetInfo::TilesetInfo(/* args */)
-{
-}
-
-TilesetInfo::~TilesetInfo()
-{
-}
