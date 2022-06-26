@@ -1,11 +1,12 @@
 #pragma once
 #define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <supergoon_engine_export.h>
 #include <memory>
+#include <vector>
+#include <SDL.h>
 #include <supergoon_engine/primitives/gametime.hpp>
-#include <supergoon_engine/engine/gameobject.hpp>
+#include <supergoon_engine_export.h>
 
+class Tile;
 class Content;
 class ConfigReader;
 // TODO remove this
@@ -22,7 +23,8 @@ private:
     SDL_Rect camera;
 
     // TODO remove this
-    GameObject* gameObj;
+    std::vector<Tile*> tiles;
+
 
     const char *window_ini_section_name = "window";
     const char *window_width_string = "window_width";

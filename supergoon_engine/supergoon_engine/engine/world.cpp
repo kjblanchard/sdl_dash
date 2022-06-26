@@ -8,6 +8,7 @@
 #include <supergoon_engine/xml/xml_parser.hpp>
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
+#include <supergoon_engine/objects/tile.hpp>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -81,13 +82,14 @@ void World::Initialize()
     content = new Content(renderer);
 
     // gameObj = GameObject(Vector2(2,4));
-    auto new_boi = Vector2(2, 4);
-    gameObj = new GameObject{new_boi};
-    auto sprite_comp = new SpriteComponent(gameObj, "purple", Point(16, 16));
-    auto sprite_comp2 = new SpriteComponent(gameObj, "purple", Point(16, 16));
-    auto sprite_comp3 = new SpriteComponent(gameObj, "purple", Point(16, 16));
-    auto sprite_comp4 = new SpriteComponent(gameObj, "purple", Point(16, 16));
-    gameObj->AddComponent(sprite_comp);
+    auto filename = "purple";
+    auto rect = Rectangle(Point(0, 0), Point(16, 16));
+
+    auto tile1 = new Tile(Vector2(0, 0), filename, rect);
+    auto tile2 = new Tile(Vector2(32, 0), filename, rect);
+    auto tile3 = new Tile(Vector2(0, 32), filename, rect);
+
+    tiles.insert(tiles.end(), {tile1, tile2, tile3});
 }
 
 void World::InitializeSdl()
@@ -138,14 +140,22 @@ void World::Update(Gametime &gametime)
     /// Actually do update stuff
     std::cout << "The update time is " << gametime.ElapsedTimeInSeconds() << "And " << gametime.DeltaTime() << std::endl;
     Sound::Update();
-    gameObj->Update(gametime);
+    for (auto &&tile : tiles)
+    {
+        tile->Update(gametime);
+    }
+
+    // tiles->Update(gametime);
 }
 
 void World::Render()
 {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
-    gameObj->Draw(renderer);
+    for (auto &&tile : tiles)
+    {
+        tile->Draw(renderer);
+    }
 
     SDL_RenderPresent(renderer);
 }
