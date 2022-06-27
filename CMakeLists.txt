@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.2)
 project(sdl_dash VERSION 0.0.1)
+# This is needed for building sdl_image
+enable_language(OBJC)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
-# Set the output dir to debug cause of MSVC being a crap compiler, but it's the only way to debug on windows.....
 include(CPack)
 add_subdirectory(supergoon_engine)
 add_subdirectory(supergoon_dash)
