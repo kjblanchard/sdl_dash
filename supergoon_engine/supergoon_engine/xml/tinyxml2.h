@@ -20,6 +20,10 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source
 distribution.
 */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
+
 #include <supergoon_engine_export.h>
 
 #ifndef TINYXML2_INCLUDED
@@ -2379,3 +2383,5 @@ private:
 #endif
 
 #endif // TINYXML2_INCLUDED
+
+#pragma clang diagnostic pop

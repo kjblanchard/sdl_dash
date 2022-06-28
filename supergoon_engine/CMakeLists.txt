@@ -6,15 +6,18 @@ include(FindPkgConfig)
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
 
+
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
+#Add all of our tinyxml files and headers to this library.
+file(GLOB TINYXML external/tinyxml/src/*)
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
     add_subdirectory(./external/SDL2-2.0.22)
     add_subdirectory(./external/SDL_image)
 endif()
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
-add_library(supergoon_engine SHARED ${FILES})
+add_library(supergoon_engine SHARED ${FILES} ${TINYXML})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
@@ -85,12 +88,17 @@ message(STATUS "Adding include Directories to the project.")
 target_include_directories(supergoon_engine
         SYSTEM
         PRIVATE
+        # built sdl2 includes
         "./external/SDL2-2.0.22/include/"
+        # built sdl_image
+        "./external/SDL_image/"
+        # This is where our fmod includes live.
         "./external/include/"
         )
 target_include_directories(supergoon_engine
         PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/"
+        # This is needed for the exports file.
         "${CMAKE_BINARY_DIR}/exports/"
         )
 
