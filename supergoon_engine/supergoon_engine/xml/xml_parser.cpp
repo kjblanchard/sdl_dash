@@ -117,6 +117,7 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
             tile_map_ptr->tsx_in_tilemap.push_back(std::unique_ptr<Tsx>(tsx));
         }
         return tile_map_ptr;
+
     }
     return nullptr;
 }

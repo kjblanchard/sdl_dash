@@ -15,4 +15,12 @@ public:
     int tile_width;
     int tile_height;
     int first_gid;
+
+    //TODO this doesn't work right.
+    inline Tsx operator<(const Tsx &rhs)
+    {
+        if (first_gid > rhs.first_gid)
+            return *this;
+        return rhs;
+    }
 };
