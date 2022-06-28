@@ -10,7 +10,6 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tiled.hpp>
-#include <SDL_ttf.h>
 #include <SDL_image.h>
 
 World *World::instance = nullptr;
@@ -91,9 +90,10 @@ void World::InitializeSdl()
     auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
-    auto sdl_ttf_init_result = TTF_Init();
-    if (sdl_ttf_init_result != 0)
-        throw std::runtime_error(TTF_GetError());
+        //TODO when adding in ttf, do it here
+    // auto sdl_ttf_init_result = TTF_Init();
+    // if (sdl_ttf_init_result != 0)
+    //     throw std::runtime_error(TTF_GetError());
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
     int initted = IMG_Init(flags);
     if ((initted & flags) != flags)

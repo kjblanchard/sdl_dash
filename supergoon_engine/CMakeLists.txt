@@ -23,9 +23,7 @@ set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
 # Sets the module path, this is so that we can use the find sdl package below with the FindSDL2.cmake file in the location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
-# We are building this from source
 
-# find_package(SDL2 REQUIRED)
 
 # Add external libraries, these don't use cmake at all so we have a longer process.
 add_library(fmod SHARED IMPORTED)
@@ -62,6 +60,7 @@ elseif(APPLE)
     set(COPY_LIBS libfmod.dylib libfmodstudio.dylib)
 elseif(UNIX)
     message(STATUS "Setting Up Linux, these are installed via apt with the bootstrap.sh, and is found automatically due to issues building from source.")
+    find_package(SDL2 REQUIRED)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(SDL2_image REQUIRED SDL2_image)
     pkg_check_modules(SDL2_ttf REQUIRED SDL2_ttf)
@@ -98,7 +97,7 @@ target_include_directories(supergoon_engine
 message(STATUS "Linking to the external libraries.")
 # We are compiling from source for apple/win32 for SDL2 and SDL_image, ttf is not currently.
 if(APPLE OR WIN32)
-    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image SDL2_ttf::SDL2_ttf )
+    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image)
 else()
     target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image SDL2_ttf )
 endif()
