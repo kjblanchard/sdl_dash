@@ -1,10 +1,12 @@
 #pragma once
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/IUpdate.hpp>
+#include <supergoon_engine/interfaces/i_initialize.hpp>
+
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
 class GameObject;
-class SUPERGOON_ENGINE_EXPORT Component : IUpdate
+class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize
 {
 protected:
     Vector2 offset_;
@@ -15,6 +17,7 @@ public:
     Component(GameObject *owner, Vector2 offset = Vector2());
     virtual ~Component() override;
 
+    inline void Initialize() override {}
     inline void Update(const Gametime &) override {}
     inline Component operator<(const Component &rhs)
     {

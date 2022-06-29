@@ -11,7 +11,7 @@ private:
     /* data */
     SpriteComponent* sprite_component_;
 public:
-    Tile(Vector2 loc, const char* filename, Rectangle src_rect);
+    Tile(Vector2 loc, SDL_Texture* texture, Rectangle src_rect);
     ~Tile() override;
 };
 

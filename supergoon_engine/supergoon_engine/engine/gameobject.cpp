@@ -18,6 +18,11 @@ GameObject::~GameObject()
 {
 }
 
+void GameObject::Initialize()
+{
+
+}
+
 void GameObject::Update(const Gametime &gametime)
 {
    for (auto &&component : components_)

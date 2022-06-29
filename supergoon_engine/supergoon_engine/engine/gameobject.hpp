@@ -1,6 +1,7 @@
 #pragma once
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/IUpdate.hpp>
+#include <supergoon_engine/interfaces/i_initialize.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <supergoon_engine/engine/component.hpp>
 #include <vector>
@@ -11,7 +12,7 @@ class World;
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
-class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate
+class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize
 {
 private:
 protected:
@@ -32,6 +33,7 @@ public:
     GameObject(Vector2 loc = Vector2());
     virtual ~GameObject() override;
 
+    void Initialize() override;
     /**
      * Calls update on all components on this gameobject.
      * @param gametime Reference to the gametime

@@ -5,8 +5,9 @@
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tsx.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
+#include <supergoon_engine/engine/content.hpp>
 
-std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
+std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap, Content *content)
 {
     std::vector<Tile *> tiles;
     for (size_t layer_group_i = 0; layer_group_i < tilemap->layer_groups.size(); layer_group_i++)
@@ -22,12 +23,15 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
                 // If gid is 0, skip as this is a blank tile.
                 if (tile_gid == 0)
                     continue;
+
                 auto tsx = Tiled::GetTsxFromGid(tilemap, tile_gid);
                 auto dst_rect = Tiled::GetTileSrcRectFromTileDataI(tilemap, tsx, static_cast<int>(tile_i));
                 auto tsx_tile_num = Tiled::GetTsxTileNumberFromTileGid(tsx, tile_gid);
                 Rectangle source_rect = Tiled::GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
 
-                auto new_tile = new Tile(dst_rect.location.ToVector2(), tsx->image_source.c_str(), source_rect);
+                auto texture_ptr = content->LoadTexture(tsx->image_source.c_str());
+
+                auto new_tile = new Tile(dst_rect.location.ToVector2(), texture_ptr, source_rect);
                 tiles.push_back(new_tile);
             }
         }

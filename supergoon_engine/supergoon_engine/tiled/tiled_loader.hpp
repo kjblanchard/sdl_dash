@@ -4,11 +4,11 @@
 #include <supergoon_engine/primitives/rectangle.hpp>
 
 class Tile;
+class Content;
 
 namespace Tiled
 {
     class Tilemap;
-    class Content;
     class Tsx;
 
     /**
@@ -17,7 +17,7 @@ namespace Tiled
      * @param tilemap The loaded tilemap
      * @return Vector of tiles that can be used to draw with.
      */
-    std::vector<Tile *> LoadTilesFromTilemap(Tilemap *tilemap);
+    std::vector<Tile *> LoadTilesFromTilemap(Tilemap *tilemap, Content *content);
     /**
      * Gets the current tsx that the tile gid uses.  Useful to know the source image location
      *
