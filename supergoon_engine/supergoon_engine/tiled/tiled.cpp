@@ -26,7 +26,7 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
                 if (tile_gid == 0)
                     continue;
                 auto tsx = Tiled::GetTsxFromGid(tilemap, tile_gid);
-                auto dst_rect = GetTileSrcRectFromTileDataI(tilemap, tile_i, tsx->collection_of_images);
+                auto dst_rect = GetTileSrcRectFromTileDataI(tilemap,tsx, tile_i);
                 auto tsx_tile_num = GetTsxTileNumberFromTileGid(tsx, tile_gid);
                 Rectangle source_rect = GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
 
@@ -60,36 +60,28 @@ Tsx *Tiled::GetTsxFromGid(Tilemap *tilemap, int gid)
     }
     return nullptr;
 }
-//  private int GetTileNumberFromTileGid(int tileGid, int tilesetNum)
-//     {
-//         return tileGid - TileMap.Tilesets[tilesetNum].firstgid;
-//     }
 int Tiled::GetTsxTileNumberFromTileGid(Tsx *tsx, int gid)
 {
     return gid - tsx->first_gid;
 }
 
-//    float x = (tileIterator % TileMap.Width) * TileMap.TileWidth;
-//                 float y = (float)Math.Floor(tileIterator / (double)TileMap.Width) * TileMap.TileHeight;
-Point Tiled::GetTileLocationFromTileDataI(Tilemap *tilemap, int i, bool collection_of_images)
+Point Tiled::GetTileLocationFromTileDataI(Tilemap *tilemap, Tsx* tsx, int i)
 {
 
     int x = (i % tilemap->width) * tilemap->tile_width;
     int y = floor(i / tilemap->width) * tilemap->tile_height;
-    if(collection_of_images)
+    if(tsx->collection_of_images)
     {
-        //TODO get the correct offset from the tsx, this is due to how collection of images are drawn in tiled.
-        auto tilesize = 64;
-        auto offset = 64 - tilemap->tile_height;
+        auto offset = tsx->tile_height - tilemap->tile_height;
         y -= offset;
     }
     return Point(x, y);
 }
-Rectangle Tiled::GetTileSrcRectFromTileDataI(Tilemap *tsx, int i, bool collection_of_images)
+Rectangle Tiled::GetTileSrcRectFromTileDataI(Tilemap *tilemap, Tsx* tsx, int i)
 {
     return Rectangle(
-        Tiled::GetTileLocationFromTileDataI(tsx, i, collection_of_images),
-        Point(tsx->tile_width, tsx->tile_height));
+        Tiled::GetTileLocationFromTileDataI(tilemap, tsx, i),
+        Point(tilemap->tile_width, tilemap->tile_height));
 }
 Rectangle Tiled::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
 {
@@ -99,11 +91,6 @@ Rectangle Tiled::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number
 }
 Point Tiled::GetTileSourceLocationFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
 {
-    if(!tsx->collection_of_images)
-    {
-        std::cout << "hi";
-
-    }
     int x = (tsx_tile_number % tsx->columns) * tsx->tile_width;
     int y = (tsx_tile_number / tsx->columns) * tsx->tile_height;
     return Point(x, y);

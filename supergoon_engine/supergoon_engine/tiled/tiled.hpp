@@ -20,8 +20,8 @@ public:
     static Tsx* GetTsxFromGid(Tilemap* tilemap, int gid);
     static void LoadTexturesFromTilemap(Tilemap* tilemap, Content* content);
     static int GetTsxTileNumberFromTileGid(Tsx* tsx, int gid);
-    static Point GetTileLocationFromTileDataI(Tilemap* tilemap, int i, bool collection_of_images);
-    static Rectangle GetTileSrcRectFromTileDataI(Tilemap* tsx, int i, bool collection_of_images);
+    static Point GetTileLocationFromTileDataI(Tilemap* tilemap, Tsx* tsx,  int i);
+    static Rectangle GetTileSrcRectFromTileDataI(Tilemap* tilemap, Tsx* tsx, int i);
 
     static Point GetTileSourceLocationFromTsxTileNumber(Tsx* tsx, int tsx_tile_number);
     static Rectangle GetTileRectangleFromTsxTileNumber(Tsx* tsx, int tsx_tile_number);
