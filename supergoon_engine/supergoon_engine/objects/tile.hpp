@@ -2,7 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/gameobject.hpp>
 
-class Rectangle;
+struct Rectangle;
 class SpriteComponent;
 
 class Tile : public GameObject
@@ -12,6 +12,6 @@ private:
     SpriteComponent* sprite_component_;
 public:
     Tile(Vector2 loc, const char* filename, Rectangle src_rect);
-    ~Tile();
+    ~Tile() override;
 };
 

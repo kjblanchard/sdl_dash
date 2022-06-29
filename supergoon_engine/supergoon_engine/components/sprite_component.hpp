@@ -16,7 +16,7 @@ public:
 public:
     SpriteComponent(GameObject *owner, const char* filename, Point size = Point(), Point src_loc = Point());
     SpriteComponent(GameObject *owner, const char* filename, Rectangle src_rectangle);
-    ~SpriteComponent();
+    ~SpriteComponent() override;
     void Update(const Gametime &gametime) override;
     void Draw(SDL_Renderer *renderer) override;
 };

@@ -3,11 +3,8 @@
 #include <supergoon_engine/tiled/layer_group.hpp>
 #include <supergoon_engine/tiled/tile_layer.hpp>
 #include <supergoon_engine/objects/tile.hpp>
-#include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/tiled/tsx.hpp>
-
 #include <supergoon_engine/primitives/rectangle.hpp>
-#include <iostream>
 
 std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
 {
@@ -26,7 +23,7 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
                 if (tile_gid == 0)
                     continue;
                 auto tsx = Tiled::GetTsxFromGid(tilemap, tile_gid);
-                auto dst_rect = GetTileSrcRectFromTileDataI(tilemap,tsx, tile_i);
+                auto dst_rect = GetTileSrcRectFromTileDataI(tilemap, tsx, static_cast<int>(tile_i));
                 auto tsx_tile_num = GetTsxTileNumberFromTileGid(tsx, tile_gid);
                 Rectangle source_rect = GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
 
@@ -35,15 +32,7 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
             }
         }
     }
-
     return tiles;
-}
-void Tiled::LoadTexturesFromTilemap(Tilemap *tilemap, Content *content)
-{
-    for (auto &&tsx : tilemap->tsx_in_tilemap)
-    {
-        content->LoadTexture(tsx->image_source.c_str());
-    }
 }
 
 Tsx *Tiled::GetTsxFromGid(Tilemap *tilemap, int gid)
@@ -60,27 +49,29 @@ Tsx *Tiled::GetTsxFromGid(Tilemap *tilemap, int gid)
     }
     return nullptr;
 }
+
 int Tiled::GetTsxTileNumberFromTileGid(Tsx *tsx, int gid)
 {
     return gid - tsx->first_gid;
 }
 
-Point Tiled::GetTileLocationFromTileDataI(Tilemap *tilemap, Tsx* tsx, int i)
+Point Tiled::GetTileDstLocationFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
 {
 
     int x = (i % tilemap->width) * tilemap->tile_width;
-    int y = floor(i / tilemap->width) * tilemap->tile_height;
-    if(tsx->collection_of_images)
+    int y = (i / tilemap->width) * tilemap->tile_height;
+    // Collection of images needs an offset due to the way tiled draws them in the editor.
+    if (tsx->collection_of_images)
     {
         auto offset = tsx->tile_height - tilemap->tile_height;
         y -= offset;
     }
     return Point(x, y);
 }
-Rectangle Tiled::GetTileSrcRectFromTileDataI(Tilemap *tilemap, Tsx* tsx, int i)
+Rectangle Tiled::GetTileSrcRectFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
 {
     return Rectangle(
-        Tiled::GetTileLocationFromTileDataI(tilemap, tsx, i),
+        Tiled::GetTileDstLocationFromTileDataI(tilemap, tsx, i),
         Point(tilemap->tile_width, tilemap->tile_height));
 }
 Rectangle Tiled::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)

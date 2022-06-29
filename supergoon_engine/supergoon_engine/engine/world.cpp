@@ -57,7 +57,7 @@ void World::Initialize()
     screenScaleRatioHeight = window_width / unscaled_width;
 
     window = SDL_CreateWindow(
-        NULL,
+        nullptr,
         0,
         0,
         window_width,
@@ -81,7 +81,6 @@ void World::Initialize()
     content = new Content(renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap);
-    Tiled::LoadTexturesFromTilemap(tilemap, content);
 
 }
 
