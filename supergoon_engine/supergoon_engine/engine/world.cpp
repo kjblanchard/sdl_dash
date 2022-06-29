@@ -78,9 +78,9 @@ void World::Initialize()
     camera.h = unscaled_height;
     SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
-    auto tilemap = xml_parser::LoadTiledMap("level_1");
-    auto tiles = Tiled::LoadTilesFromTilemap(tilemap);
     content = new Content(renderer);
+    auto tilemap = xml_parser::LoadTiledMap("level_1");
+    tiles = Tiled::LoadTilesFromTilemap(tilemap);
     Tiled::LoadTexturesFromTilemap(tilemap, content);
 
 }

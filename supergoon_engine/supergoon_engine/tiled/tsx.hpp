@@ -15,6 +15,8 @@ public:
     int tile_width;
     int tile_height;
     int first_gid;
+    int columns;
+    bool collection_of_images;
 
     //TODO this doesn't work right.
     inline Tsx operator<(const Tsx &rhs)

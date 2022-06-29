@@ -97,17 +97,20 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
                 tsx->layer_name = tsx_root_element->Attribute("name");
                 tsx->tile_height = tsx_root_element->IntAttribute("tileheight");
                 tsx->tile_width = tsx_root_element->IntAttribute("tilewidth");
+                tsx->columns = tsx_root_element->IntAttribute("columns");
                 // Check to see if this is a Image TSX
                 auto is_image_tsx = tsx_root_element->FirstChildElement("tile");
                 if (is_image_tsx != nullptr)
                 {
                     auto image_element = is_image_tsx->FirstChildElement("image");
                     tsx->image_source = image_element->Attribute("source");
+                    tsx->collection_of_images = true;
                 }
                 else
                 {
                     auto image_element = tsx_root_element->FirstChildElement("image");
                     tsx->image_source = image_element->Attribute("source");
+                    tsx->collection_of_images = false;
                 }
             }
             if (element == last_element)
