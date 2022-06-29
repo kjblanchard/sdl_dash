@@ -80,7 +80,7 @@ void World::Initialize()
     isRunning = true;
     content = new Content(renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
-    tiles = TiledLoader::LoadTilesFromTilemap(tilemap);
+    tiles = Tiled::TiledLoader::LoadTilesFromTilemap(tilemap);
 
 }
 

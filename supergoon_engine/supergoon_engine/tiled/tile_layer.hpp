@@ -3,15 +3,18 @@
 #include <vector>
 #include <supergoon_engine_export.h>
 
-// class SUPERGOON_ENGINE_EXPORT TileLayer
-class TileLayer
+namespace Tiled
 {
-private:
-    /* data */
-public:
-    int layer_id;
-    std::string layer_name;
-    int width;
-    int height;
-    std::vector<int> tiles;
-};
+    class SUPERGOON_ENGINE_EXPORT TileLayer
+    {
+    private:
+        /* data */
+    public:
+        int layer_id;
+        std::string layer_name;
+        int width;
+        int height;
+        std::vector<int> tiles;
+    };
+
+}

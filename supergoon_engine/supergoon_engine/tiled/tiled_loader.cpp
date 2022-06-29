@@ -6,6 +6,8 @@
 #include <supergoon_engine/tiled/tsx.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
 
+using namespace Tiled;
+
 std::vector<Tile *> TiledLoader::LoadTilesFromTilemap(Tilemap *tilemap)
 {
     std::vector<Tile *> tiles;

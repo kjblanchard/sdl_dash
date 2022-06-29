@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <stdexcept>
 
+using namespace Tiled;
+
 Tilemap *xml_parser::LoadTiledMap(std::string filename)
 {
     auto full_name = "./assets/tiled/" + filename + ".tmx";

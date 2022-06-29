@@ -1,13 +1,13 @@
 #pragma once
 #include <supergoon_engine_export.h>
 
-// class SUPERGOON_ENGINE_EXPORT TilesetInfo
-class TilesetInfo
+namespace Tiled
 {
-private:
-    /* data */
-public:
-    TilesetInfo(/* args */);
-    ~TilesetInfo();
-};
 
+    class SUPERGOON_ENGINE_EXPORT TilesetInfo
+    {
+    public:
+        TilesetInfo();
+        ~TilesetInfo();
+    };
+}

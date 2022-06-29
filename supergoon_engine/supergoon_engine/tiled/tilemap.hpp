@@ -6,24 +6,24 @@
 #include <supergoon_engine/tiled/layer_group.hpp>
 #include <supergoon_engine/tiled/tsx.hpp>
 
-// class SUPERGOON_ENGINE_EXPORT Tilemap
-class Tilemap
+namespace Tiled
 {
-private:
-    /* data */
-public:
-    inline ~Tilemap()
+    class SUPERGOON_ENGINE_EXPORT Tilemap
     {
-        tileset_infos.clear();
-        layer_groups.clear();
-    }
-    int width;
-    int height;
-    int tile_width;
-    int tile_height;
+    public:
+        inline ~Tilemap()
+        {
+            tileset_infos.clear();
+            layer_groups.clear();
+        }
+        int width;
+        int height;
+        int tile_width;
+        int tile_height;
 
-    std::vector<std::unique_ptr<TilesetInfo>> tileset_infos;
-    std::vector<std::unique_ptr<LayerGroup>> layer_groups;
-    std::vector<std::unique_ptr<Tsx>> tsx_in_tilemap;
-};
+        std::vector<std::unique_ptr<TilesetInfo>> tileset_infos;
+        std::vector<std::unique_ptr<Tiled::LayerGroup>> layer_groups;
+        std::vector<std::unique_ptr<Tsx>> tsx_in_tilemap;
+    };
 
+}

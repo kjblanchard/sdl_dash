@@ -2,27 +2,30 @@
 #include <supergoon_engine_export.h>
 #include <string>
 
-
 class Tile;
-class Tilemap;
 
-class Tsx
+namespace Tiled
 {
-public:
+    class Tilemap;
 
-    std::string layer_name;
-    std::string image_source;
-    int tile_width;
-    int tile_height;
-    int first_gid;
-    int columns;
-    bool collection_of_images;
-
-    //TODO this doesn't work right.
-    inline Tsx operator<(const Tsx &rhs)
+    class Tsx
     {
-        if (first_gid > rhs.first_gid)
-            return *this;
-        return rhs;
-    }
-};
+    public:
+        std::string layer_name;
+        std::string image_source;
+        int tile_width;
+        int tile_height;
+        int first_gid;
+        int columns;
+        bool collection_of_images;
+
+        // TODO this doesn't work right.
+        inline Tsx operator<(const Tsx &rhs)
+        {
+            if (first_gid > rhs.first_gid)
+                return *this;
+            return rhs;
+        }
+    };
+
+}
