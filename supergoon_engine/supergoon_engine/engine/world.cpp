@@ -9,7 +9,7 @@
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
-#include <supergoon_engine/tiled/tiled.hpp>
+#include <supergoon_engine/tiled/tiled_loader.hpp>
 #include <SDL_image.h>
 
 World *World::instance = nullptr;
@@ -80,7 +80,7 @@ void World::Initialize()
     isRunning = true;
     content = new Content(renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
-    tiles = Tiled::LoadTilesFromTilemap(tilemap);
+    tiles = TiledLoader::LoadTilesFromTilemap(tilemap);
 
 }
 

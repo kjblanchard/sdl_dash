@@ -12,11 +12,11 @@ class Tsx;
 * This class has a lot of useful functions for working with loaded TSX and TMX data
 * This class just has halper functions, and cannot be instantiated.
 */
-class Tiled
+class TiledLoader
 {
 private:
-    Tiled() = delete;
-    ~Tiled() = delete;
+    TiledLoader() = delete;
+    ~TiledLoader() = delete;
 
 public:
     /**
