@@ -6,9 +6,7 @@
 #include <supergoon_engine/tiled/tsx.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
 
-using namespace Tiled;
-
-std::vector<Tile *> TiledLoader::LoadTilesFromTilemap(Tilemap *tilemap)
+std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap)
 {
     std::vector<Tile *> tiles;
     for (size_t layer_group_i = 0; layer_group_i < tilemap->layer_groups.size(); layer_group_i++)
@@ -24,10 +22,10 @@ std::vector<Tile *> TiledLoader::LoadTilesFromTilemap(Tilemap *tilemap)
                 // If gid is 0, skip as this is a blank tile.
                 if (tile_gid == 0)
                     continue;
-                auto tsx = TiledLoader::GetTsxFromGid(tilemap, tile_gid);
-                auto dst_rect = GetTileSrcRectFromTileDataI(tilemap, tsx, static_cast<int>(tile_i));
-                auto tsx_tile_num = GetTsxTileNumberFromTileGid(tsx, tile_gid);
-                Rectangle source_rect = GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
+                auto tsx = Tiled::GetTsxFromGid(tilemap, tile_gid);
+                auto dst_rect = Tiled::GetTileSrcRectFromTileDataI(tilemap, tsx, static_cast<int>(tile_i));
+                auto tsx_tile_num = Tiled::GetTsxTileNumberFromTileGid(tsx, tile_gid);
+                Rectangle source_rect = Tiled::GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
 
                 auto new_tile = new Tile(dst_rect.location.ToVector2(), tsx->image_source.c_str(), source_rect);
                 tiles.push_back(new_tile);
@@ -37,7 +35,7 @@ std::vector<Tile *> TiledLoader::LoadTilesFromTilemap(Tilemap *tilemap)
     return tiles;
 }
 
-Tsx *TiledLoader::GetTsxFromGid(Tilemap *tilemap, int gid)
+Tiled::Tsx *Tiled::GetTsxFromGid(Tilemap *tilemap, int gid)
 {
     for (size_t i = 0; i < tilemap->tsx_in_tilemap.size(); i++)
     {
@@ -52,12 +50,12 @@ Tsx *TiledLoader::GetTsxFromGid(Tilemap *tilemap, int gid)
     return nullptr;
 }
 
-int TiledLoader::GetTsxTileNumberFromTileGid(Tsx *tsx, int gid)
+int Tiled::GetTsxTileNumberFromTileGid(Tsx *tsx, int gid)
 {
     return gid - tsx->first_gid;
 }
 
-Point TiledLoader::GetTileDstLocationFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
+Point Tiled::GetTileDstLocationFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
 {
 
     int x = (i % tilemap->width) * tilemap->tile_width;
@@ -70,19 +68,19 @@ Point TiledLoader::GetTileDstLocationFromTileDataI(Tilemap *tilemap, Tsx *tsx, i
     }
     return Point(x, y);
 }
-Rectangle TiledLoader::GetTileSrcRectFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
+Rectangle Tiled::GetTileSrcRectFromTileDataI(Tilemap *tilemap, Tsx *tsx, int i)
 {
     return Rectangle(
-        TiledLoader::GetTileDstLocationFromTileDataI(tilemap, tsx, i),
+        Tiled::GetTileDstLocationFromTileDataI(tilemap, tsx, i),
         Point(tilemap->tile_width, tilemap->tile_height));
 }
-Rectangle TiledLoader::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
+Rectangle Tiled::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
 {
     return Rectangle(
-        TiledLoader::GetTileSourceLocationFromTsxTileNumber(tsx, tsx_tile_number),
+        Tiled::GetTileSourceLocationFromTsxTileNumber(tsx, tsx_tile_number),
         Point(tsx->tile_width, tsx->tile_height));
 }
-Point TiledLoader::GetTileSourceLocationFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
+Point Tiled::GetTileSourceLocationFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
 {
     int x = (tsx_tile_number % tsx->columns) * tsx->tile_width;
     int y = (tsx_tile_number / tsx->columns) * tsx->tile_height;
