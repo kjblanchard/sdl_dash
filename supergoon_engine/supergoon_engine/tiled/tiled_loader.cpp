@@ -86,7 +86,9 @@ Rectangle Tiled::GetTileRectangleFromTsxTileNumber(Tsx *tsx, int tsx_tile_number
 }
 Point Tiled::GetTileSourceLocationFromTsxTileNumber(Tsx *tsx, int tsx_tile_number)
 {
-    int x = (tsx_tile_number % tsx->columns) * tsx->tile_width;
-    int y = (tsx_tile_number / tsx->columns) * tsx->tile_height;
+    // prevent division by 0
+    auto num_columns = (tsx->columns == 0) ? 1 : tsx->columns;
+    int x = (tsx_tile_number % num_columns) * tsx->tile_width;
+    int y = (tsx_tile_number / num_columns) * tsx->tile_height;
     return Point(x, y);
 }

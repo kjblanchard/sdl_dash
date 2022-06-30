@@ -21,9 +21,9 @@ namespace Tiled
         int tile_width;
         int tile_height;
 
-        std::vector<std::unique_ptr<TilesetInfo>> tileset_infos;
-        std::vector<std::unique_ptr<Tiled::LayerGroup>> layer_groups;
-        std::vector<std::unique_ptr<Tsx>> tsx_in_tilemap;
+        std::vector<std::shared_ptr<TilesetInfo>> tileset_infos;
+        std::vector<std::shared_ptr<Tiled::LayerGroup>> layer_groups;
+        std::vector<std::shared_ptr<Tsx>> tsx_in_tilemap;
     };
 
 }

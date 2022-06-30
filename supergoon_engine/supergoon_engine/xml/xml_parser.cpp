@@ -74,9 +74,9 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
             else
                 element = element->NextSiblingElement("layer");
             // Add this layer to the tile layers so that it is deleted properly.
-            layer_group_ptr->tile_layers.push_back(std::unique_ptr<TileLayer>(layer_ptr));
+            layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(layer_ptr));
         }
-        tile_map_ptr->layer_groups.push_back(std::unique_ptr<LayerGroup>(layer_group_ptr));
+        tile_map_ptr->layer_groups.push_back(std::shared_ptr<LayerGroup>(layer_group_ptr));
 
         // Grab all the tilesets information.
 
@@ -119,7 +119,7 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
                 still_reading_tilesets = false;
             else
                 element = element->NextSiblingElement("tileset");
-            tile_map_ptr->tsx_in_tilemap.push_back(std::unique_ptr<Tsx>(tsx));
+            tile_map_ptr->tsx_in_tilemap.push_back(std::shared_ptr<Tsx>(tsx));
         }
         return tile_map_ptr;
 

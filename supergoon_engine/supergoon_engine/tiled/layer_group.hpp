@@ -13,7 +13,7 @@ namespace Tiled
     private:
         /* data */
     public:
-        std::vector<std::unique_ptr<TileLayer>> tile_layers;
+        std::vector<std::shared_ptr<TileLayer>> tile_layers;
         std::string name;
     };
 
