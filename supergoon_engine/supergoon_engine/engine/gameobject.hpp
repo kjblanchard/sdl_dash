@@ -26,7 +26,7 @@ protected:
      *
      * This is in Shared pointer, so it is destructed automatically when this gameobject is destroyed.
      */
-    std::vector<std::shared_ptr<Component>> components_;
+    std::vector<std::unique_ptr<Component>> components_;
 
 public:
     Vector2 location;
@@ -52,5 +52,21 @@ public:
     {
         components_.push_back(std::unique_ptr<Component>(component));
         std::sort(components_.begin(), components_.end());
+    }
+    inline GameObject(GameObject &&other)
+        : components_(std::move(other.components_))
+    {
+    }
+
+    inline GameObject &operator=(GameObject other)
+    {
+        swap(*this, other);
+        return *this;
+    }
+
+    inline friend void swap(GameObject &lhs, GameObject &rhs)
+    {
+        using std::swap;
+        swap(lhs.components_, rhs.components_);
     }
 };

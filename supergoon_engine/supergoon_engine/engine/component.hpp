@@ -19,16 +19,28 @@ public:
 
     inline void Initialize() override {}
     inline void Update(const Gametime &) override {}
-    inline Component operator<(const Component &rhs)
+    inline Component operator<(Component &rhs)
     {
         if (update_order < rhs.update_order)
-            return *this;
-        return rhs;
+            return std::move(*this);
+        return std::move(rhs);
     }
     inline virtual void Draw(SDL_Renderer *) {}
 
-    Component(const Component &) = default;
-    Component(Component &&) = default;
-    Component &operator=(const Component &) = default;
-    Component &operator=(Component &&) = default;
+    inline Component(Component &&other)
+        : offset_(std::move(other.offset_)), owner_(std::move(other.owner_))
+    {
+    }
+
+    inline Component &operator=(Component other)
+    {
+        swap(*this, other);
+        return *this;
+    }
+
+    inline friend void swap(Component &lhs, Component &rhs)
+    {
+        using std::swap;
+        swap(lhs, rhs);
+    }
 };
