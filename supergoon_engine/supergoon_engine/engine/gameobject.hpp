@@ -20,7 +20,6 @@ protected:
      * Pointer to world, as a convenience function.
      */
     static World *world;
-    // TODO for some reason unique ptrs don't compile on windows (msvc), spent a bit of time on this but couldn't get it to work so just used shared
     /**
      * List of components on the gameObject
      *

@@ -26,21 +26,4 @@ public:
         return std::move(rhs);
     }
     inline virtual void Draw(SDL_Renderer *) {}
-
-    inline Component(Component &&other)
-        : offset_(std::move(other.offset_)), owner_(std::move(other.owner_))
-    {
-    }
-
-    inline Component &operator=(Component other)
-    {
-        swap(*this, other);
-        return *this;
-    }
-
-    inline friend void swap(Component &lhs, Component &rhs)
-    {
-        using std::swap;
-        swap(lhs, rhs);
-    }
 };
