@@ -87,7 +87,7 @@ message(STATUS "Adding include Directories to the project.")
 # Try to reduce the amount of errors from 3rd party, so use SYSTEM - Private breaks linux for some reason, need to research.
 target_include_directories(supergoon_engine
         SYSTEM
-        PRIVATE
+        PUBLIC
         # built sdl2 includes
         "./external/SDL2-2.0.22/include/"
         # built sdl_image
