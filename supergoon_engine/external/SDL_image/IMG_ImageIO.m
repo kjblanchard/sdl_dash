@@ -6,6 +6,10 @@
  *  Copyright 2009 __MyCompanyName__. All rights reserved.
  *
  */
+#ifdef CLANG
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#endif
 
 #if defined(__APPLE__) && !defined(SDL_IMAGE_USE_COMMON_BACKEND)
 
@@ -590,3 +594,7 @@ SDL_Surface* IMG_Load (const char *file)
 }
 
 #endif /* defined(__APPLE__) && !defined(SDL_IMAGE_USE_COMMON_BACKEND) */
+
+#ifdef CLANG
+    #pragma clang diagnostic pop
+#endif

@@ -20,7 +20,6 @@ private:
 
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Rect camera;
 
     // TODO remove this
     std::vector<Tile*> tiles;
@@ -64,4 +63,7 @@ public:
     {
         return instance;
     }
+    //TODO probably mane this not public
+    SDL_Rect camera;
+
 };

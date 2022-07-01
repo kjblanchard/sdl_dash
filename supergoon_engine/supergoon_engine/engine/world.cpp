@@ -81,7 +81,6 @@ void World::Initialize()
     content = new Content(renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
-
 }
 
 void World::InitializeSdl()
@@ -89,7 +88,7 @@ void World::InitializeSdl()
     auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
-        //TODO when adding in ttf, do it here
+    // TODO when adding in ttf, do it here
     // auto sdl_ttf_init_result = TTF_Init();
     // if (sdl_ttf_init_result != 0)
     //     throw std::runtime_error(TTF_GetError());
@@ -119,6 +118,24 @@ void World::ProcessInput()
             }
             break;
         }
+    }
+    auto speed = 1;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_A])
+    {
+        camera.x -= speed;
+    }
+    if (state[SDL_SCANCODE_D])
+    {
+        camera.x += speed;
+    }
+    if (state[SDL_SCANCODE_W])
+    {
+        camera.y -= speed;
+    }
+    if (state[SDL_SCANCODE_S])
+    {
+        camera.y += speed;
     }
 }
 

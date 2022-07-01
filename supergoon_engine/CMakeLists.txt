@@ -16,6 +16,7 @@ if(APPLE OR WIN32)
     add_subdirectory(./external/SDL2-2.0.22)
     add_subdirectory(./external/SDL_image)
 endif()
+add_subdirectory(./external/glew-cmake/build/cmake)
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES} ${TINYXML})
 
@@ -40,10 +41,6 @@ if(WIN32)
     set_target_properties(fmod PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmod_vc.lib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmodstudio.dll)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmodstudio_vc.lib)
-    # Probably can remove these next time I want to compile on windows.
-    # add_library(SDL2_image::SDL2_image SHARED IMPORTED)
-    # set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_image.dll)
-    # set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_image.lib)
     add_library(SDL2_ttf::SDL2_ttf SHARED IMPORTED)
     set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.dll)
     set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.lib)
@@ -94,6 +91,8 @@ target_include_directories(supergoon_engine
         "./external/SDL_image/"
         # This is where our fmod includes live.
         "./external/include/"
+        # Built glew include folder
+        "./external/glew-cmake/include/GL/"
         )
 target_include_directories(supergoon_engine
         PUBLIC
@@ -105,9 +104,9 @@ target_include_directories(supergoon_engine
 message(STATUS "Linking to the external libraries.")
 # We are compiling from source for apple/win32 for SDL2 and SDL_image, ttf is not currently.
 if(APPLE OR WIN32)
-    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image)
+    target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image glew)
 else()
-    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image SDL2_ttf )
+    target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image SDL2_ttf )
 endif()
 
 
