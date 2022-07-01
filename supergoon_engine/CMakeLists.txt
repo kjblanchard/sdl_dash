@@ -106,7 +106,7 @@ message(STATUS "Linking to the external libraries.")
 if(APPLE OR WIN32)
     target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image glew)
 else()
-    target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image SDL2_ttf )
+    target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image SDL2_ttf glew)
 endif()
 
 

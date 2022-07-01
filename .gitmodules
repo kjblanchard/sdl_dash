@@ -1,3 +1,0 @@
-[submodule "supergoon_engine/external/glew-cmake"]
-	path = supergoon_engine/external/glew-cmake
-	url = https://github.com/Perlmint/glew-cmake
