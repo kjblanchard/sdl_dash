@@ -8,9 +8,6 @@ set(MINOR_VERSION 5)
 set(MICRO_VERSION 2)
 set(SDL_REQUIRED_VERSION 2.0.9)
 
-#Add in so that we can ignore warnings in sdl_image with a header
-target_compile_definitions(sdl-build-options INTERFACE CLANG)
-
 # For historical reasons this is 3.0.0 rather than the expected 1.0.0
 set(DYLIB_COMPATIBILITY_VERSION "3.0.0")
 

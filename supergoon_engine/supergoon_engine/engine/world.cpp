@@ -1,8 +1,6 @@
 #include <stdexcept>
 #include <string>
 #include <iostream>
-#include <SDL_image.h>
-#include <glew.h>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
@@ -12,6 +10,7 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
+#include <SDL_image.h>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, vsync_enabled{false}, config_reader{nullptr}
@@ -66,32 +65,6 @@ void World::Initialize()
         SDL_WINDOW_OPENGL);
     if (!window)
         throw std::runtime_error(SDL_GetError());
-
-    // Use OpenGL 3.1 core
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-    auto ctx = SDL_GL_CreateContext(window);
-    if (ctx == NULL)
-    {
-        printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-        exit(1);
-    }
-    // Initialize GLEW
-    glewExperimental = GL_TRUE;
-    GLenum glewError = glewInit();
-    if (glewError != GLEW_OK)
-    {
-        printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
-        exit(1);
-    }
-    // Use Vsync, this is for opengl
-    if (SDL_GL_SetSwapInterval(1) < 0)
-    {
-        printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-    }
-
     if (vsync_enabled)
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     else
