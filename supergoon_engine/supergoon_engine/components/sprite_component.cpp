@@ -36,8 +36,6 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
     auto dst_rect = dst_rect_.GetSDL_Rect();
     auto src_rect = src_rect_.GetSDL_Rect();
-    dst_rect.x = dst_rect.x - World::GetWorld()->camera.x;
-    dst_rect.y = dst_rect.y - World::GetWorld()->camera.y;
 
     SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
 }
