@@ -20,11 +20,9 @@ private:
 
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Rect camera;
 
     // TODO remove this
-    std::vector<Tile*> tiles;
-
+    std::vector<Tile *> tiles;
 
     const char *window_ini_section_name = "window";
     const char *window_width_string = "window_width";
@@ -57,6 +55,8 @@ public:
     World();
     ~World();
 
+    // TODO make this not public
+    SDL_Rect camera;
     Content *content;
     void Run();
     ConfigReader *config_reader;

@@ -6,11 +6,11 @@ include(FindPkgConfig)
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
 
-
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
 #Add all of our tinyxml files and headers to this library.
 file(GLOB TINYXML external/tinyxml/src/*)
+
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
     add_subdirectory(./external/SDL2-2.0.22)
@@ -27,36 +27,27 @@ set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 # Sets the module path, this is so that we can use the find sdl package below with the FindSDL2.cmake file in the location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 
-
 # Add external libraries, these don't use cmake at all so we have a longer process.
 add_library(fmod SHARED IMPORTED)
 add_library(fmodstudio SHARED IMPORTED)
+
 # Define where our files are to be copied from.
 set(EXTERNAL_BIN_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/external/bin)
 if(WIN32)
     message(STATUS "Setting up windows build information.")
-# Set the filenames for the libs, this is due to the libs being built for different platforms, windows has different names.
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmod.dll)
     set_target_properties(fmod PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmod_vc.lib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmodstudio.dll)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/fmodstudio_vc.lib)
-    # Probably can remove these next time I want to compile on windows.
-    # add_library(SDL2_image::SDL2_image SHARED IMPORTED)
-    # set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_image.dll)
-    # set_target_properties(SDL2_image::SDL2_image PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_image.lib)
-    add_library(SDL2_ttf::SDL2_ttf SHARED IMPORTED)
-    set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.dll)
-    set_target_properties(SDL2_ttf::SDL2_ttf PROPERTIES IMPORTED_IMPLIB ${EXTERNAL_BIN_FOLDER}/SDL2_ttf.lib)
     # We need to use the exports on windows as dlls are funky business
     target_compile_definitions(supergoon_engine PRIVATE supergoon_engine_EXPORTS)
     # Set the output of external libs to the runtime folder, due to dlls not getting the proper linking flags in other folders.
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
-    # Windows libs to copy over, they have different names
+    # Windows libs to copy over, they have different names than others.
     set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll SDL2_ttf.dll libjpeg-9.dll libpng16-16.dll zlib1.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
     # Find the SDL2_ttf package in the frameworks folder since we don't build it from source.
-    find_package(SDL2_ttf CONFIG REQUIRED)
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.dylib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.dylib)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -66,7 +57,6 @@ elseif(UNIX)
     find_package(SDL2 REQUIRED)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(SDL2_image REQUIRED SDL2_image)
-    pkg_check_modules(SDL2_ttf REQUIRED SDL2_ttf)
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.so)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.so)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -74,7 +64,7 @@ elseif(UNIX)
 endif()
 
 
-message(STATUS "Setting Compiler Options.")
+message(STATUS "Setting Compiler Options. We want to see as many errors as possible.")
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors -Wno-global-constructors -Wno-constant-conversion)
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
@@ -84,7 +74,6 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 endif()
 
 message(STATUS "Adding include Directories to the project.")
-# Try to reduce the amount of errors from 3rd party, so use SYSTEM - Private breaks linux for some reason, need to research.
 target_include_directories(supergoon_engine
         SYSTEM
         PUBLIC
@@ -103,15 +92,9 @@ target_include_directories(supergoon_engine
         )
 
 message(STATUS "Linking to the external libraries.")
-# We are compiling from source for apple/win32 for SDL2 and SDL_image, ttf is not currently.
-if(APPLE OR WIN32)
-    target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image)
-else()
-    target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image SDL2_ttf )
-endif()
+target_link_libraries(supergoon_engine PUBLIC SDL2 fmod fmodstudio SDL2_image)
 
-
-message(STATUS "Copying the Libraries to the output folder.")
+message(STATUS "Copying the Libraries to the output folder.  We do this for FMOD since we aren't building from source.")
 foreach( file_i ${COPY_LIBS})
     add_custom_command(
     TARGET supergoon_engine

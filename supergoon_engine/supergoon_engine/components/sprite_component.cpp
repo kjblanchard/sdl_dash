@@ -34,8 +34,11 @@ void SpriteComponent::Update(const Gametime &gametime)
 
 void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
+    auto cam = World::GetWorld()->camera;
     auto dst_rect = dst_rect_.GetSDL_Rect();
     auto src_rect = src_rect_.GetSDL_Rect();
+    dst_rect.x -= cam.x;
+    dst_rect.y -= cam.y;
 
     SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
 }
