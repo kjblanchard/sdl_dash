@@ -5,6 +5,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/tiled/layer_group.hpp>
 #include <supergoon_engine/tiled/tsx.hpp>
+#include <supergoon_engine/objects/actor.hpp>
 
 namespace Tiled
 {
@@ -24,6 +25,7 @@ namespace Tiled
         std::vector<std::shared_ptr<TilesetInfo>> tileset_infos;
         std::vector<std::shared_ptr<Tiled::LayerGroup>> layer_groups;
         std::vector<std::shared_ptr<Tsx>> tsx_in_tilemap;
+        std::vector<Objects::ActorParams> actors;
     };
 
 }

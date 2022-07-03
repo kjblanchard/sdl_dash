@@ -21,4 +21,5 @@ public:
     double GetResolutionScaleSizeX();
     double GetResolutionScaleSizeY();
     void MoveCamera(Vector2 move_amount);
+
 };

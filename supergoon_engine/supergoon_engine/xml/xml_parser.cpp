@@ -78,6 +78,24 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
         }
         tile_map_ptr->layer_groups.push_back(std::shared_ptr<LayerGroup>(layer_group_ptr));
 
+        // Grab the actor information.
+        element = root_element->FirstChildElement("objectgroup");
+        auto actor = element->FirstChildElement("object");
+        last_element = element->LastChildElement("object");
+        still_reading_layers = true;
+        while (still_reading_layers)
+        {
+            auto actor_params = Objects::ActorParams();
+            actor_params.actor_name = actor->Attribute("name");
+            actor_params.loc.x = actor->FloatAttribute("x");
+            actor_params.loc.y = actor->FloatAttribute("y");
+
+            if (actor == last_element)
+                still_reading_layers = false;
+            else
+                actor = actor->NextSiblingElement("object");
+            tile_map_ptr->actors.push_back(actor_params);
+        }
         // Grab all the tilesets information.
 
         element = root_element->FirstChildElement("tileset");
@@ -122,7 +140,6 @@ Tilemap *xml_parser::LoadTiledMap(std::string filename)
             tile_map_ptr->tsx_in_tilemap.push_back(std::shared_ptr<Tsx>(tsx));
         }
         return tile_map_ptr;
-
     }
     return nullptr;
 }

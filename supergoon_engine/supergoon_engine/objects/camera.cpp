@@ -5,12 +5,12 @@
 Camera::Camera(Vector2 loc, Graphics::GraphicsDevice *graphics) : GameObject(loc)
 {
     graphics_device = graphics;
+    rect.w = graphics_device->unscaled_width;
+    rect.h = graphics_device->unscaled_height;
 }
 
 Camera::~Camera()
 {
-    rect.w = graphics_device->unscaled_width;
-    rect.h = graphics_device->unscaled_height;
 }
 
 void Camera::Update(const Gametime &gametime)
@@ -34,4 +34,5 @@ void Camera::MoveCamera(Vector2 move_amount)
     move_amount.y *= graphics_device->screen_scale_ratio_height;
     location.x += move_amount.x;
     location.y += move_amount.y;
+
 }
