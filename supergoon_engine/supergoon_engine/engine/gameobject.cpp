@@ -7,11 +7,14 @@
 
 // statics
 World *GameObject::world = nullptr;
+Camera *GameObject::main_camera = nullptr;
 
-GameObject::GameObject(Vector2 loc) : location{loc}, IUpdate{}
+GameObject::GameObject(Vector2 loc) : IUpdate{}, location{loc}
 {
    if (world == nullptr)
       world = World::GetWorld();
+   if (main_camera == nullptr)
+      main_camera = World::GetWorld()->main_camera;
 }
 
 GameObject::~GameObject()
@@ -20,7 +23,6 @@ GameObject::~GameObject()
 
 void GameObject::Initialize()
 {
-
 }
 
 void GameObject::Update(const Gametime &gametime)

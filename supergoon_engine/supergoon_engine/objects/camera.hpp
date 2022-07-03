@@ -2,14 +2,22 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/gameobject.hpp>
 
-class Camera : public GameObject
+namespace Graphics
+{
+
+    class GraphicsDevice;
+}
+
+class Camera : private GameObject
 {
 private:
-    /* data */
+    Graphics::GraphicsDevice *graphics_device;
 
 public:
-    Camera(Vector2 loc);
+    Camera(Vector2 loc, Graphics::GraphicsDevice *graphics);
     ~Camera() override;
     SDL_Rect rect;
     void Update(const Gametime &gametime) override;
+    Vector2 GetResolutionScaleSize();
+    void MoveCamera(Vector2 move_amount);
 };

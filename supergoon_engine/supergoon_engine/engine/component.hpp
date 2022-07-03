@@ -6,9 +6,19 @@
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
 class GameObject;
+class Camera;
+class World;
 class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize
 {
 protected:
+    /**
+     * Pointer to world, as a convenience function.
+     */
+    static World *world;
+    /**
+     * Pointer to Main Camera, as a convenience function.
+     */
+    static Camera *main_camera;
     Vector2 offset_;
     GameObject *owner_;
 
@@ -26,4 +36,5 @@ public:
         return std::move(rhs);
     }
     inline virtual void Draw(SDL_Renderer *) {}
+
 };

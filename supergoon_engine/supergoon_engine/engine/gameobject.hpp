@@ -9,6 +9,7 @@
 #include <algorithm>
 
 class World;
+class Camera;
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
@@ -20,6 +21,10 @@ protected:
      * Pointer to world, as a convenience function.
      */
     static World *world;
+    /**
+     * Pointer to Main Camera, as a convenience function.
+     */
+    static Camera *main_camera;
     /**
      * List of components on the gameObject
      *
@@ -68,4 +73,5 @@ public:
         using std::swap;
         swap(lhs.components_, rhs.components_);
     }
+    friend Component;
 };

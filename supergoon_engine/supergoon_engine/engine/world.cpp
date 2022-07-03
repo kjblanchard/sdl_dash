@@ -11,9 +11,12 @@
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
 #include <SDL_image.h>
+#include <supergoon_engine/graphics/graphics_device.hpp>
+#include <supergoon_engine/graphics/sprite_batch.hpp>
+#include <supergoon_engine/objects/camera.hpp>
 
 World *World::instance = nullptr;
-World::World() : isRunning{false}, vsync_enabled{false}, camera{Vector2()}, config_reader{nullptr}
+World::World() : isRunning{false}, vsync_enabled{false}, main_camera{nullptr}, config_reader{nullptr}
 {
 
     if (World::instance == nullptr)
@@ -31,53 +34,16 @@ World::~World()
 void World::Initialize()
 {
     config_reader = new ConfigReader("cfg.ini");
-    vsync_enabled = ConfigReader::GetValueFromCfgBool("game", "vsync");
+    graphics = new Graphics::GraphicsDevice(config_reader);
+    main_camera = new Camera(Vector2(),graphics);
 
     InitializeSdl();
 
-    // TODO Move this to graphics class, this handles the correct fps when reading refresh rate for updates.
-    SDL_DisplayMode displayMode;
-    SDL_GetCurrentDisplayMode(0, &displayMode);
-    if (vsync_enabled)
-    {
-        auto fps = displayMode.refresh_rate;
-        world_gametime = Gametime(fps);
-    }
-    else
-    {
-        world_gametime = Gametime(ConfigReader::GetValueFromCfgInt("game", "fps"));
-    }
-
-    window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
-    window_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_height_string);
-    unscaled_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_width_string);
-    unscaled_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_height_string);
-    screenScaleRatioWidth = window_width / static_cast<double>(unscaled_width);
-    screenScaleRatioHeight = window_width / static_cast<double>(unscaled_width);
-
-    window = SDL_CreateWindow(
-        nullptr,
-        0,
-        0,
-        window_width,
-        window_height,
-        0);
-    if (!window)
-        throw std::runtime_error(SDL_GetError());
-    if (vsync_enabled)
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    else
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer)
-        throw std::runtime_error(SDL_GetError());
-    // This is SDL's auto resizing.  Logical size causes tearing, but used with integer it looks good but is letterboxed.  I'm handling scaling.
-    // Manually inside of the camera class as it was the only one that worked fine.
-    // SDL_RenderSetIntegerScale(renderer, SDL_TRUE);
-    // SDL_RenderSetLogicalSize(renderer, unscaled_width, unscaled_height);
     isRunning = true;
-    content = new Content(renderer);
+    content = new Content(graphics->renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
+    sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 
 void World::InitializeSdl()
@@ -85,10 +51,6 @@ void World::InitializeSdl()
     auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
-    // TODO when adding in ttf, do it here
-    // auto sdl_ttf_init_result = TTF_Init();
-    // if (sdl_ttf_init_result != 0)
-    //     throw std::runtime_error(TTF_GetError());
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
     int initted = IMG_Init(flags);
     if ((initted & flags) != flags)
@@ -144,17 +106,21 @@ void World::Setup()
 
 void World::Update(Gametime &gametime)
 {
-    auto speed = 500;
+    auto speed = 50;
 
     auto move_speed_right = (this_frame_directions.right) ? gametime.ElapsedTimeInSeconds() * speed : 0;
     auto move_speed_left = (this_frame_directions.left) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
     auto move_speed_up = (this_frame_directions.up) ? gametime.ElapsedTimeInSeconds() * speed : 0;
     auto move_speed_down = (this_frame_directions.down) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
-    camera.location.x += move_speed_right += move_speed_left;
-    camera.location.y += move_speed_up += move_speed_down;
-    printf("Camera location X: %f, Y: %f \n", camera.location.x, camera.location.y);
+    // main_camera.location.x += move_speed_right += move_speed_left;
+    // main_camera.location.y += move_speed_up += move_speed_down;
+    main_camera->MoveCamera(Vector2(
+        move_speed_right + move_speed_left,
+        move_speed_up + move_speed_down
+    ));
+    // printf("Camera location X: %f, Y: %f \n", main_camera.location.x, main_camera.location.y);
 
-    camera.Update(gametime);
+    main_camera->Update(gametime);
 
     Sound::Update();
     for (auto &&tile : tiles)
@@ -165,14 +131,14 @@ void World::Update(Gametime &gametime)
 
 void World::Render()
 {
-    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
-    SDL_RenderClear(renderer);
+    sprite_batch->Begin();
+
     for (auto &&tile : tiles)
     {
-        tile->Draw(renderer);
+        sprite_batch->Draw(tile);
     }
+    sprite_batch->End();
 
-    SDL_RenderPresent(renderer);
 }
 
 void World::Run()
@@ -200,7 +166,7 @@ void World::Run()
         {
             auto wait_time = world_gametime.CheckForSleepTime();
 
-            if (wait_time >= 1 && wait_time <= MILLISECS_PER_FRAME)
+            if (wait_time >= 1 && wait_time <= world_gametime.ElapsedTimeInMilliseconds())
                 SDL_Delay(wait_time);
         }
     }
@@ -208,7 +174,6 @@ void World::Run()
 
 void World::Destroy()
 {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    delete graphics;
     SDL_Quit();
 }
