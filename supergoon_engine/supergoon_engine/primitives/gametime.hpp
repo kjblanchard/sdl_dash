@@ -2,6 +2,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <supergoon_engine_export.h>
+#include <iostream>
 
 /**
  * Gametime is passed in gameobjects update call for elapsed time this frame. Pass by ref.

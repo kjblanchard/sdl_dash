@@ -2,6 +2,7 @@
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine_export.h>
 #include <vector>
+#include <functional>
 
 namespace Objects
 {

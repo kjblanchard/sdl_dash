@@ -4,6 +4,8 @@
 int main(int, char**) {
 	auto world = World();
 	world.Run();
+	return 1;
+	
 }
 
 
