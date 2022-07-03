@@ -4,13 +4,13 @@
 #include <supergoon_engine/engine/content.hpp>
 #include <SDL_rect.h>
 
-SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture* texture, Point size, Point src_loc) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Point size, Point src_loc) : Component(owner)
 {
     this->texture = texture;
     src_rect_ = Rectangle{src_loc, size};
     dst_rect_ = Rectangle{owner->location.ToPoint(), size};
 }
-SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture* texture, Rectangle src_rectangle) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Rectangle src_rectangle) : Component(owner)
 {
     this->texture = texture;
     src_rect_ = src_rectangle;
@@ -23,22 +23,28 @@ SpriteComponent::~SpriteComponent()
 
 void SpriteComponent::Initialize()
 {
-
 }
 
 void SpriteComponent::Update(const Gametime &gametime)
 {
-    dst_rect_.location.x = static_cast<int>(owner_->location.x + offset_.x);
-    dst_rect_.location.y = static_cast<int>(owner_->location.y + offset_.y);
+    auto world_ratio_width = World::GetWorld()->screenScaleRatioWidth;
+    auto world_ratio_height = World::GetWorld()->screenScaleRatioHeight;
+    dst_rect_.location.x = static_cast<int>((owner_->location.x + offset_.x) * world_ratio_width);
+    dst_rect_.location.y = static_cast<int>((owner_->location.y + offset_.y) * world_ratio_height);
 }
 
 void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
-    auto cam = World::GetWorld()->camera;
+    auto world_ratio_width = World::GetWorld()->screenScaleRatioWidth;
+    auto world_ratio_height = World::GetWorld()->screenScaleRatioHeight;
+
+    auto &cam = World::GetWorld()->camera;
     auto dst_rect = dst_rect_.GetSDL_Rect();
     auto src_rect = src_rect_.GetSDL_Rect();
-    dst_rect.x -= cam.x;
-    dst_rect.y -= cam.y;
+    dst_rect.x -= cam.rect.x;
+    dst_rect.y -= cam.rect.y;
+    dst_rect.w *= world_ratio_width;
+    dst_rect.h *= world_ratio_height;
 
     SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
 }

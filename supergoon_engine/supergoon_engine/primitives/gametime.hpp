@@ -15,9 +15,9 @@ private:
     int game_fps = 60;
     Uint64 start_time;
     Uint64 current_time;
-    double previous_game_running_time = 0.0;
-    double current_game_running_time = 0.0;
-    double this_tick_delta_time = 0.0;
+    Uint64 previous_game_running_time = 0.0;
+    Uint64 current_game_running_time = 0.0;
+    Uint64 this_tick_delta_time_ms = 0.0;
     double time_since_last_update = 0.0;
 
     double MillisecondsPerFrame()
@@ -79,7 +79,10 @@ public:
      * Returns if the time since last update is greater than the ms per frame
      * @return If the game should perform a game loop update
      */
-    bool ShouldUpdate() { return time_since_last_update >= MillisecondsPerFrame(); }
+    bool ShouldUpdate() {
+
+        printf("Time since last update is %f and this needs to be >= %f\n", time_since_last_update, MillisecondsPerFrame());
+        return time_since_last_update >= MillisecondsPerFrame(); }
     /**
      *  Checks to see if the game is getting a steady frame rate or not
      * @return Value is true if the Update time since last frame is the ms frame time * 1.5

@@ -11,8 +11,8 @@ void Gametime::Tick()
     current_time = SDL_GetTicks64();
     previous_game_running_time = current_game_running_time;
     current_game_running_time = current_time;
-    this_tick_delta_time = current_game_running_time - previous_game_running_time;
-    time_since_last_update += this_tick_delta_time;
+    this_tick_delta_time_ms = current_game_running_time - previous_game_running_time;
+    time_since_last_update += this_tick_delta_time_ms;
 }
 
 void Gametime::UpdateClockTimer()
@@ -24,9 +24,10 @@ void Gametime::UpdateClockTimer()
 
 unsigned short Gametime::CheckForSleepTime()
 {
-    auto timeToWait = MillisecondsPerFrame() - time_since_last_update;
-    if (timeToWait < 0)
+    auto timeToWait = MillisecondsPerFrame() - time_since_last_update -1;
+    if (timeToWait <= 1)
         return 0;
-    auto wait_time_int = static_cast<unsigned short>(floor(timeToWait));
+    auto wait_time_int = static_cast<unsigned short>(floor(timeToWait) ) ;
+
     return wait_time_int;
 }

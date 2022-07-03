@@ -4,6 +4,7 @@
 #include <vector>
 #include <SDL.h>
 #include <supergoon_engine/primitives/gametime.hpp>
+#include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine_export.h>
 
 class Tile;
@@ -13,9 +14,15 @@ class ConfigReader;
 
 class SUPERGOON_ENGINE_EXPORT World
 {
+    struct dir
+    {
+        bool up, down, left, right = false;
+    };
+
 private:
     bool isRunning;
     bool vsync_enabled;
+    dir this_frame_directions;
     Gametime world_gametime;
 
     SDL_Window *window;
@@ -42,10 +49,6 @@ protected:
 
     int window_width;
     int window_height;
-    int unscaled_height;
-    int unscaled_width;
-    int screenScaleRatioWidth;
-    int screenScaleRatioHeight;
 
     const int FPS = 60;
     const double MILLISECS_PER_FRAME = 1000.0000 / FPS;
@@ -56,7 +59,12 @@ public:
     ~World();
 
     // TODO make this not public
-    SDL_Rect camera;
+    int unscaled_height;
+    int unscaled_width;
+    double screenScaleRatioWidth;
+    double screenScaleRatioHeight;
+    // TODO make this not public
+    Camera camera;
     Content *content;
     void Run();
     ConfigReader *config_reader;
