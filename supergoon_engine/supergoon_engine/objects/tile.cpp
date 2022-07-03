@@ -4,7 +4,7 @@
 
 Tile::Tile(Vector2 loc, SDL_Texture* texture, Rectangle src_rect ) : GameObject{loc}
 {
-    sprite_component_ = new SpriteComponent(this,texture,src_rect);
+    sprite_component_ = new Components::SpriteComponent(this,texture,src_rect);
     AddComponent(sprite_component_);
 }
 

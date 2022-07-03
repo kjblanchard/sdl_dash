@@ -1,6 +1,6 @@
 #pragma once
 #include <supergoon_engine_export.h>
-#include <supergoon_engine/interfaces/IUpdate.hpp>
+#include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <supergoon_engine/engine/component.hpp>

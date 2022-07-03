@@ -5,6 +5,8 @@
 #include <supergoon_engine/objects/camera.hpp>
 #include <SDL_rect.h>
 
+using namespace Components;
+
 SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Point size, Point src_loc) : Component(owner)
 {
     this->texture = texture;
@@ -28,28 +30,19 @@ void SpriteComponent::Initialize()
 
 void SpriteComponent::Update(const Gametime &gametime)
 {
-    // auto world_ratio_width = World::GetWorld()->screenScaleRatioWidth;
-    // auto world_ratio_height = World::GetWorld()->screenScaleRatioHeight;
-    // dst_rect_.location.x = static_cast<int>((owner_->location.x + offset_.x) * world_ratio_width);
-    dst_rect_.location.x = static_cast<int>((owner_->location.x + offset_.x) * main_camera->GetResolutionScaleSize().x);
-    // dst_rect_.location.x = static_cast<int>((owner_->location.x + offset_.x) * world_ratio_width);
-    // dst_rect_.location.y = static_cast<int>((owner_->location.y + offset_.y) * world_ratio_height);
-    dst_rect_.location.y = static_cast<int>((owner_->location.y + offset_.y) * main_camera->GetResolutionScaleSize().y);
+    dst_rect_.location.x = static_cast<int>((static_cast<double>(owner_->location.x + offset_.x)) * main_camera->GetResolutionScaleSizeX());
+    dst_rect_.location.y = static_cast<int>((static_cast<double>(owner_->location.y + offset_.y)) * main_camera->GetResolutionScaleSizeY());
 }
 
 void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
-    // auto world_ratio_width = World::GetWorld()->screenScaleRatioWidth;
-    // auto world_ratio_height = World::GetWorld()->screenScaleRatioHeight;
 
     auto dst_rect = dst_rect_.GetSDL_Rect();
     auto src_rect = src_rect_.GetSDL_Rect();
     dst_rect.x -= main_camera->rect.x;
     dst_rect.y -= main_camera->rect.y;
-    // dst_rect.w *= world_ratio_width;
-    // dst_rect.h *= world_ratio_height;
-    dst_rect.w *= main_camera->GetResolutionScaleSize().x;
-    dst_rect.h *= main_camera->GetResolutionScaleSize().y;
+    dst_rect.w *= main_camera->GetResolutionScaleSizeX();
+    dst_rect.h *= main_camera->GetResolutionScaleSizeY();
 
     SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
 }

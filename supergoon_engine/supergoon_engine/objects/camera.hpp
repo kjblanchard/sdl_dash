@@ -18,6 +18,7 @@ public:
     ~Camera() override;
     SDL_Rect rect;
     void Update(const Gametime &gametime) override;
-    Vector2 GetResolutionScaleSize();
+    double GetResolutionScaleSizeX();
+    double GetResolutionScaleSizeY();
     void MoveCamera(Vector2 move_amount);
 };

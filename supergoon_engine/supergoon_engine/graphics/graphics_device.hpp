@@ -11,7 +11,10 @@ namespace Graphics
     class GraphicsDevice : public IInitialize
     {
     private:
-        bool vsync_enabled;
+        const char* game_name_string = "name";
+        const char *fps_string = "fps";
+        const char *vsync_string = "vsync";
+        const char *game_settings_string = "game";
         const char *window_ini_section_name = "window";
         const char *window_width_string = "window_width";
         const char *window_height_string = "window_height";
@@ -22,11 +25,13 @@ namespace Graphics
         int window_height;
 
     public:
+        bool vsync_enabled;
         // TODO make this not public
         int unscaled_height;
         int unscaled_width;
-        double screenScaleRatioWidth;
-        double screenScaleRatioHeight;
+        double screen_scale_ratio_width;
+        double screen_scale_ratio_height;
+        int fps;
 
         SDL_Window *window;
         SDL_Renderer *renderer;

@@ -5,9 +5,9 @@
 
 using namespace Graphics;
 
-SpriteBatch::SpriteBatch(GraphicsDevice* grapics)
+SpriteBatch::SpriteBatch(GraphicsDevice* graphics)
 {
-    graphics_device = grapics;
+    graphics_device = graphics;
 }
 
 SpriteBatch::~SpriteBatch()

@@ -16,7 +16,7 @@
 #include <supergoon_engine/objects/camera.hpp>
 
 World *World::instance = nullptr;
-World::World() : isRunning{false}, vsync_enabled{false}, main_camera{nullptr}, config_reader{nullptr}
+World::World() : isRunning{false}, main_camera{nullptr}, config_reader{nullptr}
 {
 
     if (World::instance == nullptr)
@@ -38,6 +38,8 @@ void World::Initialize()
 
     config_reader = new ConfigReader("cfg.ini");
     graphics = new Graphics::GraphicsDevice(config_reader);
+    auto fps = graphics->fps;
+    world_gametime = Gametime(fps);
     main_camera = new Camera(Vector2(),graphics);
 
     isRunning = true;
@@ -113,13 +115,10 @@ void World::Update(Gametime &gametime)
     auto move_speed_left = (this_frame_directions.left) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
     auto move_speed_up = (this_frame_directions.up) ? gametime.ElapsedTimeInSeconds() * speed : 0;
     auto move_speed_down = (this_frame_directions.down) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
-    // main_camera.location.x += move_speed_right += move_speed_left;
-    // main_camera.location.y += move_speed_up += move_speed_down;
     main_camera->MoveCamera(Vector2(
         move_speed_right + move_speed_left,
         move_speed_up + move_speed_down
     ));
-    // printf("Camera location X: %f, Y: %f \n", main_camera.location.x, main_camera.location.y);
 
     main_camera->Update(gametime);
 
@@ -163,13 +162,13 @@ void World::Run()
         Update(world_gametime);
         Render();
         // Sleep until we can update again if not on vsync
-        // if ( vsync_enabled == false)
-        // {
-        //     auto wait_time = world_gametime.CheckForSleepTime();
+        if ( graphics->vsync_enabled == false)
+        {
+            auto wait_time = world_gametime.CheckForSleepTime();
 
-        //     if (wait_time >= 1 && wait_time <= world_gametime.ElapsedTimeInMilliseconds())
-        //         SDL_Delay(wait_time);
-        // }
+            if (wait_time >= 1 && wait_time <= world_gametime.ElapsedTimeInMilliseconds())
+                SDL_Delay(wait_time);
+        }
     }
 }
 

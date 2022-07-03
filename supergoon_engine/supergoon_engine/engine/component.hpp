@@ -1,13 +1,15 @@
 #pragma once
 #include <supergoon_engine_export.h>
-#include <supergoon_engine/interfaces/IUpdate.hpp>
+#include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
+
 class GameObject;
 class Camera;
 class World;
+
 class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize
 {
 protected:
@@ -19,6 +21,7 @@ protected:
      * Pointer to Main Camera, as a convenience function.
      */
     static Camera *main_camera;
+
     Vector2 offset_;
     GameObject *owner_;
 

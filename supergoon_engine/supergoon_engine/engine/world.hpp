@@ -26,7 +26,7 @@ class SUPERGOON_ENGINE_EXPORT World
 
 private:
     bool isRunning;
-    bool vsync_enabled;
+    //TODO remove this
     dir this_frame_directions;
 
     // TODO remove this
@@ -42,13 +42,12 @@ protected:
     void Destroy();
     Graphics::SpriteBatch *sprite_batch;
     static World *instance;
+    Gametime world_gametime;
 
 public:
     World();
     ~World();
 
-    Gametime world_gametime;
-    // TODO make this not public
     Camera* main_camera;
     Graphics::GraphicsDevice *graphics;
     Content *content;

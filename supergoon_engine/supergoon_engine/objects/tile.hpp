@@ -3,15 +3,20 @@
 #include <supergoon_engine/engine/gameobject.hpp>
 
 struct Rectangle;
-class SpriteComponent;
+
+namespace Components
+{
+
+    class SpriteComponent;
+}
 
 class Tile : public GameObject
 {
 private:
     /* data */
-    SpriteComponent* sprite_component_;
+    Components::SpriteComponent *sprite_component_;
+
 public:
-    Tile(Vector2 loc, SDL_Texture* texture, Rectangle src_rect);
+    Tile(Vector2 loc, SDL_Texture *texture, Rectangle src_rect);
     ~Tile() override;
 };
-
