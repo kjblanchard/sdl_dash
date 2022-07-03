@@ -1,5 +1,6 @@
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/ini/config_reader.hpp>
+#include <supergoon_engine/engine/world.hpp>
 #include <SDL.h>
 
 using namespace Graphics;
@@ -9,16 +10,21 @@ GraphicsDevice::GraphicsDevice(ConfigReader *config)
     vsync_enabled = ConfigReader::GetValueFromCfgBool("game", "vsync");
     // TODO Move this to graphics class, this handles the correct fps when reading refresh rate for updates.
     SDL_DisplayMode displayMode;
-    SDL_GetCurrentDisplayMode(0, &displayMode);
-    // if (vsync_enabled)
-    // {
-    //     auto fps = displayMode.refresh_rate;
-    //     world_gametime = Gametime(fps);
-    // }
-    // else
-    // {
-    //     world_gametime = Gametime(ConfigReader::GetValueFromCfgInt("game", "fps"));
-    // }
+    auto result = SDL_GetCurrentDisplayMode(0, &displayMode);
+    if(result != 0 )
+    {
+        printf("Error, %s", SDL_GetError());
+        exit(1);
+    }
+    if (vsync_enabled)
+    {
+        auto fps = displayMode.refresh_rate;
+        World::GetWorld()->world_gametime = Gametime(fps);
+    }
+    else
+    {
+        World::GetWorld()->world_gametime = Gametime(ConfigReader::GetValueFromCfgInt("game", "fps"));
+    }
 
     window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
     window_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_height_string);

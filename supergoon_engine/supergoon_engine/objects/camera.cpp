@@ -20,6 +20,7 @@ void Camera::Update(const Gametime &gametime)
     printf("Camera rect X: %d, Y: %d", rect.x, rect.y);
 }
 
+//TODO this could cause some issues, maybe get the doubles straight to help reduct some jitter.
 Vector2 Camera::GetResolutionScaleSize()
 {
     return Vector2(

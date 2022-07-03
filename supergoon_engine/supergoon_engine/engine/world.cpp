@@ -33,11 +33,12 @@ World::~World()
 
 void World::Initialize()
 {
+
+    InitializeSdl();
+
     config_reader = new ConfigReader("cfg.ini");
     graphics = new Graphics::GraphicsDevice(config_reader);
     main_camera = new Camera(Vector2(),graphics);
-
-    InitializeSdl();
 
     isRunning = true;
     content = new Content(graphics->renderer);
@@ -155,20 +156,20 @@ void World::Run()
         ProcessInput();
         while (lag >= world_gametime.ElapsedTimeInMilliseconds())
         {
-            printf("UPDATE\n");
+            printf("\n WorldGamtime: %d, lag: %fUPDATE\n", world_gametime.ElapsedTimeInMilliseconds(), lag);
             Update(world_gametime);
             lag -= world_gametime.ElapsedTimeInMilliseconds();
         }
         Update(world_gametime);
         Render();
         // Sleep until we can update again if not on vsync
-        if (vsync_enabled == false)
-        {
-            auto wait_time = world_gametime.CheckForSleepTime();
+        // if ( vsync_enabled == false)
+        // {
+        //     auto wait_time = world_gametime.CheckForSleepTime();
 
-            if (wait_time >= 1 && wait_time <= world_gametime.ElapsedTimeInMilliseconds())
-                SDL_Delay(wait_time);
-        }
+        //     if (wait_time >= 1 && wait_time <= world_gametime.ElapsedTimeInMilliseconds())
+        //         SDL_Delay(wait_time);
+        // }
     }
 }
 

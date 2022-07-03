@@ -28,7 +28,6 @@ private:
     bool isRunning;
     bool vsync_enabled;
     dir this_frame_directions;
-    Gametime world_gametime;
 
     // TODO remove this
     std::vector<Tile *> tiles;
@@ -48,6 +47,7 @@ public:
     World();
     ~World();
 
+    Gametime world_gametime;
     // TODO make this not public
     Camera* main_camera;
     Graphics::GraphicsDevice *graphics;
