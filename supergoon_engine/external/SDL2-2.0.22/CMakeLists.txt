@@ -377,7 +377,7 @@ foreach(_SUB ${SDL_SUBSYSTEMS})
 endforeach()
 
 # Allow some projects to be built conditionally.
-set_option(SDL2_DISABLE_SDL2MAIN   "Disable building/installation of SDL2main" ON)
+set_option(SDL2_DISABLE_SDL2MAIN   "Disable building/installation of SDL2main" OFF)
 set_option(SDL2_DISABLE_INSTALL    "Disable installation of SDL2" OFF)
 set_option(SDL2_DISABLE_UNINSTALL  "Disable uninstallation of SDL2" OFF)
 

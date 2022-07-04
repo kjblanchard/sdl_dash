@@ -1,5 +1,5 @@
 #pragma once
-#define SDL_MAIN_HANDLED
+// #define SDL_MAIN_HANDLED
 #include <memory>
 #include <vector>
 #include <SDL.h>
@@ -10,6 +10,10 @@ class Tile;
 class Content;
 class ConfigReader;
 class Camera;
+
+namespace Objects{
+    class Actor;
+}
 
 namespace Graphics
 {
@@ -31,6 +35,7 @@ private:
 
     // TODO remove this
     std::vector<Tile *> tiles;
+    std::vector<Objects::Actor*> actors;
     void InitializeSdl();
 
 protected:

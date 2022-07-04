@@ -1,5 +1,5 @@
 #pragma once
-#define SDL_MAIN_HANDLED
+// #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <supergoon_engine_export.h>
 #include <iostream>

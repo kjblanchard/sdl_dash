@@ -10,6 +10,7 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
+#include <supergoon_engine/tiled/tilemap.hpp>
 #include <SDL_image.h>
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/graphics/sprite_batch.hpp>
@@ -40,12 +41,20 @@ void World::Initialize()
     graphics = new Graphics::GraphicsDevice(config_reader);
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
-    main_camera = new Camera(Vector2(),graphics);
+    main_camera = new Camera(Vector2(), graphics);
 
     isRunning = true;
     content = new Content(graphics->renderer);
     auto tilemap = xml_parser::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
+    auto actor_params = tilemap->actors;
+    for (auto &&actor_param : actor_params)
+    {
+        auto actor = Objects::SpawnActor(actor_param);
+        if (actor)
+            actors.push_back(actor);
+    }
+
     sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 
@@ -117,8 +126,7 @@ void World::Update(Gametime &gametime)
     auto move_speed_down = (this_frame_directions.down) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
     main_camera->MoveCamera(Vector2(
         move_speed_right + move_speed_left,
-        move_speed_up + move_speed_down
-    ));
+        move_speed_up + move_speed_down));
 
     main_camera->Update(gametime);
 
@@ -127,6 +135,7 @@ void World::Update(Gametime &gametime)
     {
         tile->Update(gametime);
     }
+    std::for_each(actors.begin(), actors.end(), [&gametime](auto& actor){actor->Update(gametime);});
 }
 
 void World::Render()
@@ -137,8 +146,8 @@ void World::Render()
     {
         sprite_batch->Draw(tile);
     }
+    std::for_each(actors.begin(), actors.end(), [&](auto& actor){sprite_batch->Draw(actor);});
     sprite_batch->End();
-
 }
 
 void World::Run()
@@ -162,7 +171,7 @@ void World::Run()
         Update(world_gametime);
         Render();
         // Sleep until we can update again if not on vsync
-        if ( graphics->vsync_enabled == false)
+        if (graphics->vsync_enabled == false)
         {
             auto wait_time = world_gametime.CheckForSleepTime();
 

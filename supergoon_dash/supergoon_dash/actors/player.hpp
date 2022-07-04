@@ -1,12 +1,13 @@
 #pragma once
-#define SDL_MAIN_HANDLED
+#include <supergoon_engine/objects/actor.hpp>
 
-class Player
+class Player : public Objects::Actor
 {
 private:
     /* data */
 public:
-    Player(/* args */){}
-    ~Player(){}
+    Player(Objects::ActorParams params);
+    ~Player();
+    static Objects::Actor* ActorFactory(Objects::ActorParams& params);
 };
 

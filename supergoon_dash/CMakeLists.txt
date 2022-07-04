@@ -1,11 +1,13 @@
 #Add all of our source files and headers to this library.
-file(GLOB FILES "${CMAKE_SOURCE_DIR}/**/*.?pp")
-message(STATUS ${FILES})
-add_executable(supergoon_dash ${FILES})
+file(GLOB FILES supergoon_dash/**/*.?pp)
+file(GLOB MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+add_executable(supergoon_dash ${FILES} ${MAIN})
 set_property(TARGET supergoon_dash PROPERTY CXX_STANDARD 20)
 target_include_directories(supergoon_dash
         PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/"
+        "./supergoon_engine"
+        "${CMAKE_BINARY_DIR}/exports/"
         )
 target_link_libraries(supergoon_dash PUBLIC supergoon_engine)
 
