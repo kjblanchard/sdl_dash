@@ -9,7 +9,7 @@ message(STATUS "Starting Supergoon Engine Cmake")
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
 #Add all of our tinyxml files and headers to this library.
-file(GLOB TINYXML external/tinyxml/src/*)
+file(GLOB JSON external/nlohmann/*)
 
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
@@ -17,7 +17,7 @@ if(APPLE OR WIN32)
     add_subdirectory(./external/SDL_image)
 endif()
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
-add_library(supergoon_engine SHARED ${FILES} ${TINYXML})
+add_library(supergoon_engine SHARED ${FILES} ${JSON})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)

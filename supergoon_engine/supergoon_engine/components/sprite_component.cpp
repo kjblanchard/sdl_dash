@@ -1,8 +1,10 @@
 #include <supergoon_engine/components/sprite_component.hpp>
+#include <supergoon_engine/json/json_parser.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/objects/camera.hpp>
+#include <supergoon_engine/aseprite/aseprite_sheet.hpp>
 #include <SDL_rect.h>
 
 using namespace Components;
@@ -18,6 +20,15 @@ SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Rectan
     this->texture = texture;
     src_rect_ = src_rectangle;
     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.size};
+}
+SpriteComponent::SpriteComponent(GameObject *owner, const char* aseprite_file_name) : Component(owner)
+{
+    auto ase_sheed = Json::LoadAsepriteSheetFromFile(aseprite_file_name);
+
+    texture = ase_sheed->texture;
+    src_rect_ = ase_sheed->sprite_sheet_frames[0].source_rect;
+    dst_rect_ = Rectangle{owner->location.ToPoint(), src_rect_.size};
+
 }
 SpriteComponent::~SpriteComponent()
 {

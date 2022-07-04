@@ -5,6 +5,11 @@
 #include <vector>
 #include <functional>
 
+namespace Components
+{
+
+    class SpriteComponent;
+}
 namespace Objects
 {
     struct ActorParams
@@ -20,6 +25,7 @@ namespace Objects
         Actor(ActorParams params);
         ~Actor() override;
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
+        Components::SpriteComponent *sprite_component;
 
     public:
         static std::vector<actor_factory> actor_listing_vector;

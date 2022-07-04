@@ -12,7 +12,7 @@ Content::Content(SDL_Renderer *render)
 Content::~Content()
 {
 }
-SDL_Texture *Content::LoadTexture(const char *filename)
+SDL_Texture *Content::LoadTexture(const char *filename, LoadType load_type)
 {
     // TODO handle the location and postfix better, since we can only load tilesets currently.
     // Check to see if we have already loaded it.
@@ -21,7 +21,18 @@ SDL_Texture *Content::LoadTexture(const char *filename)
     SDL_Surface *
         surf = NULL;
     SDL_Texture *tex = NULL;
-    std::string prefix = "./assets/tiled/tilesets/";
+    std::string prefix = "";
+    switch (load_type)
+    {
+    case LoadType::Tile:
+        prefix = "./assets/tiled/tilesets/";
+        break;
+    case LoadType::Aseprite:
+        prefix = "./assets/actors/";
+        break;
+    default:
+        break;
+    }
     std::string full = prefix + filename;
 
     surf = IMG_Load(full.c_str());

@@ -29,7 +29,7 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap, Content *conte
                 auto tsx_tile_num = Tiled::GetTsxTileNumberFromTileGid(tsx, tile_gid);
                 Rectangle source_rect = Tiled::GetTileRectangleFromTsxTileNumber(tsx, tsx_tile_num);
 
-                auto texture_ptr = content->LoadTexture(tsx->image_source.c_str());
+                auto texture_ptr = content->LoadTexture(tsx->image_source.c_str(), LoadType::Tile);
 
                 auto new_tile = new Tile(dst_rect.location.ToVector2(), texture_ptr, source_rect);
                 tiles.push_back(new_tile);

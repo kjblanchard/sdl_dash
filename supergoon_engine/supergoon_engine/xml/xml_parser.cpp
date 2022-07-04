@@ -1,4 +1,5 @@
 #include <supergoon_engine/xml/xml_parser.hpp>
+#include <supergoon_engine/xml/tinyxml2.h>
 #include <supergoon_engine/tiled/tilemap.hpp>
 #include <iostream>
 #include <vector>
@@ -7,7 +8,7 @@
 
 using namespace Tiled;
 
-Tilemap *xml_parser::LoadTiledMap(std::string filename)
+Tilemap *XmlParser::LoadTiledMap(std::string filename)
 {
     auto full_name = "./assets/tiled/" + filename + ".tmx";
     auto current_doc = new tinyxml2::XMLDocument();

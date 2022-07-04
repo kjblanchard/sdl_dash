@@ -45,7 +45,7 @@ void World::Initialize()
 
     isRunning = true;
     content = new Content(graphics->renderer);
-    auto tilemap = xml_parser::LoadTiledMap("level_1");
+    auto tilemap = XmlParser::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
     auto actor_params = tilemap->actors;
     for (auto &&actor_param : actor_params)
