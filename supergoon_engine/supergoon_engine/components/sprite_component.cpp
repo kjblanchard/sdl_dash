@@ -21,15 +21,14 @@ SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Rectan
     src_rect_ = src_rectangle;
     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.size};
 }
-SpriteComponent::SpriteComponent(GameObject *owner, const char* aseprite_file_name) : Component(owner)
-{
-    auto ase_sheed = Json::LoadAsepriteSheetFromFile(aseprite_file_name);
+// SpriteComponent::SpriteComponent(GameObject *owner, const char* aseprite_file_name) : Component(owner)
+// {
 
-    texture = ase_sheed->texture;
-    src_rect_ = ase_sheed->sprite_sheet_frames[0].source_rect;
-    dst_rect_ = Rectangle{owner->location.ToPoint(), src_rect_.size};
+//     texture = ase_sheed->texture;
+//     src_rect_ = ase_sheed->sprite_sheet_frames[0].source_rect;
+//     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rect_.size};
 
-}
+// }
 SpriteComponent::~SpriteComponent()
 {
     SDL_DestroyTexture(texture);

@@ -8,7 +8,7 @@
 namespace Components
 {
 
-    class SpriteComponent;
+    class AnimationComponent;
 }
 namespace Objects
 {
@@ -25,7 +25,7 @@ namespace Objects
         Actor(ActorParams params);
         ~Actor() override;
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
-        Components::SpriteComponent *sprite_component;
+        Components::AnimationComponent *animation_component;
 
     public:
         static std::vector<actor_factory> actor_listing_vector;
