@@ -8,16 +8,21 @@ message(STATUS "Starting Supergoon Engine Cmake")
 
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
-#Add all of our tinyxml files and headers to this library.
+#Add all of our nlohmann json files and headers to this library.
 file(GLOB JSON external/nlohmann/*)
+#Add all of our SOL2 files and headers to this library.
+file(GLOB SOL external/sol2/*)
 
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
     add_subdirectory(./external/SDL2-2.0.22)
     add_subdirectory(./external/SDL_image)
 endif()
+
+# Compile lua from source.
+add_subdirectory(./external/lua)
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
-add_library(supergoon_engine SHARED ${FILES} ${JSON})
+add_library(supergoon_engine SHARED ${FILES} ${JSON} ${SOL})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
@@ -83,6 +88,8 @@ target_include_directories(supergoon_engine
         "./external/SDL_image/"
         # This is where our fmod includes live.
         "./external/include/"
+        # This is where lua includes live
+        "./external/lua/lua-5.4.4/include"
         )
 target_include_directories(supergoon_engine
         PUBLIC
