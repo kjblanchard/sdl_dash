@@ -62,7 +62,7 @@ void World::InitializeSdl()
     auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
-    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+    int flags = IMG_INIT_PNG;
     int initted = IMG_Init(flags);
     if ((initted & flags) != flags)
     {
@@ -152,24 +152,22 @@ void World::Render()
 void World::Run()
 {
     Setup();
-    double previous = SDL_GetTicks64();
+    Uint64 previous = SDL_GetTicks64();
     double lag = 0.0;
     while (isRunning)
     {
-        double current = SDL_GetTicks64();
-        double elapsed = current - previous;
+        Uint64 current = SDL_GetTicks64();
+        Uint64 elapsed = current - previous;
         previous = current;
         lag += elapsed;
         ProcessInput();
         while (lag >= world_gametime.ElapsedTimeInMilliseconds())
         {
-            printf("\n WorldGamtime: %d, lag: %fUPDATE\n", world_gametime.ElapsedTimeInMilliseconds(), lag);
             Update(world_gametime);
             lag -= world_gametime.ElapsedTimeInMilliseconds();
         }
-        Update(world_gametime);
+
         Render();
-        // Sleep until we can update again if not on vsync
         if (graphics->vsync_enabled == false)
         {
             auto wait_time = world_gametime.CheckForSleepTime();
