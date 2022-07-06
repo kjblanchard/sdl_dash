@@ -39,7 +39,7 @@ namespace Graphics
         SDL_Window *window;
         SDL_Renderer *renderer;
 
-        GraphicsDevice(sol::state &lua_state);
+        GraphicsDevice(sol::state* lua_state);
         void Initialize() override;
         ~GraphicsDevice() override;
     };

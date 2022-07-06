@@ -5,9 +5,9 @@
 
 using namespace Graphics;
 
-GraphicsDevice::GraphicsDevice(sol::state &lua_state)
+GraphicsDevice::GraphicsDevice(sol::state *lua_state)
 {
-    sol::lua_table config_table = lua_state["config"];
+    sol::lua_table config_table = (*lua_state)["config"];
     // vsync_enabled = ConfigReader::GetValueFromCfgBool(game_settings_string, vsync_string);
     vsync_enabled = config_table[game_settings_string][vsync_string];
     SDL_DisplayMode displayMode;

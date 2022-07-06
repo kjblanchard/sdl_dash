@@ -15,6 +15,7 @@
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/lua/lua_loader.hpp>
+#include <external/sol2/sol.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
@@ -41,7 +42,7 @@ void World::Initialize()
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
     main_camera = new Camera(Vector2(), graphics);
-    Sound::muted = table["config"]["sound"]["muted"];
+    Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
     auto tilemap = XmlParser::LoadTiledMap("level_1");
