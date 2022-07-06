@@ -1,7 +1,11 @@
 #pragma once
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 
-class ConfigReader;
+namespace sol
+{
+    class state;
+
+}
 struct SDL_Window;
 struct SDL_Renderer;
 
@@ -11,15 +15,14 @@ namespace Graphics
     class GraphicsDevice : public IInitialize
     {
     private:
-        const char* game_name_string = "name";
+        const char *game_name_string = "name";
         const char *fps_string = "fps";
         const char *vsync_string = "vsync";
         const char *game_settings_string = "game";
-        const char *window_ini_section_name = "window";
-        const char *window_width_string = "window_width";
-        const char *window_height_string = "window_height";
-        const char *game_width_string = "game_width";
-        const char *game_height_string = "game_height";
+        const char *world_section_name = "world";
+        const char *window_section_name = "window";
+        const char *width_string = "width";
+        const char *height_string = "height";
 
         int window_width;
         int window_height;
@@ -36,7 +39,7 @@ namespace Graphics
         SDL_Window *window;
         SDL_Renderer *renderer;
 
-        GraphicsDevice(ConfigReader *config);
+        GraphicsDevice(sol::state &lua_state);
         void Initialize() override;
         ~GraphicsDevice() override;
     };

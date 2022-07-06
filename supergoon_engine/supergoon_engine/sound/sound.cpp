@@ -1,12 +1,11 @@
 #include <supergoon_engine/sound/sound.hpp>
-#include <supergoon_engine/ini/config_reader.hpp>
 #include <fmod.hpp>
 #include <fmod_studio.hpp>
 #include <iostream>
 
+bool Sound::muted = false;
 FMOD::Studio::System *Sound::loaded_system = nullptr;
 FMOD::Studio::EventInstance *Sound::current_music = nullptr;
-bool muted = false;
 
 void Sound::play_sfx_oneshot()
 {
@@ -48,7 +47,6 @@ Sound::Setup()
 
     std::cout << result;
     Sound::loaded_system = system;
-    muted = ConfigReader::GetValueFromCfgBool("sound", "muted");
     return system;
 }
 void Sound::stop_music_with_fadeout()

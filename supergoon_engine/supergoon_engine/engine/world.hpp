@@ -57,7 +57,7 @@ public:
     Graphics::GraphicsDevice *graphics;
     Content *content;
     void Run();
-    ConfigReader *config_reader;
+    // ConfigReader *config_reader;
     static World *GetWorld()
     {
         return instance;

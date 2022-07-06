@@ -4,7 +4,6 @@
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
-#include <supergoon_engine/ini/config_reader.hpp>
 #include <supergoon_engine/xml/xml_parser.hpp>
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
@@ -15,9 +14,10 @@
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/objects/camera.hpp>
+#include <supergoon_engine/lua/lua_loader.hpp>
 
 World *World::instance = nullptr;
-World::World() : isRunning{false}, main_camera{nullptr}, config_reader{nullptr}
+World::World() : isRunning{false}, main_camera{nullptr}
 {
 
     if (World::instance == nullptr)
@@ -36,13 +36,12 @@ void World::Initialize()
 {
 
     InitializeSdl();
-
-    config_reader = new ConfigReader("cfg.ini");
-    graphics = new Graphics::GraphicsDevice(config_reader);
+    auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config");
+    graphics = new Graphics::GraphicsDevice(table);
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
     main_camera = new Camera(Vector2(), graphics);
-
+    Sound::muted = table["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
     auto tilemap = XmlParser::LoadTiledMap("level_1");

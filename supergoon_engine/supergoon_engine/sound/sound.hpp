@@ -16,6 +16,7 @@ private:
     static FMOD::Studio::EventInstance *current_music;
 
 public:
+static bool muted;
     static FMOD::Studio::System *Setup();
     static void play_sfx_oneshot();
     static void Update();

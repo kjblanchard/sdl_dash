@@ -1,13 +1,15 @@
 #include <supergoon_engine/graphics/graphics_device.hpp>
-#include <supergoon_engine/ini/config_reader.hpp>
 #include <supergoon_engine/engine/world.hpp>
+#include <external/sol2/sol.hpp>
 #include <SDL.h>
 
 using namespace Graphics;
 
-GraphicsDevice::GraphicsDevice(ConfigReader *config)
+GraphicsDevice::GraphicsDevice(sol::state &lua_state)
 {
-    vsync_enabled = ConfigReader::GetValueFromCfgBool(game_settings_string, vsync_string);
+    sol::lua_table config_table = lua_state["config"];
+    // vsync_enabled = ConfigReader::GetValueFromCfgBool(game_settings_string, vsync_string);
+    vsync_enabled = config_table[game_settings_string][vsync_string];
     SDL_DisplayMode displayMode;
     auto result = SDL_GetCurrentDisplayMode(0, &displayMode);
     if(result != 0 )
@@ -15,15 +17,23 @@ GraphicsDevice::GraphicsDevice(ConfigReader *config)
         printf("Error, %s", SDL_GetError());
         exit(1);
     }
-    fps = (vsync_enabled) ? displayMode.refresh_rate : ConfigReader::GetValueFromCfgInt(game_settings_string,fps_string);
-    window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
-    window_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_height_string);
-    unscaled_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_width_string);
-    unscaled_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_height_string);
+    // fps = (vsync_enabled) ? displayMode.refresh_rate : ConfigReader::GetValueFromCfgInt(game_settings_string,fps_string);
+    fps = (vsync_enabled) ? displayMode.refresh_rate : config_table[game_settings_string][fps_string];
+    // window_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_width_string);
+    window_width = config_table[window_section_name][width_string];
+    // window_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, window_height_string);
+    window_height = config_table[window_section_name][height_string];
+    // unscaled_width = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_width_string);
+    unscaled_width = config_table[world_section_name][width_string];
+    // unscaled_height = ConfigReader::GetValueFromCfgInt(window_ini_section_name, game_height_string);
+    unscaled_height = config_table[world_section_name][height_string];
     screen_scale_ratio_width = window_width / static_cast<double>(unscaled_width);
     screen_scale_ratio_height = window_width / static_cast<double>(unscaled_width);
+    std::string game_name = config_table[game_settings_string][game_name_string];
     window = SDL_CreateWindow(
-    ConfigReader::GetValueFromCfg(game_settings_string, game_name_string).c_str(),
+    // ConfigReader::GetValueFromCfg(game_settings_string, game_name_string).c_str(),
+    // config_table[game_settings_string][game_name_string],
+    game_name.c_str(),
         0,
         0,
         window_width,
