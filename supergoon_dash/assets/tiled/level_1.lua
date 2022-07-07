@@ -15,12 +15,12 @@ return {
     {
       name = "backgrounds",
       firstgid = 1,
-      filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/backgrounds.tsx"
+      filename = "backgrounds.lua"
     },
     {
       name = "terrain",
       firstgid = 2,
-      filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/terrain.tsx"
+      filename = "terrain.lua"
     }
   },
   layers = {

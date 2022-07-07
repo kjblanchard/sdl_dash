@@ -15,7 +15,8 @@ namespace Objects
     struct ActorParams
     {
         Vector2 loc;
-        const char *actor_name;
+        // const char *actor_name;
+        std::string actor_name;
     };
 
     class Actor : public GameObject

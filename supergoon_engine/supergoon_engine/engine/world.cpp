@@ -4,7 +4,6 @@
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
-#include <supergoon_engine/xml/xml_parser.hpp>
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
@@ -45,7 +44,8 @@ void World::Initialize()
     Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
-    auto tilemap = XmlParser::LoadTiledMap("level_1");
+    // auto tilemap = XmlParser::LoadTiledMap("level_1");
+    auto tilemap = Lua::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
     auto actor_params = tilemap->actors;
     for (auto &&actor_param : actor_params)
