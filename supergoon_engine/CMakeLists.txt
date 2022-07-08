@@ -8,25 +8,21 @@ message(STATUS "Starting Supergoon Engine Cmake")
 
 #Add all of our source files and headers to this library.
 file(GLOB FILES supergoon_engine/**/*.?pp)
-#Add all of our nlohmann json files and headers to this library.
-file(GLOB JSON external/nlohmann/*)
-#Add all of our SOL2 files and headers to this library.
+#Add all of our SOL2 files and headers to this library, it is header only.
 file(GLOB SOL external/sol2/*)
 
+# Compile lua from source.
+add_subdirectory(./external/lua)
+# Compile jsoncpp from source.
+add_subdirectory(./external/jsoncpp-1.8.0)
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
     add_subdirectory(./external/SDL2-2.0.22)
     add_subdirectory(./external/SDL_image)
 endif()
 
-# Compile lua from source.
-add_subdirectory(./external/lua)
-
-# Compile jsoncpp from source.
-add_subdirectory(./external/jsoncpp-1.8.0)
-
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
-add_library(supergoon_engine SHARED ${FILES} ${JSON} ${SOL})
+add_library(supergoon_engine SHARED ${FILES} ${SOL})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
@@ -34,7 +30,7 @@ generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exp
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
 
 # Sets the module path, this is so that we can use the find sdl package below with the FindSDL2.cmake file in the location
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 
 # Add external libraries, these don't use cmake at all so we have a longer process.
 add_library(fmod SHARED IMPORTED)
@@ -53,10 +49,9 @@ if(WIN32)
     # Set the output of external libs to the runtime folder, due to dlls not getting the proper linking flags in other folders.
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
     # Windows libs to copy over, they have different names than others.
-    set(COPY_LIBS fmod.dll fmodstudio.dll SDL2_image.dll SDL2_ttf.dll libjpeg-9.dll libpng16-16.dll zlib1.dll)
+    set(COPY_LIBS fmod.dll fmodstudio.dll libjpeg-9.dll libpng16-16.dll zlib1.dll)
 elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
-    # Find the SDL2_ttf package in the frameworks folder since we don't build it from source.
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.dylib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.dylib)
     set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -91,7 +86,7 @@ target_include_directories(supergoon_engine
         # built sdl_image
         "./external/SDL_image/"
         # This is where our fmod includes live.
-        "./external/include/"
+        "./external/fmod/"
         # This is where lua includes live
         "./external/lua/lua-5.4.4/include/"
         # This is where the json includes live

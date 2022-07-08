@@ -16,16 +16,19 @@ Currently Compiling on Windows(32bit), Mac (apple silicon/arm64), and Ubuntu lin
 - **CMake** - Build system
 - **FMOD** - Low level handling of sound
 - **Tiled** - Used for creating the maps and outputting data for it
-- **[TinyXML2]** (https://github.com/leethomason/tinyxml2) Used for low level handling of xml
-- **[minINI]** (https://github.com/pulzed/mINI) - Used for low level handling of ini files for reading config.
-- **ImGui** - Development Debugging and GUI
+- **[jsoncpp]** (https://github.com/open-source-parsers/jsoncpp) - Used for low level handling of json, so that we can load it into lua
+**[Lua]**(https://www.lua.org/license.html) - Data tables currently.
+**[sol2]**(https://github.com/ThePhD/sol2) - Wrapper around the lua C api
 ## License
 
 All of the licenses that I'm using will be listed here.
 
-[minINI](https://github.com/pulzed/mINI) - MIT
+[jsoncpp](https://github.com/open-source-parsers/jsoncpp) - MIT
+[sol2](https://github.com/ThePhD/sol2) - MIT
+[Lua](https://www.lua.org/license.html) - MIT
 [Pixel art](https://pixelfrog-assets.itch.io/pixel-adventure-1) - Creative Commons License
 [tinyxml2](https://github.com/leethomason/tinyxml2/blob/master/LICENSE.txt) - zlib license - not altered.
+FMOD - Indie License
 
 ## Authors
 

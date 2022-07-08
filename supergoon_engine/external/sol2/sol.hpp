@@ -33,6 +33,8 @@
 #define SOL_HPP
 
 // beginning of sol/version.hpp
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
 
 #include "./config.hpp"
 
@@ -28905,3 +28907,5 @@ namespace sol {
 // end of sol/sol.hpp
 
 #endif // SOL_SINGLE_INCLUDE_HPP
+
+#pragma clang diagnostic pop
