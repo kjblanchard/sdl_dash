@@ -21,6 +21,10 @@ endif()
 
 # Compile lua from source.
 add_subdirectory(./external/lua)
+
+# Compile jsoncpp from source.
+add_subdirectory(./external/jsoncpp-1.8.0)
+
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES} ${JSON} ${SOL})
 
@@ -89,7 +93,9 @@ target_include_directories(supergoon_engine
         # This is where our fmod includes live.
         "./external/include/"
         # This is where lua includes live
-        "./external/lua/lua-5.4.4/include"
+        "./external/lua/lua-5.4.4/include/"
+        # This is where the json includes live
+        "./external/jsoncpp-1.8.0/include/"
         )
 target_include_directories(supergoon_engine
         PUBLIC
@@ -99,7 +105,7 @@ target_include_directories(supergoon_engine
         )
 
 message(STATUS "Linking to the external libraries.")
-target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image lua_shared)
+target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image lua_shared jsoncpp_lib)
 
 message(STATUS "Copying the Libraries to the output folder.  We do this for FMOD since we aren't building from source.")
 foreach( file_i ${COPY_LIBS})

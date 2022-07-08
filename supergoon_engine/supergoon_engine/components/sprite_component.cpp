@@ -1,5 +1,4 @@
 #include <supergoon_engine/components/sprite_component.hpp>
-#include <supergoon_engine/json/json_parser.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/engine/content.hpp>

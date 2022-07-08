@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/engine/world.hpp>
-#include <supergoon_engine/json/json_parser.hpp>
 
 Aseprite::AsepriteSheet::AsepriteSheet(const char* file_name)
 {

@@ -1,12 +1,11 @@
 #include <supergoon_engine/objects/actor.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
-#include <supergoon_engine/json/json_parser.hpp>
 
 std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
 Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
     animation_component = new Components::AnimationComponent(this, params.actor_name.c_str());
-    AddComponent(animation_component);
+    // AddComponent(animation_component);
 }
 
 Objects::Actor::~Actor()

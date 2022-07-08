@@ -2,11 +2,9 @@
 #include <supergoon_engine_export.h>
 #include <string>
 
-class Tile;
 
 namespace Tiled
 {
-    class Tilemap;
 
     class Tsx
     {

@@ -8,7 +8,6 @@
 
 class Tile;
 class Content;
-class ConfigReader;
 class Camera;
 
 namespace Objects{
