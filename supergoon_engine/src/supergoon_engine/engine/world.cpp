@@ -14,7 +14,7 @@
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/lua/lua_loader.hpp>
-#include <external/sol2/sol.hpp>
+#include <sol2/sol.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}

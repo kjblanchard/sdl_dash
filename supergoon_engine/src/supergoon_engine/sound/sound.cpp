@@ -1,6 +1,6 @@
 #include <supergoon_engine/sound/sound.hpp>
-#include <fmod.hpp>
-#include <fmod_studio.hpp>
+#include <fmod/fmod.hpp>
+#include <fmod/fmod_studio.hpp>
 #include <iostream>
 
 bool Sound::muted = false;

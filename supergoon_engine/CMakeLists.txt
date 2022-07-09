@@ -1,41 +1,35 @@
 # Needed for windows defining declspecs automatically
 include(GenerateExportHeader)
-# Used for linux.
+# Used for linux to find the packages installed.
 include(FindPkgConfig)
-# Use the most current version.
+# Use a modern CMAKE version.
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
-
 #Add all of our source files to this library
-file(GLOB FILES supergoon_engine/**/*.cpp)
-
+file(GLOB FILES ./src/supergoon_engine/**/*.cpp)
 # Compile lua from source.
-add_subdirectory(./external/lua)
+add_subdirectory(./external/build/lua)
 # Compile jsoncpp from source.
-add_subdirectory(./external/jsoncpp-1.8.0)
+add_subdirectory(./external/build/jsoncpp-1.8.0)
 # Add the SDL folders as we are building it as source, had issues building from source in linux currently.
 if(APPLE OR WIN32)
-    add_subdirectory(./external/SDL2-2.0.22)
-    add_subdirectory(./external/SDL_image)
+    add_subdirectory(./external/build/SDL2-2.0.22)
+    add_subdirectory(./external/build/SDL_image)
 endif()
-
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES})
-
-# Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
-generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
 # Use newest cpp standard for this target
 set_property(TARGET supergoon_engine PROPERTY CXX_STANDARD 20)
-
+# Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
+generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
 # Sets the module path, this is so that we can use the find sdl package below with the FindSDL2.cmake file in the location
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
-
-# Add external libraries, these don't use cmake at all so we have a longer process.
+# Add external libraries, these don't use cmake at all so we have a longer process and need to define them
 add_library(fmod SHARED IMPORTED)
 add_library(fmodstudio SHARED IMPORTED)
-
-# Define where our files are to be copied from.
+# Define where our compiled FMOD binary files are to be copied from.
 set(EXTERNAL_BIN_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/external/bin)
+set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 if(WIN32)
     message(STATUS "Setting up windows build information.")
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/fmod.dll)
@@ -52,7 +46,6 @@ elseif(APPLE)
     message(STATUS "Setting Up Fmod for Mac")
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.dylib)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.dylib)
-    set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(COPY_LIBS libfmod.dylib libfmodstudio.dylib)
 elseif(UNIX)
     message(STATUS "Setting Up Linux, these are installed via apt with the bootstrap.sh, and is found automatically due to issues building from source.")
@@ -61,7 +54,6 @@ elseif(UNIX)
     pkg_check_modules(SDL2_image REQUIRED SDL2_image)
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.so)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.so)
-    set(EXTERNAL_LIBRARY_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(COPY_LIBS libfmod.so libfmodstudio.so libfmodstudio.so.13 libfmodstudio.so.13.7)
 endif()
 
@@ -76,23 +68,24 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 endif()
 
 message(STATUS "Adding include Directories to the project.")
+# We use the build dir for projects we will build, and we use the lib for heade ronly imps.
 target_include_directories(supergoon_engine
         SYSTEM
         PUBLIC
         # built sdl2 includes
-        "./external/SDL2-2.0.22/include/"
+        "./external/build/SDL2-2.0.22/include/"
         # built sdl_image
-        "./external/SDL_image/"
-        # This is where our fmod includes live.
-        "./external/fmod/"
+        "./external/build/SDL_image/"
         # This is where lua includes live
-        "./external/lua/lua-5.4.4/include/"
+        "./external/build/lua/lua-5.4.4/include/"
         # This is where the json includes live
-        "./external/jsoncpp-1.8.0/include/"
+        "./external/build/jsoncpp-1.8.0/include/"
+        # This is where the header only files live
+        "./external/include/"
         )
 target_include_directories(supergoon_engine
         PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/"
         # This is needed for the exports file.
         "${CMAKE_BINARY_DIR}/exports/"
         )

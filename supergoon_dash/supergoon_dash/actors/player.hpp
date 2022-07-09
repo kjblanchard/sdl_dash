@@ -7,7 +7,7 @@ private:
     /* data */
 public:
     Player(Objects::ActorParams params);
-    ~Player();
+    ~Player() override;
     static Objects::Actor* ActorFactory(Objects::ActorParams& params);
 };
 

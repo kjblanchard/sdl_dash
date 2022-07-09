@@ -6,8 +6,8 @@ return {
         name = 'Supergoon Dash',
     },
     window = {
-        width = 1920,
-        height = 1080,
+        width = 1536,
+        height = 840,
     },
     world = {
         width = 512,

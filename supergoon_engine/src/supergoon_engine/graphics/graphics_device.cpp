@@ -1,6 +1,6 @@
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/engine/world.hpp>
-#include <external/sol2/sol.hpp>
+#include <sol2/sol.hpp>
 #include <SDL.h>
 
 using namespace Graphics;

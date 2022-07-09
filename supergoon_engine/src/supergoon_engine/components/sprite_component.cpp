@@ -42,6 +42,7 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
     auto src_rect = src_rect_.GetSDL_Rect();
     dst_rect.x -= main_camera->rect.x;
     dst_rect.y -= main_camera->rect.y;
+    // Scale to resolution size manually.
     dst_rect.w *= main_camera->GetResolutionScaleSizeX();
     dst_rect.h *= main_camera->GetResolutionScaleSizeY();
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <external/sol2/forward.hpp>
+#include <sol2/forward.hpp>
 #include <string>
 
 namespace Tiled{

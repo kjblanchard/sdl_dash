@@ -1,6 +1,6 @@
 #include <supergoon_engine/lua/lua_loader.hpp>
 #include <string.h>
-#include <external/sol2/sol.hpp>
+#include <sol2/sol.hpp>
 #include <supergoon_engine/tiled/tilemap.hpp>
 
 sol::state Lua::lua_global_state;
