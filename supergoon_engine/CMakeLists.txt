@@ -5,16 +5,16 @@ include(FindPkgConfig)
 # Use a modern CMAKE version.
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
-#Add all of our source files to this library
+#Add all of our source files to this library for building
 file(GLOB FILES ./src/supergoon_engine/**/*.cpp)
-# Compile lua from source.
-add_subdirectory(./external/build/lua)
-# Compile jsoncpp from source.
-add_subdirectory(./external/build/jsoncpp-1.8.0)
-# Add the SDL folders as we are building it as source, had issues building from source in linux currently.
+# We use the build dir for projects we will build in subdirectories
+set(EXTERNAL_BUILD_DIR ./external/build)
+add_subdirectory(${EXTERNAL_BUILD_DIR}/lua)
+add_subdirectory(${EXTERNAL_BUILD_DIR}/jsoncpp-1.8.0)
+# Add the SDL folders as we are building it as source, had issues building from source in linux currently. Linux uses shell script to install
 if(APPLE OR WIN32)
-    add_subdirectory(./external/build/SDL2-2.0.22)
-    add_subdirectory(./external/build/SDL_image)
+    add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL2-2.0.22)
+    add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL_image)
 endif()
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES})
@@ -67,26 +67,20 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     target_compile_options(supergoon_engine PRIVATE /EHsc /W2 /c)
 endif()
 
-message(STATUS "Adding include Directories to the project.")
-# We use the build dir for projects we will build, and we use the lib for heade ronly imps.
+message(STATUS "Adding include Directories from build submodules, and from header only includes to the project.")
 target_include_directories(supergoon_engine
         SYSTEM
         PUBLIC
-        # built sdl2 includes
-        "./external/build/SDL2-2.0.22/include/"
-        # built sdl_image
-        "./external/build/SDL_image/"
-        # This is where lua includes live
-        "./external/build/lua/lua-5.4.4/include/"
-        # This is where the json includes live
-        "./external/build/jsoncpp-1.8.0/include/"
-        # This is where the header only files live
-        "./external/include/"
+        ${EXTERNAL_BUILD_DIR}/SDL2-2.0.22/include/
+        ${EXTERNAL_BUILD_DIR}/SDL_image/
+        ${EXTERNAL_BUILD_DIR}/lua/lua-5.4.4/include/
+        ${EXTERNAL_BUILD_DIR}/jsoncpp-1.8.0/include/
+        ./external/include/
         )
 target_include_directories(supergoon_engine
         PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-        # This is needed for the exports file.
+        # This is needed for the declspec exports file.
         "${CMAKE_BINARY_DIR}/exports/"
         )
 

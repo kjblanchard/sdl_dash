@@ -1,10 +1,70 @@
 #include <supergoon_engine/lua/lua_loader.hpp>
+#include <supergoon_engine/lua/lua_helper.hpp>
 #include <string.h>
 #include <sol2/sol.hpp>
 #include <supergoon_engine/tiled/tilemap.hpp>
+#include <supergoon_engine/aseprite/aseprite_frame.hpp>
+#include <sstream>
 
 sol::state Lua::lua_global_state;
 using namespace Tiled;
+
+std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(std::string files)
+{
+    sol::state temp_state;
+    auto thing = sol::this_state(temp_state);
+    auto full_path = "./assets/actors/" + files;
+    std::vector<Aseprite::AsepriteFrame> aseprite_frames;
+
+    auto char_sprite_sheet = Lua::l_read_json(full_path, thing);
+    if (char_sprite_sheet != sol::lua_nil)
+    {
+        if (char_sprite_sheet.is<sol::table>())
+        {
+            auto lua_table = char_sprite_sheet.as<sol::lua_table>();
+            if (lua_table != sol::lua_nil)
+            {
+                sol::table frames = lua_table["frames"];
+                for (const auto &key_value_pair : frames)
+                {
+                    Aseprite::AsepriteFrame frame;
+                    auto key = key_value_pair.first.as<std::string>();
+                    frame.frame_num = Lua::ParseIntFromString(key);
+                    sol::table value = key_value_pair.second;
+                    frame.millisecond_length = value["duration"];
+                    sol::table frame_rect = value["frame"];
+                    frame.source_rect = Rectangle(
+                        Point(frame_rect["x"], frame_rect["y"]),
+                        Point(frame_rect["w"], frame_rect["h"]));
+                    aseprite_frames.push_back(frame);
+                }
+                //TODO convert this to a operator for aseprite frame.
+                std::sort(aseprite_frames.begin(), aseprite_frames.end(), [](Aseprite::AsepriteFrame a, Aseprite::AsepriteFrame b){
+                    return a.frame_num < b.frame_num;
+                });
+            }
+        }
+    }
+    return aseprite_frames;
+}
+
+unsigned int Lua::ParseIntFromString(std::string aseprite_key_name)
+{
+    std::stringstream str_strm;
+    str_strm << aseprite_key_name; // convert the string s into stringstream
+    std::string temp_str;
+    unsigned int temp_int;
+    while (!str_strm.eof())
+    {
+        str_strm >> temp_str; // take words into temp_str one by one
+        if (std::stringstream(temp_str) >> temp_int)
+        { // try to convert string to int
+            return temp_int;
+        }
+        temp_str = ""; // clear temp string
+    }
+    return 0;
+}
 
 sol::state &Lua::LoadLuaTableIntoGlobalState(const char *file_name, const char *table_name)
 {

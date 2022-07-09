@@ -5,7 +5,7 @@ std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
 Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
     animation_component = new Components::AnimationComponent(this, params.actor_name.c_str());
-    // AddComponent(animation_component);
+    AddComponent(animation_component);
 }
 
 Objects::Actor::~Actor()

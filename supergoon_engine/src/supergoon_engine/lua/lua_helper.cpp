@@ -2,10 +2,10 @@
 #include <fstream>
 #include <sstream>
 #include <sol2/sol.hpp>
+#include <supergoon_engine/lua/lua_helper.hpp>
 
-namespace {
 
-sol::object json_to_lua(Json::Value value, sol::this_state state) {
+sol::object Lua::json_to_lua(Json::Value value, sol::this_state state) {
 	switch (value.type()) {
 	case Json::nullValue:
 		return sol::lua_nil;
@@ -36,10 +36,8 @@ sol::object json_to_lua(Json::Value value, sol::this_state state) {
 	assert(false);
 }
 
-} // namespace
 
-sol::object l_parse_json(
-		const std::string &value, sol::this_state state) {
+sol::object Lua::l_parse_json(const std::string &value, sol::this_state state) {
 	Json::Value root;
 	std::string errors;
 
@@ -58,8 +56,7 @@ sol::object l_parse_json(
 	return json_to_lua(root, state);
 }
 
-sol::object l_read_json(
-		const std::string &path, sol::this_state state) {
+sol::object Lua::l_read_json(const std::string &path, sol::this_state state) {
 	Json::Value root;
 	{
 		std::ifstream is(path);

@@ -14,6 +14,7 @@
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/lua/lua_loader.hpp>
+#include <supergoon_engine/lua/lua_helper.hpp>
 #include <sol2/sol.hpp>
 
 World *World::instance = nullptr;
@@ -36,7 +37,8 @@ void World::Initialize()
 {
 
     InitializeSdl();
-    auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config");
+    auto temp_loading_state = new sol::state();
+    auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config", temp_loading_state);
     graphics = new Graphics::GraphicsDevice(table);
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
@@ -54,7 +56,6 @@ void World::Initialize()
         if (actor)
             actors.push_back(actor);
     }
-
     sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 
@@ -135,7 +136,8 @@ void World::Update(Gametime &gametime)
     {
         tile->Update(gametime);
     }
-    std::for_each(actors.begin(), actors.end(), [&gametime](auto& actor){actor->Update(gametime);});
+    std::for_each(actors.begin(), actors.end(), [&gametime](auto &actor)
+                  { actor->Update(gametime); });
 }
 
 void World::Render()
@@ -146,7 +148,8 @@ void World::Render()
     {
         sprite_batch->Draw(tile);
     }
-    std::for_each(actors.begin(), actors.end(), [&](auto& actor){sprite_batch->Draw(actor);});
+    std::for_each(actors.begin(), actors.end(), [&](auto &actor)
+                  { sprite_batch->Draw(actor); });
     sprite_batch->End();
 }
 
