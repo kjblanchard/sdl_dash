@@ -1,7 +1,14 @@
 #Add all of our source files and headers to this library.
-file(GLOB FILES supergoon_dash/**/*.?pp)
+# file(GLOB FILES supergoon_dash/**/*.?pp)
+file(GLOB FILES supergoon_dash/**/*.cpp)
 file(GLOB MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
-add_executable(supergoon_dash ${FILES} ${MAIN})
+list(APPEND FILES ${MAIN})
+# Build a win32 bundle when building on win, and macos when building on ios
+# Remove macosbundle as its easier to copy the files and debug
+add_executable(supergoon_dash
+                WIN32
+                # MACOSX_BUNDLE
+                ${FILES})
 set_property(TARGET supergoon_dash PROPERTY CXX_STANDARD 20)
 target_include_directories(supergoon_dash
         PUBLIC

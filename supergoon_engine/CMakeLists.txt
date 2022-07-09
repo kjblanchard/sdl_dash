@@ -6,10 +6,8 @@ include(FindPkgConfig)
 cmake_minimum_required(VERSION 3.2)
 message(STATUS "Starting Supergoon Engine Cmake")
 
-#Add all of our source files and headers to this library.
-file(GLOB FILES supergoon_engine/**/*.?pp)
-#Add all of our SOL2 files and headers to this library, it is header only.
-file(GLOB SOL external/sol2/*)
+#Add all of our source files to this library
+file(GLOB FILES supergoon_engine/**/*.cpp)
 
 # Compile lua from source.
 add_subdirectory(./external/lua)
@@ -22,7 +20,7 @@ if(APPLE OR WIN32)
 endif()
 
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
-add_library(supergoon_engine SHARED ${FILES} ${SOL})
+add_library(supergoon_engine SHARED ${FILES})
 
 # Generate our EXPORT and NO_EXPORT macros in sgengine_exported.h, this is for automatically generating windows declspecs
 generate_export_header(supergoon_engine EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/supergoon_engine_export.h)
@@ -100,7 +98,10 @@ target_include_directories(supergoon_engine
         )
 
 message(STATUS "Linking to the external libraries.")
-target_link_libraries(supergoon_engine PUBLIC SDL2 SDL2main fmod fmodstudio SDL2_image lua_shared jsoncpp_lib)
+target_link_libraries(supergoon_engine
+                        PUBLIC
+                        PRIVATE SDL2 fmod fmodstudio SDL2_image lua_shared jsoncpp_lib
+                        INTERFACE )
 
 message(STATUS "Copying the Libraries to the output folder.  We do this for FMOD since we aren't building from source.")
 foreach( file_i ${COPY_LIBS})
