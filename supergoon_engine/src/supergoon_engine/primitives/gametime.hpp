@@ -21,7 +21,7 @@ private:
     Uint64 this_tick_delta_time_ms = 0.0;
     double time_since_last_update = 0.0;
 
-    double MillisecondsPerFrame()
+    double MillisecondsPerFrame() const
     {
         return 1000.00 / game_fps;
     }
@@ -54,7 +54,7 @@ public:
      *
      * @return The amount of milliseconds this update frame. 16.6667 for 60fps, etc
      */
-    double ElapsedTimeInMilliseconds()
+   double ElapsedTimeInMilliseconds() const
     {
         return MillisecondsPerFrame();
     }

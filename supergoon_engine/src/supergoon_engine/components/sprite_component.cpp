@@ -48,3 +48,7 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
 
     SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
 }
+void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)
+{
+    src_rect_ = src_rectangle;
+}

@@ -22,6 +22,7 @@ namespace Components
         void Initialize() override;
         void Update(const Gametime &gametime) override;
         void Draw(SDL_Renderer *renderer) override;
+        void UpdateFromAnimationComponent(Rectangle src_rectangle);
     };
 
 }

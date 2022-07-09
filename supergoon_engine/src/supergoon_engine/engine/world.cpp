@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <string>
 #include <iostream>
+#include <SDL_image.h>
+#include <sol2/sol.hpp>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/sound/sound.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
@@ -9,13 +11,11 @@
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
 #include <supergoon_engine/tiled/tilemap.hpp>
-#include <SDL_image.h>
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/lua/lua_loader.hpp>
 #include <supergoon_engine/lua/lua_helper.hpp>
-#include <sol2/sol.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
@@ -46,7 +46,6 @@ void World::Initialize()
     Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
-    // auto tilemap = XmlParser::LoadTiledMap("level_1");
     auto tilemap = Lua::LoadTiledMap("level_1");
     tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
     auto actor_params = tilemap->actors;

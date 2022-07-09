@@ -21,7 +21,8 @@ namespace Components
         SpriteComponent *sprite_component;
         Aseprite::AsepriteSheet *aseprite_sheet;
         float animation_speed = 1.0f;
-        double seconds_this_frame = 0.0;
+        double ms_this_frame = 0.0;
+        int current_frame_in_animation;
 
     public:
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, Vector2 offset = Vector2());
