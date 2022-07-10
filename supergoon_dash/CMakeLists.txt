@@ -5,8 +5,9 @@ file(GLOB MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 list(APPEND FILES ${MAIN})
 # Build a win32 bundle when building on win, and macos when building on ios
 # Remove macosbundle as its easier to copy the files and debug
+#Remove win32 as couldn't build with sdl2
 add_executable(supergoon_dash
-                WIN32
+                # WIN32
                 # MACOSX_BUNDLE
                 ${FILES})
 set_property(TARGET supergoon_dash PROPERTY CXX_STANDARD 20)

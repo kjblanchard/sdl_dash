@@ -35,7 +35,9 @@
 #endif
 
 /* this checks for HAVE_DBUS_DBUS_H internally. */
+#ifdef __LINUX__
 #include "core/linux/SDL_dbus.h"
+#endif
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>

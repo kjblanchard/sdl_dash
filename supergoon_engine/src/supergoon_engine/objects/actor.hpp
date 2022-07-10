@@ -1,25 +1,23 @@
 #pragma once
-// #define SDL_MAIN_HANDLED
-#include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine_export.h>
+#include <supergoon_engine/engine/gameobject.hpp>
 #include <vector>
 #include <functional>
 
 namespace Components
 {
-
     class AnimationComponent;
 }
 namespace Objects
 {
-    struct ActorParams
+
+    struct SUPERGOON_ENGINE_EXPORT ActorParams
     {
         Vector2 loc;
-        // const char *actor_name;
         std::string actor_name;
     };
 
-    class Actor : public GameObject
+    class  SUPERGOON_ENGINE_EXPORT Actor : public GameObject
     {
     private:
     protected:

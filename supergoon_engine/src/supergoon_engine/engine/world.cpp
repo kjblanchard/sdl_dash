@@ -135,8 +135,14 @@ void World::Update(Gametime &gametime)
     {
         tile->Update(gametime);
     }
-    std::for_each(actors.begin(), actors.end(), [&gametime](auto &actor)
-                  { actor->Update(gametime); });
+    auto guy = actors;
+    for (size_t i = 0; i < actors.size() ; i++)
+    {
+        actors[i]->Update(gametime);
+    }
+    
+    // std::for_each(actors.begin(), actors.end(), [&gametime](auto &actor)
+    //               { actor->Update(gametime); });
 }
 
 void World::Render()

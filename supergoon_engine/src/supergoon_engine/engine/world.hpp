@@ -1,5 +1,5 @@
 #pragma once
-// #define SDL_MAIN_HANDLED
+#define SDL_MAIN_HANDLED
 #include <memory>
 #include <vector>
 #include <SDL.h>

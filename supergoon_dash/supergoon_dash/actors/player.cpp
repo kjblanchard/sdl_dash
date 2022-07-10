@@ -1,14 +1,13 @@
 #include <supergoon_dash/actors/player.hpp>
-using namespace Objects;
 
-Player::Player(ActorParams params) : Actor{params}
+Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 {
 }
 
 Player::~Player()
 {
 }
-Actor *Player::ActorFactory(ActorParams &params)
+Objects::Actor *Player::ActorFactory(Objects::ActorParams &params)
 {
     return new Player(params);
 }

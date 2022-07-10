@@ -16,6 +16,7 @@ void Components::AnimationComponent::Draw(SDL_Renderer *renderer)
 void Components::AnimationComponent::Update(const Gametime &gametime)
 {
     ms_this_frame += gametime.ElapsedTimeInMilliseconds();
+    auto length = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
     if (ms_this_frame > aseprite_sheet->sprite_sheet_frames[current_frame_in_animation].millisecond_length)
     {
         ms_this_frame = 0;

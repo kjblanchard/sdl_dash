@@ -1,7 +1,7 @@
 #pragma once
 #include <supergoon_engine/objects/actor.hpp>
 
-class Player : public Objects::Actor
+class  Player : public Objects::Actor
 {
 private:
     /* data */

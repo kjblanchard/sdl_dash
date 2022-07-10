@@ -9,8 +9,8 @@ public:
     virtual ~IInitialize();
     bool initialized = true;
 
-    IInitialize(const IInitialize &) = default;
-    IInitialize(IInitialize &&) = default;
-    IInitialize &operator=(const IInitialize &) = default;
-    IInitialize &operator=(IInitialize &&) = default;
+    // IInitialize(const IInitialize &) = default;
+    // IInitialize(IInitialize &&) = default;
+    // IInitialize &operator=(const IInitialize &) = default;
+    // IInitialize &operator=(IInitialize &&) = default;
 };

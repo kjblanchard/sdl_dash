@@ -10,8 +10,8 @@ public:
     virtual ~IUpdate();
     bool Enabled = true;
 
-    IUpdate(const IUpdate &) = default;
-    IUpdate(IUpdate &&) = default;
-    IUpdate &operator=(const IUpdate &) = default;
-    IUpdate &operator=(IUpdate &&) = default;
+    // IUpdate(const IUpdate &) = default;
+    // IUpdate(IUpdate &&) = default;
+    // IUpdate &operator=(const IUpdate &) = default;
+    // IUpdate &operator=(IUpdate &&) = default;
 };

@@ -86,7 +86,6 @@ Explore
 @kjblanchard
 torvalds
 /
-linux
 Public
 Code
 Pull requests
@@ -95,7 +94,6 @@ Actions
 Projects
 Security
 Insights
-linux/.gitignore
 @masahir0y
 masahir0y kbuild: split the second line of *.mod into *.usyms
 …
@@ -135,7 +133,6 @@ modules.order
 #
 # Top-level generic files
 #
-/linux
 /modules-only.symvers
 /vmlinux
 /vmlinux.32

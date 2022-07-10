@@ -1,3 +1,4 @@
+#include <supergoon_engine_export.h>
 #include <supergoon_engine/objects/actor.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
 
