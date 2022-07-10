@@ -17,6 +17,6 @@ private:
     Components::SpriteComponent *sprite_component_;
 
 public:
-    Tile(Vector2 loc, SDL_Texture *texture, Rectangle src_rect);
+    Tile(Vector2 loc,std::shared_ptr<SDL_Texture>texture, Rectangle src_rect);
     ~Tile() override;
 };

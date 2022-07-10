@@ -2,6 +2,7 @@
 #include <vector>
 #include <supergoon_engine/primitives/point.hpp>
 #include <supergoon_engine/aseprite/aseprite_frame.hpp>
+#include <memory>
 
 struct SDL_Texture;
 
@@ -14,6 +15,6 @@ namespace Aseprite
 
         Point sheet_size;
         std::vector<AsepriteFrame> sprite_sheet_frames;
-        SDL_Texture* texture;
+        std::shared_ptr<SDL_Texture> texture;
     };
 }

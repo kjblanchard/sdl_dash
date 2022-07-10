@@ -3,6 +3,8 @@
 #include <supergoon_engine/engine/component.hpp>
 #include <supergoon_engine/primitives/point.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
+#include <supergoon_engine/primitives/sprite.hpp>
+#include <memory>
 
 namespace Components
 {
@@ -12,12 +14,11 @@ namespace Components
     public:
         Rectangle dst_rect_;
         Rectangle src_rect_;
-        SDL_Texture *texture;
+        Sprite sprite;
 
     public:
-        SpriteComponent(GameObject *owner, SDL_Texture *texture, Point size = Point(), Point src_loc = Point());
-        SpriteComponent(GameObject *owner, SDL_Texture *texture, Rectangle src_rectangle);
-        // SpriteComponent(GameObject *owner, const char* aseprite_file_name);
+        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size = Point(), Point src_loc = Point());
+        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle);
         ~SpriteComponent() override;
         void Initialize() override;
         void Update(const Gametime &gametime) override;

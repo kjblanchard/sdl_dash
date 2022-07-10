@@ -2,7 +2,7 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 
 
-Tile::Tile(Vector2 loc, SDL_Texture* texture, Rectangle src_rect ) : GameObject{loc}
+Tile::Tile(Vector2 loc,std::shared_ptr<SDL_Texture> texture, Rectangle src_rect ) : GameObject{loc}
 {
     sprite_component_ = new Components::SpriteComponent(this,texture,src_rect);
     AddComponent(sprite_component_);

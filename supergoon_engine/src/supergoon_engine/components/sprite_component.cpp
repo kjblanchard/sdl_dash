@@ -8,21 +8,18 @@
 
 using namespace Components;
 
-SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Point size, Point src_loc) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size, Point src_loc) : Component(owner), sprite{Sprite(texture)}
 {
-    this->texture = texture;
     src_rect_ = Rectangle{src_loc, size};
     dst_rect_ = Rectangle{owner->location.ToPoint(), size};
 }
-SpriteComponent::SpriteComponent(GameObject *owner, SDL_Texture *texture, Rectangle src_rectangle) : Component(owner)
+SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle) : Component(owner), sprite{Sprite(texture)}
 {
-    this->texture = texture;
     src_rect_ = src_rectangle;
     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.size};
 }
 SpriteComponent::~SpriteComponent()
 {
-    SDL_DestroyTexture(texture);
 }
 
 void SpriteComponent::Initialize()
@@ -46,7 +43,7 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
     dst_rect.w *= main_camera->GetResolutionScaleSizeX();
     dst_rect.h *= main_camera->GetResolutionScaleSizeY();
 
-    SDL_RenderCopy(renderer, texture, &src_rect, &dst_rect);
+    SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect, &dst_rect);
 }
 void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)
 {
