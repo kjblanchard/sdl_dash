@@ -8,6 +8,7 @@ namespace Aseprite{
 }
 namespace Tiled{
     class Tilemap;
+    class TileLayer;
 }
 
 namespace Lua
@@ -18,6 +19,7 @@ namespace Lua
     sol::state& LoadLuaTableIntoGlobalState(const char *file_name, const char *table_name);
     sol::state* LoadLuaTableIntoTempState(const char *file_name, const char *table_name);
     sol::state* LoadLuaTableIntoTempState(const char *file_name, const char *table_name, sol::state* state_to_load_to);
+    Tiled::TileLayer* LoadTileLayer(sol::table& table);
     void DropLuaTable(const char* table_name);
     extern sol::state lua_global_state;
 }

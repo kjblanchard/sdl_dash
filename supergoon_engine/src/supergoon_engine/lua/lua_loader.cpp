@@ -39,7 +39,7 @@ std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(std::string files)
                         Point(frame_rect["w"], frame_rect["h"]));
                     aseprite_frames.push_back(frame);
                 }
-                std::sort(aseprite_frames.begin(),aseprite_frames.end());
+                std::sort(aseprite_frames.begin(), aseprite_frames.end());
             }
         }
     }
@@ -138,21 +138,8 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     sol::optional<sol::lua_table> hasLayer = layer_group_layers_lua[j_layer];
                     if (hasLayer == sol::nullopt)
                         break;
-                    auto layer_ptr = new TileLayer();
-                    layer_ptr->layer_name = layer_group_layers_lua[j_layer]["name"];
-                    layer_ptr->layer_id = layer_group_layers_lua[j_layer]["id"];
-                    layer_ptr->height = layer_group_layers_lua[j_layer]["height"];
-                    layer_ptr->width = layer_group_layers_lua[j_layer]["width"];
-                    sol::table layer_tile_data_lua = layer_group_layers_lua[j_layer]["data"];
-                    // int k_layer = 1;
-                    for (size_t k_layer = 1; k_layer < layer_tile_data_lua.size() + 1; k_layer++)
-                    {
-                        // hasLayer = layer_tile_data_lua[k_layer];
-                        // if (hasLayer == sol::nullopt)
-                        //     break;
-                        layer_ptr->tiles.push_back(layer_tile_data_lua[k_layer]);
-                    }
-                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(layer_ptr));
+                    sol::table tab = layer_group_layers_lua[j_layer];
+                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(LoadTileLayer(tab)));
                     ++j_layer;
                 }
                 tile_map_ptr->layer_groups.push_back(std::shared_ptr<LayerGroup>(layer_group_ptr));
@@ -210,4 +197,18 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
         return tile_map_ptr;
     }
     return nullptr;
+}
+Tiled::TileLayer *Lua::LoadTileLayer(sol::table &table)
+{
+    auto layer_ptr = new TileLayer();
+    layer_ptr->layer_name = table["name"];
+    layer_ptr->layer_id = table["id"];
+    layer_ptr->height = table["height"];
+    layer_ptr->width = table["width"];
+    sol::table layer_tile_data_lua = table["data"];
+    for (size_t k_layer = 1; k_layer < layer_tile_data_lua.size() + 1; k_layer++)
+    {
+        layer_ptr->tiles.push_back(layer_tile_data_lua[k_layer]);
+    }
+    return layer_ptr;
 }
