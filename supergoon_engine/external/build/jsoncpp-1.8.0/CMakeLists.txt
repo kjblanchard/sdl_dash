@@ -106,7 +106,7 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 
 IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # using regular Clang or AppleClang
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow -Werror=conversion -Werror=sign-compare")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow  -Werror=sign-compare")
 ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # using GCC
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow -Wextra")
@@ -117,7 +117,7 @@ ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     ENDIF()
 ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     # using Intel compiler
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow -Wextra -Werror=conversion")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wconversion -Wshadow -Wextra ")
 
     IF(JSONCPP_WITH_STRICT_ISO AND NOT JSONCPP_WITH_WARNING_AS_ERROR)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
