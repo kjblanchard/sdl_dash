@@ -2,6 +2,7 @@
 #include <supergoon_engine/lua/lua_helper.hpp>
 #include <string.h>
 #include <sol2/sol.hpp>
+#include <algorithm>
 #include <supergoon_engine/tiled/tilemap.hpp>
 #include <supergoon_engine/aseprite/aseprite_frame.hpp>
 #include <sstream>
@@ -203,6 +204,9 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
             }
             tile_map_ptr->tsx_in_tilemap.push_back(std::shared_ptr<Tsx>(tsx));
         }
+        auto guy = tile_map_ptr->tsx_in_tilemap;
+        std::sort(tile_map_ptr->tsx_in_tilemap.begin(), tile_map_ptr->tsx_in_tilemap.end());
+        auto girl = tile_map_ptr->tsx_in_tilemap;
         return tile_map_ptr;
     }
     return nullptr;

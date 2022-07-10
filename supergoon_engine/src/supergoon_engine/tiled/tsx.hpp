@@ -16,6 +16,28 @@ namespace Tiled
         int first_gid;
         int columns;
         bool collection_of_images;
+
+        inline bool operator<(const Tsx &rhs) const
+        {
+            bool is_less = first_gid < rhs.first_gid;
+            return first_gid < rhs.first_gid;
+        }
+        inline bool operator<=(const Tsx &rhs) const
+        {
+            return first_gid <= rhs.first_gid;
+        }
+        inline bool operator==(const Tsx &rhs) const
+        {
+           return first_gid == rhs.first_gid;
+        }
+        inline bool operator>(const Tsx &rhs) const
+        {
+            return first_gid > rhs.first_gid;
+        }
+        inline bool operator>=(const Tsx &rhs) const
+        {
+            return first_gid >= rhs.first_gid;
+        }
     };
 
 }
