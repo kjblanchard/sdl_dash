@@ -27,6 +27,7 @@ struct SUPERGOON_ENGINE_EXPORT Vector2
         x = x_;
         y = y_;
     }
+    //TODO add in vector2 addition.
     /**
      * Makes a new point with the values from the vec2.  Decimal places will be lost (does not round.)
      *

@@ -29,10 +29,10 @@ class SUPERGOON_ENGINE_EXPORT World
 
 private:
     bool isRunning;
-    //TODO remove this
+    //TODO remove this after testing camera.
     dir this_frame_directions;
 
-    // TODO remove this
+    // TODO remove this after creating a level to hold them.
     std::vector<Tile *> tiles;
     std::vector<Objects::Actor*> actors;
     void InitializeSdl();

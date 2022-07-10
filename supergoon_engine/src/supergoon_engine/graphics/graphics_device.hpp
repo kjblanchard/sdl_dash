@@ -24,14 +24,13 @@ namespace Graphics
         const char *width_string = "width";
         const char *height_string = "height";
 
-        int window_width;
-        int window_height;
 
     public:
         bool vsync_enabled;
-        // TODO make this not public
         int unscaled_height;
         int unscaled_width;
+        int window_width;
+        int window_height;
         double screen_scale_ratio_width;
         double screen_scale_ratio_height;
         int fps;
