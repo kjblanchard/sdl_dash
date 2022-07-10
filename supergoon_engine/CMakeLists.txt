@@ -11,11 +11,9 @@ file(GLOB FILES ./src/supergoon_engine/**/*.cpp)
 set(EXTERNAL_BUILD_DIR ./external/build)
 add_subdirectory(${EXTERNAL_BUILD_DIR}/lua)
 add_subdirectory(${EXTERNAL_BUILD_DIR}/jsoncpp-1.8.0)
-# Add the SDL folders as we are building it as source, had issues building from source in linux currently. Linux uses shell script to install
-if(APPLE OR WIN32)
-    add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL2-2.0.22)
-    add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL_image)
-endif()
+# Add the SDL folders as we are building it as source
+add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL2-2.0.22)
+add_subdirectory(${EXTERNAL_BUILD_DIR}/SDL_image)
 # We are creating a shared lib (or dll on windows) and add all the files that we globbed above to it for compiling
 add_library(supergoon_engine SHARED ${FILES})
 # Use newest cpp standard for this target
@@ -49,9 +47,7 @@ elseif(APPLE)
     set(COPY_LIBS libfmod.dylib libfmodstudio.dylib)
 elseif(UNIX)
     message(STATUS "Setting Up Linux, these are installed via apt with the bootstrap.sh, and is found automatically due to issues building from source.")
-    find_package(SDL2 REQUIRED)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(SDL2_image REQUIRED SDL2_image)
+    # pkg_check_modules(SDL2_image REQUIRED SDL2_image) Used this when not building from source
     set_target_properties(fmod PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmod.so)
     set_target_properties(fmodstudio PROPERTIES IMPORTED_LOCATION ${EXTERNAL_BIN_FOLDER}/libfmodstudio.so)
     set(COPY_LIBS libfmod.so libfmodstudio.so libfmodstudio.so.13 libfmodstudio.so.13.7)
