@@ -27,7 +27,18 @@ struct SUPERGOON_ENGINE_EXPORT Vector2
         x = x_;
         y = y_;
     }
-    //TODO add in vector2 addition.
+    inline Vector2 &operator+=(const Vector2 &rhs)
+    {
+        this->x += rhs.x;
+        this->y += rhs.y;
+        return *this;
+    }
+
+    inline Vector2 operator+(const Vector2 &rhs) const
+    {
+        return Vector2(x + rhs.x, y + rhs.y);
+    }
+
     /**
      * Makes a new point with the values from the vec2.  Decimal places will be lost (does not round.)
      *

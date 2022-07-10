@@ -140,7 +140,7 @@ void World::Update(Gametime &gametime)
     {
         actors[i]->Update(gametime);
     }
-    
+
     // std::for_each(actors.begin(), actors.end(), [&gametime](auto &actor)
     //               { actor->Update(gametime); });
 }
