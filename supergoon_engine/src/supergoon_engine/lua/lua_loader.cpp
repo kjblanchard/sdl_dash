@@ -38,10 +38,7 @@ std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(std::string files)
                         Point(frame_rect["w"], frame_rect["h"]));
                     aseprite_frames.push_back(frame);
                 }
-                //TODO convert this to a operator for aseprite frame.
-                std::sort(aseprite_frames.begin(), aseprite_frames.end(), [](Aseprite::AsepriteFrame a, Aseprite::AsepriteFrame b){
-                    return a.frame_num < b.frame_num;
-                });
+                std::sort(aseprite_frames.begin(),aseprite_frames.end());
             }
         }
     }
