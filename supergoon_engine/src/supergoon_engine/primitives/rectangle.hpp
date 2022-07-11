@@ -22,5 +22,5 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
      *
      * @return Creates a new vector 2 based on this class.
      */
-    const SDL_Rect GetSDL_Rect() const;
+    SDL_Rect GetSDL_Rect();
 };
