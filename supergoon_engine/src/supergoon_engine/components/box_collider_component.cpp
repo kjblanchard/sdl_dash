@@ -15,7 +15,7 @@ void Components::BoxColliderComponent::Update(const Gametime &gametime)
     rectangle.sdl_rectangle.h = size.y * main_camera->GetResolutionScaleSizeY();
 }
 
-void Components::BoxColliderComponent::Draw(SDL_Renderer *render)
+void Components::BoxColliderComponent::Draw(Graphics::SpriteBatch &spritebatch)
 {
-    SDL_RenderDrawRect(render, &rectangle.sdl_rectangle);
+    // SDL_RenderDrawRect(render, &rectangle.sdl_rectangle);
 }

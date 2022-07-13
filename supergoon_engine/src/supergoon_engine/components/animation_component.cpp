@@ -9,10 +9,6 @@ Components::AnimationComponent::AnimationComponent(GameObject *owner, const char
     sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect);
 }
 
-void Components::AnimationComponent::Draw(SDL_Renderer *renderer)
-{
-    sprite_component->Draw(renderer);
-}
 void Components::AnimationComponent::Update(const Gametime &gametime)
 {
     ms_this_frame += gametime.ElapsedTimeInMilliseconds();

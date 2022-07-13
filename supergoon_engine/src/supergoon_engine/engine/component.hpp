@@ -8,7 +8,11 @@
 
 class GameObject;
 class Camera;
+
 class World;
+namespace Graphics{
+class SpriteBatch;
+}
 
 class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize
 {
@@ -38,6 +42,5 @@ public:
             return std::move(*this);
         return std::move(rhs);
     }
-    inline virtual void Draw(SDL_Renderer *) {}
-
+    inline virtual void Draw(Graphics::SpriteBatch& spritebatch) {}
 };

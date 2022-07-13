@@ -10,6 +10,11 @@
 
 class World;
 class Camera;
+namespace Graphics
+{
+    class SpriteBatch;
+
+}
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
@@ -47,7 +52,7 @@ public:
      * Calls Draw all components on this gameobject.
      * @param renderer pointer to the renderer currently.
      */
-    void Draw(SDL_Renderer *renderer);
+    void Draw(Graphics::SpriteBatch &spritebatch);
     /**
      * Adds a component to this gameobject, and then sorts them.
      * @param component pointer to the component to add.

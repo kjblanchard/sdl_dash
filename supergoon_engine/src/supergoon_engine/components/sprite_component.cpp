@@ -4,6 +4,7 @@
 #include <supergoon_engine/engine/content.hpp>
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/aseprite/aseprite_sheet.hpp>
+#include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <SDL_rect.h>
 
 using namespace Components;
@@ -34,7 +35,7 @@ void SpriteComponent::Update(const Gametime &gametime)
     dst_rect_.sdl_rectangle.y = static_cast<int>((static_cast<double>(owner_->location.y + offset_.y)) * main_camera->GetResolutionScaleSizeY());
 }
 
-void SpriteComponent::Draw(SDL_Renderer *renderer)
+void SpriteComponent::Draw( Graphics::SpriteBatch& spritebatch)
 {
 
     temp_dst_rect = dst_rect_;
@@ -43,8 +44,11 @@ void SpriteComponent::Draw(SDL_Renderer *renderer)
     // Scale to resolution size manually.
     temp_dst_rect.sdl_rectangle.w *= main_camera->GetResolutionScaleSizeX();
     temp_dst_rect.sdl_rectangle.h *= main_camera->GetResolutionScaleSizeY();
+    spritebatch.Draw(sprite,temp_dst_rect,src_rect_);
 
-    SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect_.sdl_rectangle, &temp_dst_rect.sdl_rectangle);
+
+
+    // SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect_.sdl_rectangle, &temp_dst_rect.sdl_rectangle);
 }
 void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)
 {

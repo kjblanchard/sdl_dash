@@ -29,6 +29,6 @@ namespace Components
         }
         Point size;
         void Update(const Gametime& gametime) override;
-        void Draw(SDL_Renderer * render) override;
+        void Draw(Graphics::SpriteBatch&  spritebatch) override;
     };
 }

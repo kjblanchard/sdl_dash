@@ -141,8 +141,6 @@ void World::Update(Gametime &gametime)
         actors[i]->Update(gametime);
     }
 
-    // std::for_each(actors.begin(), actors.end(), [&gametime](auto &actor)
-    //               { actor->Update(gametime); });
 }
 
 void World::Render()
@@ -151,10 +149,10 @@ void World::Render()
 
     for (auto &&tile : tiles)
     {
-        sprite_batch->Draw(tile);
+        tile->Draw(*sprite_batch);
     }
     std::for_each(actors.begin(), actors.end(), [&](auto &actor)
-                  { sprite_batch->Draw(actor); });
+                  { actor->Draw(*sprite_batch); });
     sprite_batch->End();
 }
 

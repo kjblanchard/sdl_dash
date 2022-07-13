@@ -33,10 +33,10 @@ void GameObject::Update(const Gametime &gametime)
    }
 }
 
-void GameObject::Draw(SDL_Renderer *renderer)
+void GameObject::Draw( Graphics::SpriteBatch&  spritebatch)
 {
    for (auto &&component : components_)
    {
-      component.get()->Draw(renderer);
+      component.get()->Draw(spritebatch);
    }
 }

@@ -3,6 +3,9 @@
 #include <supergoon_engine/engine/component.hpp>
 
 class GameObject;
+namespace Graphics{
+    class SpriteBatch;
+}
 namespace Aseprite
 {
     class AsepriteSheet;
@@ -27,6 +30,5 @@ namespace Components
     public:
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, Vector2 offset = Vector2());
         void Update(const Gametime &) override;
-        void Draw(SDL_Renderer *) override;
     };
 }

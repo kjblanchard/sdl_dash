@@ -6,6 +6,10 @@
 #include <supergoon_engine/primitives/sprite.hpp>
 #include <memory>
 
+namespace Graphics{
+    class SpriteBatch;
+}
+
 namespace Components
 {
     class SUPERGOON_ENGINE_EXPORT SpriteComponent : public Component
@@ -23,7 +27,7 @@ namespace Components
         ~SpriteComponent() override;
         void Initialize() override;
         void Update(const Gametime &gametime) override;
-        void Draw(SDL_Renderer *renderer) override;
+        void Draw(Graphics::SpriteBatch &spritebatch) override;
         void UpdateFromAnimationComponent(Rectangle src_rectangle);
     };
 
