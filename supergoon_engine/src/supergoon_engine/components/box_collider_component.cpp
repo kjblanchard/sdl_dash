@@ -1,4 +1,5 @@
 #include <supergoon_engine/components/box_collider_component.hpp>
+#include <supergoon_engine/graphics/sprite_batch.hpp>
 
 Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}, size{box_size}
 {
@@ -17,5 +18,5 @@ void Components::BoxColliderComponent::Update(const Gametime &gametime)
 
 void Components::BoxColliderComponent::Draw(Graphics::SpriteBatch &spritebatch)
 {
-    // SDL_RenderDrawRect(render, &rectangle.sdl_rectangle);
+    spritebatch.DrawRect(rectangle);
 }
