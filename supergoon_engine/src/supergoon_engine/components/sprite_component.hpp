@@ -12,6 +12,7 @@ namespace Components
     {
     private:
     public:
+        Rectangle temp_dst_rect;
         Rectangle dst_rect_;
         Rectangle src_rect_;
         Sprite sprite;

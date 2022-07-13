@@ -12,9 +12,11 @@ namespace Components
     class BoxColliderComponent : public Component
     {
 
+
     public:
         BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~BoxColliderComponent() override;
+        Rectangle rectangle;
         inline Rectangle GetRectangle()
         {
             return Rectangle(
@@ -26,6 +28,7 @@ namespace Components
                 ));
         }
         Point size;
+        void Update(const Gametime& gametime) override;
         void Draw(SDL_Renderer * render) override;
     };
 }

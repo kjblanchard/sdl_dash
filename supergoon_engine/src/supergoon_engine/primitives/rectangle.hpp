@@ -1,26 +1,33 @@
 #pragma once
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/primitives/point.hpp>
+#include <supergoon_engine/primitives/vector2.hpp>
 #include <SDL_rect.h>
 
-
 /**
- * Data type that holds two ints
+ * Sdl_rect wrapper.
  *
  * Holds a x and y value of ints.  Can be converted to Vector 2.  This should be used for things that draw to the screen.
  */
 struct SUPERGOON_ENGINE_EXPORT Rectangle
 {
-    Point size;
-    Point location;
+    SDL_Rect sdl_rectangle;
 
-    Rectangle() : size{Point()}, location{Point()}{}
-    Rectangle(Point loc, Point rect_size) : size{rect_size}, location{loc}{}
+    inline Rectangle()
+    {
+        sdl_rectangle.x = sdl_rectangle.y = sdl_rectangle.h = sdl_rectangle.w;
+    }
+    inline Rectangle(Point loc, Point rect_size){
+        sdl_rectangle.x = loc.x;
+        sdl_rectangle.y = loc.y;
+        sdl_rectangle.h = rect_size.y;
+        sdl_rectangle.w = rect_size.x;
+    }
 
-    /**
-     * Makes a new SDL_Rect from this rectangle
-     *
-     * @return Creates a new vector 2 based on this class.
-     */
-    SDL_Rect GetSDL_Rect();
+    inline Point GetSize(){
+        return Point(sdl_rectangle.w, sdl_rectangle.h);
+    }
+    inline Vector2 GetLocation(){
+        return Vector2(sdl_rectangle.x, sdl_rectangle.y);
+    }
 };

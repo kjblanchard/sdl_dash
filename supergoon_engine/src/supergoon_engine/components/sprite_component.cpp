@@ -12,11 +12,13 @@ SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture>
 {
     src_rect_ = Rectangle{src_loc, size};
     dst_rect_ = Rectangle{owner->location.ToPoint(), size};
+    temp_dst_rect = Rectangle{owner->location.ToPoint(), size};
 }
 SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle) : Component(owner), sprite{Sprite(texture)}
 {
     src_rect_ = src_rectangle;
-    dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.size};
+    dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.GetSize()};
+    temp_dst_rect = Rectangle{owner->location.ToPoint(), src_rectangle.GetSize()};
 }
 SpriteComponent::~SpriteComponent()
 {
@@ -28,22 +30,21 @@ void SpriteComponent::Initialize()
 
 void SpriteComponent::Update(const Gametime &gametime)
 {
-    dst_rect_.location.x = static_cast<int>((static_cast<double>(owner_->location.x + offset_.x)) * main_camera->GetResolutionScaleSizeX());
-    dst_rect_.location.y = static_cast<int>((static_cast<double>(owner_->location.y + offset_.y)) * main_camera->GetResolutionScaleSizeY());
+    dst_rect_.sdl_rectangle.x = static_cast<int>((static_cast<double>(owner_->location.x + offset_.x)) * main_camera->GetResolutionScaleSizeX());
+    dst_rect_.sdl_rectangle.y = static_cast<int>((static_cast<double>(owner_->location.y + offset_.y)) * main_camera->GetResolutionScaleSizeY());
 }
 
 void SpriteComponent::Draw(SDL_Renderer *renderer)
 {
 
-    auto dst_rect = dst_rect_.GetSDL_Rect();
-    auto src_rect = src_rect_.GetSDL_Rect();
-    dst_rect.x -= main_camera->rect.x;
-    dst_rect.y -= main_camera->rect.y;
+    temp_dst_rect = dst_rect_;
+    temp_dst_rect.sdl_rectangle.x -= main_camera->rect.x;
+    temp_dst_rect.sdl_rectangle.y -= main_camera->rect.y;
     // Scale to resolution size manually.
-    dst_rect.w *= main_camera->GetResolutionScaleSizeX();
-    dst_rect.h *= main_camera->GetResolutionScaleSizeY();
+    temp_dst_rect.sdl_rectangle.w *= main_camera->GetResolutionScaleSizeX();
+    temp_dst_rect.sdl_rectangle.h *= main_camera->GetResolutionScaleSizeY();
 
-    SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect, &dst_rect);
+    SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect_.sdl_rectangle, &temp_dst_rect.sdl_rectangle);
 }
 void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)
 {
