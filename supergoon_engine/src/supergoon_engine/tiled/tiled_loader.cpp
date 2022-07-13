@@ -31,7 +31,8 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap, Content *conte
 
                 auto texture_ptr = content->LoadTexture(tsx->image_source.c_str(), LoadType::Tile);
 
-                auto new_tile = new Tile(dst_rect.GetLocation(), texture_ptr, source_rect);
+                // auto new_tile = new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer_i);
+                auto new_tile = new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer.get()->layer_id);
                 tiles.push_back(new_tile);
             }
         }

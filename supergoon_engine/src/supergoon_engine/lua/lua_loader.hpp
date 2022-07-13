@@ -19,7 +19,7 @@ namespace Lua
     sol::state& LoadLuaTableIntoGlobalState(const char *file_name, const char *table_name);
     sol::state* LoadLuaTableIntoTempState(const char *file_name, const char *table_name);
     sol::state* LoadLuaTableIntoTempState(const char *file_name, const char *table_name, sol::state* state_to_load_to);
-    Tiled::TileLayer* LoadTileLayer(sol::table& table);
+    Tiled::TileLayer* LoadTileLayer(sol::table& table, int layer_depth);
     void DropLuaTable(const char* table_name);
     extern sol::state lua_global_state;
 }

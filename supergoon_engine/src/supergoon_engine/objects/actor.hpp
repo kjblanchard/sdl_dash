@@ -14,6 +14,7 @@ namespace Objects
     struct SUPERGOON_ENGINE_EXPORT ActorParams
     {
         Vector2 loc;
+        int layer;
         std::string actor_name;
     };
 

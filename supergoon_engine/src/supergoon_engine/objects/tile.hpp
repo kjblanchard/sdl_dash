@@ -19,6 +19,6 @@ private:
     Components::BoxColliderComponent* box_collider_component;
 
 public:
-    Tile(Vector2 loc,std::shared_ptr<SDL_Texture>texture, Rectangle src_rect);
+    Tile(Vector2 loc,std::shared_ptr<SDL_Texture>texture, Rectangle src_rect, int layer);
     ~Tile() override;
 };

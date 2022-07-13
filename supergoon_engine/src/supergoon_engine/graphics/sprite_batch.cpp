@@ -2,6 +2,8 @@
 #include <supergoon_engine/graphics/graphics_device.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/primitives/sprite.hpp>
+#include <ostream>
+#include <fstream>
 #include <SDL.h>
 
 using namespace Graphics;
@@ -23,36 +25,45 @@ void SpriteBatch::Begin()
     draw_rects.clear();
 }
 
-void SpriteBatch::Draw(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect)
+void SpriteBatch::Draw(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect, int layer)
 {
     auto draw_object = DrawObject{};
     draw_object.sprite = &sprite;
     draw_object.dst_rect = &dst_rect;
     draw_object.src_rect = &src_rect;
+    draw_object.layer = layer;
     draw_objects.push_back(draw_object);
 }
 
+
 void SpriteBatch::End()
 {
-    for (auto &&i : draw_objects)
-    {
-        SDL_RenderCopy(
-            graphics_device->renderer,
-            i.sprite->texture.get(),
-            &i.src_rect->sdl_rectangle,
-            &i.dst_rect->sdl_rectangle);
-    }
+
+    std::sort(draw_objects.begin(), draw_objects.end(), [](DrawObject &lhs, DrawObject &rhs)
+              { return lhs.layer < rhs.layer; });
+
     SDL_SetRenderDrawColor(
         graphics_device->renderer,
         255,
         0,
         0,
         255);
-
-    for (auto &&i : draw_rects)
+    for (auto &&i : draw_objects)
     {
-        SDL_RenderDrawRect(graphics_device->renderer, &i->sdl_rectangle);
+        if (!i.sprite)
+        {
+            SDL_RenderDrawRect(graphics_device->renderer, &i.dst_rect->sdl_rectangle);
+        }
+        else
+        {
+            SDL_RenderCopy(
+                graphics_device->renderer,
+                i.sprite->texture.get(),
+                &i.src_rect->sdl_rectangle,
+                &i.dst_rect->sdl_rectangle);
+        }
     }
+
     SDL_SetRenderDrawColor(
         graphics_device->renderer,
         0,
@@ -64,5 +75,11 @@ void SpriteBatch::End()
 }
 void SpriteBatch::DrawRect(Rectangle &dst_rect)
 {
-    draw_rects.push_back(&dst_rect);
+    auto draw_object = DrawObject{};
+    draw_object.sprite = nullptr;
+    draw_object.src_rect = nullptr;
+    draw_object.dst_rect = &dst_rect;
+    draw_object.layer = 50;
+    draw_objects.push_back(draw_object);
+    // draw_rects.push_back(&dst_rect);
 }

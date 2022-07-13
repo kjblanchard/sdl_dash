@@ -3,10 +3,10 @@
 #include <supergoon_engine/aseprite/aseprite_sheet.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
 
-Components::AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, Vector2 offset) : Component{owner, offset}
+Components::AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer, Vector2 offset) : Component{owner, offset}
 {
     aseprite_sheet = new Aseprite::AsepriteSheet(aseprite_file_name);
-    sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect);
+    sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect,layer);
 }
 
 void Components::AnimationComponent::Update(const Gametime &gametime)

@@ -116,7 +116,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
 
         // Get the layers group, and loop through them.
         sol::lua_table layers = root_element["layers"];
-        int iLayer = 1;
+        int iLayer, layer_depth = 1;
         while (true)
         {
             // We don't know how big the table is in lua, so test to see if the layer exists, if not, break from the while loop.
@@ -139,8 +139,9 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     if (hasLayer == sol::nullopt)
                         break;
                     sol::table tab = layer_group_layers_lua[j_layer];
-                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(LoadTileLayer(tab)));
+                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(LoadTileLayer(tab, layer_depth)));
                     ++j_layer;
+                    ++layer_depth;
                 }
                 tile_map_ptr->layer_groups.push_back(std::shared_ptr<LayerGroup>(layer_group_ptr));
             }
@@ -157,8 +158,10 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.actor_name = actor_name;
                     actor_params.loc.x = actor["x"];
                     actor_params.loc.y = actor["y"];
+                    actor_params.layer = layer_depth;
                     tile_map_ptr->actors.push_back(actor_params);
                 }
+                ++layer_depth;
             }
             ++iLayer;
         }
@@ -193,19 +196,19 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
         }
         auto guy = tile_map_ptr->tsx_in_tilemap;
         // std::sort(tile_map_ptr->tsx_in_tilemap.begin(), tile_map_ptr->tsx_in_tilemap.end());
-        std::sort(tile_map_ptr->tsx_in_tilemap.begin(), tile_map_ptr->tsx_in_tilemap.end(), [](auto& lhs, auto& rhs){
-            return lhs.get()->first_gid < rhs.get()->first_gid;
-        });
+        std::sort(tile_map_ptr->tsx_in_tilemap.begin(), tile_map_ptr->tsx_in_tilemap.end(), [](auto &lhs, auto &rhs)
+                  { return lhs.get()->first_gid < rhs.get()->first_gid; });
         auto girl = tile_map_ptr->tsx_in_tilemap;
         return tile_map_ptr;
     }
     return nullptr;
 }
-Tiled::TileLayer *Lua::LoadTileLayer(sol::table &table)
+Tiled::TileLayer *Lua::LoadTileLayer(sol::table &table, int layer_depth)
 {
     auto layer_ptr = new TileLayer();
     layer_ptr->layer_name = table["name"];
-    layer_ptr->layer_id = table["id"];
+    // layer_ptr->layer_id = table["id"];
+    layer_ptr->layer_id = layer_depth;
     layer_ptr->height = table["height"];
     layer_ptr->width = table["width"];
     sol::table layer_tile_data_lua = table["data"];

@@ -3,9 +3,9 @@
 #include <supergoon_engine/components/box_collider_component.hpp>
 
 
-Tile::Tile(Vector2 loc,std::shared_ptr<SDL_Texture> texture, Rectangle src_rect ) : GameObject{loc}
+Tile::Tile(Vector2 loc,std::shared_ptr<SDL_Texture> texture, Rectangle src_rect, int layer ) : GameObject{loc}
 {
-    sprite_component_ = new Components::SpriteComponent(this,texture,src_rect);
+    sprite_component_ = new Components::SpriteComponent(this,texture,src_rect,layer);
     box_collider_component = new Components::BoxColliderComponent(this,src_rect.GetSize());
 }
 

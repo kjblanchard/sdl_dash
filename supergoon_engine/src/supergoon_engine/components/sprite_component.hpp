@@ -20,10 +20,11 @@ namespace Components
         Rectangle dst_rect_;
         Rectangle src_rect_;
         Sprite sprite;
+        int layer;
 
     public:
-        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size = Point(), Point src_loc = Point());
-        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle);
+        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size = Point(), Point src_loc = Point(), int layer = 0);
+        SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle, int layer = 0);
         ~SpriteComponent() override;
         void Initialize() override;
         void Update(const Gametime &gametime) override;

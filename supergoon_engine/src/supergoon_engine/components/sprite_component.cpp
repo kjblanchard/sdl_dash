@@ -9,13 +9,13 @@
 
 using namespace Components;
 
-SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size, Point src_loc) : Component(owner), sprite{Sprite(texture)}
+SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size, Point src_loc, int layer_id) : Component(owner), sprite{Sprite(texture)}, layer{layer_id}
 {
     src_rect_ = Rectangle{src_loc, size};
     dst_rect_ = Rectangle{owner->location.ToPoint(), size};
     temp_dst_rect = Rectangle{owner->location.ToPoint(), size};
 }
-SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle) : Component(owner), sprite{Sprite(texture)}
+SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle, int layer_id) : Component(owner), sprite{Sprite(texture)}, layer{layer_id}
 {
     src_rect_ = src_rectangle;
     dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.GetSize()};
@@ -44,7 +44,7 @@ void SpriteComponent::Draw( Graphics::SpriteBatch& spritebatch)
     // Scale to resolution size manually.
     temp_dst_rect.sdl_rectangle.w *= main_camera->GetResolutionScaleSizeX();
     temp_dst_rect.sdl_rectangle.h *= main_camera->GetResolutionScaleSizeY();
-    spritebatch.Draw(sprite,temp_dst_rect,src_rect_);
+    spritebatch.Draw(sprite,temp_dst_rect,src_rect_,layer);
 
 
 

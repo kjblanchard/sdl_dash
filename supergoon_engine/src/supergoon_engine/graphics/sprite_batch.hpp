@@ -15,6 +15,7 @@ namespace Graphics
             Sprite *sprite;
             Rectangle *dst_rect;
             Rectangle *src_rect;
+            int layer;
         };
 
     private:
@@ -26,7 +27,7 @@ namespace Graphics
         SpriteBatch(GraphicsDevice *graphics);
         ~SpriteBatch();
         void Begin();
-        void Draw(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect);
+        void Draw(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect, int layer = 0);
         void DrawRect(Rectangle& dst_rect);
         void End();
     };
