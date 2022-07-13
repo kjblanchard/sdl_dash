@@ -116,7 +116,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
 
         // Get the layers group, and loop through them.
         sol::lua_table layers = root_element["layers"];
-        int iLayer, layer_depth = 1;
+        int iLayer = 1, layer_depth = 1;
         while (true)
         {
             // We don't know how big the table is in lua, so test to see if the layer exists, if not, break from the while loop.
