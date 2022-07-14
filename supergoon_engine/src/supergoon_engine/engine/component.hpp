@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
+#include <supergoon_engine/interfaces/i_debug.hpp>
 
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
@@ -14,7 +15,7 @@ namespace Graphics{
 class SpriteBatch;
 }
 
-class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize
+class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize, public IDebug
 {
 protected:
     /**

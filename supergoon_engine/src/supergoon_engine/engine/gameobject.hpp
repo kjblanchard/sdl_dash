@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
+#include <supergoon_engine/interfaces/i_debug.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <supergoon_engine/engine/component.hpp>
 #include <vector>
@@ -18,7 +19,7 @@ namespace Graphics
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
-class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize
+class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize, public IDebug
 {
 private:
 protected:

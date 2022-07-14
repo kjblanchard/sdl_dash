@@ -28,7 +28,9 @@ namespace Graphics
         ~SpriteBatch();
         void Begin();
         void Draw(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect, int layer = 0);
+        void DrawUi(Sprite &sprite, Rectangle &dst_rect, Rectangle &src_rect, int layer = 0);
         void DrawRect(Rectangle& dst_rect);
+        void DrawRectUi(Rectangle& dst_rect);
         void End();
     };
 

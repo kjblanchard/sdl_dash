@@ -8,7 +8,7 @@ namespace Graphics
     class GraphicsDevice;
 }
 
-class Camera : private GameObject
+class Camera : public GameObject
 {
 private:
     Graphics::GraphicsDevice *graphics_device;
