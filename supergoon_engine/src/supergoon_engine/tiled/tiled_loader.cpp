@@ -16,6 +16,9 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap, Content *conte
         for (size_t layer_i = 0; layer_i < layer_group->tile_layers.size(); layer_i++)
         {
             auto &layer = layer_group->tile_layers[layer_i];
+            auto layer_name = layer.get()->layer_name;
+
+            bool solid_tile = (layer_name.starts_with("solid")) ? true : false;
 
             for (size_t tile_i = 0; tile_i < layer->tiles.size(); tile_i++)
             {
@@ -31,8 +34,9 @@ std::vector<Tile *> Tiled::LoadTilesFromTilemap(Tilemap *tilemap, Content *conte
 
                 auto texture_ptr = content->LoadTexture(tsx->image_source.c_str(), LoadType::Tile);
 
-                // auto new_tile = new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer_i);
-                auto new_tile = new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer.get()->layer_id);
+                auto new_tile = (solid_tile)
+                                    ? new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer.get()->layer_id, true)
+                                    : new Tile(dst_rect.GetLocation(), texture_ptr, source_rect, layer.get()->layer_id);
                 tiles.push_back(new_tile);
             }
         }
