@@ -172,7 +172,19 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
             sol::lua_table current_tileset_lua = tilesets[i];
             tsx->first_gid = current_tileset_lua["firstgid"];
             std::string tsx_name = current_tileset_lua["filename"];
-            auto tsx_full_name = "./assets/tiled/tilesets/" + tsx_name;
+            std::stringstream test(tsx_name);
+            std::string segment;
+            std::vector<std::string> seglist;
+
+            while (std::getline(test, segment, '/'))
+            {
+                seglist.push_back(segment);
+            }
+            std::string filename_no_path = seglist.back();
+            std::string filename_no_prefix = filename_no_path.erase(filename_no_path.length() - 3);
+            std::string filename_lua_prefix = filename_no_prefix + "lua";
+            // auto tsx_full_name = "./assets/tiled/tilesets/" + tsx_name;
+            auto tsx_full_name = "./assets/tiled/tilesets/" + filename_lua_prefix;
             Lua::LoadLuaTableIntoTempState(tsx_full_name.c_str(), tsx_name.c_str(), current_doc_lua_state.get());
             // sol::lua_table loaded_tsx_lua = root_element[tsx_name.c_str()];
             sol::lua_table loaded_tsx_lua = (*current_doc_lua_state.get())[tsx_name.c_str()];

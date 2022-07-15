@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <supergoon_engine/engine/world.hpp>
 #include <supergoon_engine/engine/content.hpp>
+#include <supergoon_engine/engine/level.hpp>
 
 // statics
 World *GameObject::world = nullptr;
@@ -33,10 +34,15 @@ void GameObject::Update(const Gametime &gametime)
    }
 }
 
-void GameObject::Draw( Graphics::SpriteBatch&  spritebatch)
+void GameObject::Draw(Graphics::SpriteBatch &spritebatch)
 {
    for (auto &&component : components_)
    {
       component.get()->Draw(spritebatch);
    }
+}
+
+Level *GameObject::GetLevel()
+{
+   return world->GetCurrentLevel();
 }

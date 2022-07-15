@@ -12,13 +12,13 @@ namespace Components
     class BoxColliderComponent : public Component
     {
 
-
     public:
         BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~BoxColliderComponent() override;
         Rectangle rectangle;
         Rectangle temp_rect;
-        void Update(const Gametime& gametime) override;
-        void Draw(Graphics::SpriteBatch&  spritebatch) override;
+        SDL_Rect GetCurrentSdlRect();
+        void Update(const Gametime &gametime) override;
+        void Draw(Graphics::SpriteBatch &spritebatch) override;
     };
 }

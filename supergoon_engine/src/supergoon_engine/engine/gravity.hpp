@@ -2,7 +2,12 @@
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 
+class Level;
+
+namespace Components{
 class RigidbodyComponent;
+
+}
 
 namespace Gravity
 {
@@ -11,12 +16,14 @@ namespace Gravity
     public:
         int gravity = 0;
         int friction = 0;
+        bool enabled = true;
         Vector2 min_velocity;
         Vector2 max_velocity;
+        Level* current_level;
     };
 
-    void ApplyGravity(RigidbodyComponent &rb, GravityParams &gravity_params, Gametime &gametime);
-    static void GravityConstraintX();
-    static void GravityConstraintY();
+    void ApplyGravity(Components::RigidbodyComponent &rb, GravityParams &gravity_params, const Gametime &gametime);
+    void GravityConstraintY(Components::RigidbodyComponent& rb, GravityParams& gravity_params, double gravity_step);
+    void GravityConstraintX();
 
 }

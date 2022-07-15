@@ -10,17 +10,19 @@ return {
   tileheight = 16,
   nextlayerid = 7,
   nextobjectid = 2,
-  properties = {},
+  properties = {
+    ["music"] = "level_1"
+  },
   tilesets = {
     {
       name = "backgrounds",
       firstgid = 1,
-      filename = "backgrounds.lua"
+      filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/backgrounds.tsx"
     },
     {
       name = "terrain",
       firstgid = 2,
-      filename = "terrain.lua"
+      filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/terrain.tsx"
     }
   },
   layers = {
@@ -167,8 +169,8 @@ return {
           name = "player",
           type = "",
           shape = "point",
-          x = 16,
-          y = 208,
+          x = 32,
+          y = 80,
           width = 0,
           height = 0,
           rotation = 0,

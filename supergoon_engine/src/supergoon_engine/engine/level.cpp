@@ -11,6 +11,7 @@
 
 Level::Level(sol::table& current_level_table, Content *content_ptr) : tilemap{nullptr}, content{content_ptr}
 {
+    // get the level name to load from tiled.
     map_name = current_level_table["name"];
     // load gravity initial levels from the table.
     gravity_params.gravity = current_level_table["gravity"];

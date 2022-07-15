@@ -12,6 +12,7 @@
 
 class World;
 class Camera;
+class Level;
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
@@ -38,6 +39,8 @@ public:
     Vector2 location;
     GameObject(Vector2 loc = Vector2());
     virtual ~GameObject() override;
+
+    Level* GetLevel();
 
     void Initialize() override;
     /**

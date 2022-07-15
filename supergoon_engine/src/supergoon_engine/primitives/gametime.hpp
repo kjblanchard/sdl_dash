@@ -44,7 +44,7 @@ public:
      *
      * @return The amount of seconds this update tick (0.016667 for 60 fps, etc)
      */
-    double ElapsedTimeInSeconds()
+    double ElapsedTimeInSeconds() const
     {
         return MillisecondsPerFrame() / 1000.00;
     }

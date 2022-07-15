@@ -10,6 +10,15 @@ Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point 
 Components::BoxColliderComponent::~BoxColliderComponent()
 {
 }
+SDL_Rect Components::BoxColliderComponent::GetCurrentSdlRect()
+{
+    SDL_Rect rect;
+    rect.x = owner_->location.x + offset_.x;
+    rect.y = owner_->location.y + offset_.y;
+    rect.w = rectangle.GetSize().x;
+    rect.h = rectangle.GetSize().y;
+    return rect;
+}
 void Components::BoxColliderComponent::Update(const Gametime &gametime)
 {
     rectangle.sdl_rectangle.x = (owner_->location.x + static_cast<int>(offset_.x)) * main_camera->GetResolutionScaleSizeX();
