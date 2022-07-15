@@ -1,3 +1,5 @@
+#include <sol2/sol.hpp>
+#include <supergoon_engine/engine/gravity.hpp>
 #include <supergoon_engine/engine/level.hpp>
 #include <supergoon_engine/tiled/tilemap.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
@@ -7,8 +9,22 @@
 #include <supergoon_engine/components/box_collider_component.hpp>
 #include <supergoon_engine/engine/engine_tags.hpp>
 
-Level::Level(const char *level_name, Content *content_ptr) : tilemap{nullptr}, map_name{level_name}, content{content_ptr}
+Level::Level(sol::table& current_level_table, Content *content_ptr) : tilemap{nullptr}, content{content_ptr}
 {
+    map_name = current_level_table["name"];
+    // load gravity initial levels from the table.
+    gravity_params.gravity = current_level_table["gravity"];
+    gravity_params.friction = current_level_table["friction"];
+    gravity_params.min_velocity = Vector2(
+        current_level_table["min_x_velocity"],
+        current_level_table["min_y_velocity"]
+    );
+    gravity_params.max_velocity = Vector2(
+        current_level_table["max_x_velocity"],
+        current_level_table["max_y_velocity"]
+    );
+
+
 }
 
 Level::~Level()

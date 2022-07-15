@@ -2,7 +2,9 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <sol2/forward.hpp>
 #include <supergoon_engine_export.h>
+#include <supergoon_engine/engine/gravity.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/objects/actor.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
@@ -27,11 +29,12 @@ private:
     LoadActorsFromTilemap(Tiled::Tilemap *tilemap);
 
 public:
-    Level(const char *level_name, Content* content_ptr);
+    Level(sol::table& current_level_table, Content* content_ptr);
     ~Level() override;
     std::vector<Tile*> tiles;
     std::vector<Tile*> solid_tiles;
     std::vector<Objects::Actor*> actors;
+    Gravity::GravityParams gravity_params;
 
     void Initialize() override;
     void Update(const Gametime &gametime) override;

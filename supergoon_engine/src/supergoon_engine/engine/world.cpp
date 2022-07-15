@@ -40,6 +40,10 @@ void World::Initialize()
     InitializeSdl();
     auto temp_loading_state = new sol::state();
     auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config", temp_loading_state);
+    auto level_data_name = "levels";
+    auto& level_data = Lua::LoadLuaTableIntoGlobalState("./assets/config/levels.lua",level_data_name);
+    sol::table level_global_table = level_data[level_data_name]["levels"];
+
     graphics = new Graphics::GraphicsDevice(table);
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
@@ -47,8 +51,11 @@ void World::Initialize()
     Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
+    sol::table level_1_global_table = level_global_table[1];
+    // std::string level_name = level_global_table[1]["name"];
 
-    level = new Level("level_1", content);
+
+    level = new Level(level_1_global_table, content);
     level->Initialize();
 
 

@@ -16,5 +16,6 @@ namespace Components
     public:
         RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~RigidbodyComponent() override;
+        Vector2 velocity;
     };
 }
