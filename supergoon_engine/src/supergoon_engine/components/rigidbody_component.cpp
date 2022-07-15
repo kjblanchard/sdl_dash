@@ -29,64 +29,34 @@ void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Tile *> solid_tiles)
 {
     bool collision = false;
-    std::cout << "Step is : " << step << std::endl;
-    if (step >= 1)
+    if (step > 0)
     {
-
-        while (step >= 1)
+        while (step > 0.2)
         {
-            // Temporarily add 1 to Y and check for collisions
-            auto box_location = box_collider->GetCurrentSdlRect();
-            ++box_location.y;
-            for (auto tile : solid_tiles)
-            {
-                if (collision)
-                    break;
-                auto tile_rect = tile->box_collider_component->rectangle.sdl_rectangle;
-                auto intersect = SDL_HasIntersection(&box_location, &tile_rect);
-                std::cout << intersect << std::endl;
-                if (SDL_HasIntersection(&box_location, &tile_rect))
-                {
-                    step = 0;
-                    collision = true;
-                    velocity.y = 0;
-                }
-                if (collision)
-                    break;
-            }
-
+            auto move_step = (step >= 1) ? 1 : step;
+            collision = TryMovementStep(move_step, solid_tiles);
             if (collision)
+            {
+                velocity.y = 0;
                 break;
-            owner_->location.y++;
-            --step;
+            }
+            owner_->location.y += move_step;
+            step -= move_step;
         }
     }
     else if (step < 0)
     {
-        while (step <= -1)
+        while (step <= -0.2)
         {
-            // Temporarily add 1 to Y and check for collisions
-            auto box_location = box_collider->GetCurrentSdlRect();
-            --box_location.y;
-            for (auto tile : solid_tiles)
-            {
-                if (collision)
-                    return;
-                auto tile_rect = tile->box_collider_component->rectangle.sdl_rectangle;
-                if (SDL_HasIntersection(&box_location, &tile_rect))
-                {
-                    step = 0;
-                    collision = true;
-                    velocity.y = 0;
-                }
-                if (collision)
-                    break;
-                owner_->location.y--;
-            }
-
+            auto move_step = (step <= -1) ? -1 : step;
+            collision = TryMovementStep(move_step, solid_tiles);
             if (collision)
+            {
+                velocity.y = 0;
                 break;
-            ++step;
+            }
+            owner_->location.y += move_step;
+            step -= move_step;
         }
     }
 }
@@ -116,4 +86,29 @@ void Components::RigidbodyComponent::ApplyForce(Vector2 force, Vector2 constrain
             temp_velocity.y = -constraint.y;
     }
     velocity = temp_velocity;
+}
+bool Components::RigidbodyComponent::TryMovement(double full_step, std::vector<Tile *> &solid_tiles)
+{
+
+}
+bool Components::RigidbodyComponent::TryMovementStep(double current_step, std::vector<Tile *> &solid_tiles)
+{
+    bool collision = false;
+    auto box_location = box_collider->GetCurrentSdlRect();
+    box_location.y += current_step;
+    for (auto tile : solid_tiles)
+    {
+        if (collision)
+            break;
+        auto tile_rect = tile->box_collider_component->rectangle.sdl_rectangle;
+        auto intersect = SDL_HasIntersection(&box_location, &tile_rect);
+        std::cout << intersect << std::endl;
+        if (SDL_HasIntersection(&box_location, &tile_rect))
+        {
+            return true;
+        }
+        if (collision)
+            break;
+    }
+    return false;
 }

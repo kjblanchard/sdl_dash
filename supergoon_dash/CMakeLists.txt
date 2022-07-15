@@ -53,3 +53,6 @@ else()
     target_compile_options(supergoon_dash PRIVATE /EHsc /W2 /c)
 
 endif()
+# Set relative link for this lib.
+set_target_properties(supergoon_engine
+    PROPERTIES LINK_FLAGS "-Wl,-rpath,../lib")
