@@ -7,6 +7,7 @@
 namespace Components
 {
     class AnimationComponent;
+    class RigidbodyComponent;
 }
 namespace Objects
 {
@@ -25,6 +26,8 @@ namespace Objects
         Actor(ActorParams params);
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
         Components::AnimationComponent *animation_component;
+        Components::RigidbodyComponent * rigidbody_component;
+
 
     public:
         ~Actor() override;

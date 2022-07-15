@@ -22,4 +22,5 @@ void Gravity::GravityConstraintY(Components::RigidbodyComponent &rb, GravityPara
         desired_velocity_y = (desired_velocity_y > -params.max_velocity.y) ? -params.max_velocity.y : desired_velocity_y;
         desired_velocity_y = (desired_velocity_y < -params.min_velocity.y) ? 0 : desired_velocity_y;
     }
+    rb.velocity.y = desired_velocity_y;
 }

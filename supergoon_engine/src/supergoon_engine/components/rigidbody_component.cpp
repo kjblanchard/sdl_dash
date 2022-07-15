@@ -7,6 +7,7 @@
 Components::RigidbodyComponent::RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}
 {
     box_collider = new BoxColliderComponent(owner, box_size, offset);
+    box_collider->debug = true;
 }
 
 Components::RigidbodyComponent::~RigidbodyComponent()
@@ -27,9 +28,10 @@ void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 }
 void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Tile *> solid_tiles)
 {
+    bool collision = false;
+    std::cout << "Step is : " << step << std::endl;
     if (step >= 1)
     {
-        bool collision = false;
 
         while (step >= 1)
         {
@@ -39,8 +41,10 @@ void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Til
             for (auto tile : solid_tiles)
             {
                 if (collision)
-                    return;
+                    break;
                 auto tile_rect = tile->box_collider_component->rectangle.sdl_rectangle;
+                auto intersect = SDL_HasIntersection(&box_location, &tile_rect);
+                std::cout << intersect << std::endl;
                 if (SDL_HasIntersection(&box_location, &tile_rect))
                 {
                     step = 0;
@@ -49,14 +53,17 @@ void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Til
                 }
                 if (collision)
                     break;
-                    owner_->location.y++;
             }
 
             if (collision)
                 break;
+            owner_->location.y++;
             --step;
         }
-        while (step <= 1)
+    }
+    else if (step < 0)
+    {
+        while (step <= -1)
         {
             // Temporarily add 1 to Y and check for collisions
             auto box_location = box_collider->GetCurrentSdlRect();
@@ -74,7 +81,7 @@ void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Til
                 }
                 if (collision)
                     break;
-                    owner_->location.y--;
+                owner_->location.y--;
             }
 
             if (collision)
@@ -83,6 +90,7 @@ void Components::RigidbodyComponent::ApplyYVelocity(double step, std::vector<Til
         }
     }
 }
+// owner_->location += step;
 void Components::RigidbodyComponent::ApplyForce(Vector2 force, Vector2 constraint)
 {
     auto temp_velocity = velocity + force;
