@@ -23,11 +23,11 @@ namespace Objects
     private:
     protected:
         Actor(ActorParams params);
-        ~Actor() override;
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
         Components::AnimationComponent *animation_component;
 
     public:
+        ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
     };
 

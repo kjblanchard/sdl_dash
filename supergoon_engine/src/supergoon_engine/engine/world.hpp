@@ -6,13 +6,10 @@
 #include <supergoon_engine/primitives/gametime.hpp>
 #include <supergoon_engine_export.h>
 
-class Tile;
 class Content;
 class Camera;
+class Level;
 
-namespace Objects{
-    class Actor;
-}
 
 namespace Graphics
 {
@@ -29,12 +26,12 @@ class SUPERGOON_ENGINE_EXPORT World
 
 private:
     bool isRunning;
-    //TODO remove this after testing camera.
+    // TODO remove this after testing camera.
     dir this_frame_directions;
 
-    // TODO remove this after creating a level to hold them.
-    std::vector<Tile *> tiles;
-    std::vector<Objects::Actor*> actors;
+    // TODO store this in a level machine
+    Level *level;
+
     void InitializeSdl();
 
 protected:
@@ -52,9 +49,13 @@ public:
     World();
     ~World();
 
-    Camera* main_camera;
+    Camera *main_camera;
     Graphics::GraphicsDevice *graphics;
     Content *content;
+    inline Level* GetCurrentLevel()
+    {
+        return level;
+    }
     void Run();
     // ConfigReader *config_reader;
     static World *GetWorld()

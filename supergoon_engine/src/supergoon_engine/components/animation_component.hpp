@@ -3,9 +3,6 @@
 #include <supergoon_engine/engine/component.hpp>
 
 class GameObject;
-namespace Graphics{
-    class SpriteBatch;
-}
 namespace Aseprite
 {
     class AsepriteSheet;

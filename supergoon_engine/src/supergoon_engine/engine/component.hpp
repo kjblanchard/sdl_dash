@@ -3,6 +3,8 @@
 #include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 #include <supergoon_engine/interfaces/i_debug.hpp>
+#include <supergoon_engine/interfaces/i_draw.hpp>
+#include <supergoon_engine/interfaces/i_tags.hpp>
 
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <iostream>
@@ -15,7 +17,7 @@ namespace Graphics{
 class SpriteBatch;
 }
 
-class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize, public IDebug
+class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize, public IDebug, public IDraw, public ITags
 {
 protected:
     /**
@@ -43,5 +45,5 @@ public:
             return std::move(*this);
         return std::move(rhs);
     }
-    inline virtual void Draw(Graphics::SpriteBatch& spritebatch) {}
+    inline virtual void Draw(Graphics::SpriteBatch& spritebatch) override {}
 };

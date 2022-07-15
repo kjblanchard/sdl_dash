@@ -3,6 +3,7 @@
 #include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 #include <supergoon_engine/interfaces/i_debug.hpp>
+#include <supergoon_engine/interfaces/i_draw.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <supergoon_engine/engine/component.hpp>
 #include <vector>
@@ -11,15 +12,10 @@
 
 class World;
 class Camera;
-namespace Graphics
-{
-    class SpriteBatch;
-
-}
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
-class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize, public IDebug
+class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize, public IDebug, public IDraw
 {
 private:
 protected:
@@ -51,9 +47,9 @@ public:
     void Update(const Gametime &gametime) override;
     /**
      * Calls Draw all components on this gameobject.
-     * @param renderer pointer to the renderer currently.
+     * @param Spritebatch the spritebatch
      */
-    void Draw(Graphics::SpriteBatch &spritebatch);
+    void Draw(Graphics::SpriteBatch &spritebatch) override;
     /**
      * Adds a component to this gameobject, and then sorts them.
      * @param component pointer to the component to add.
@@ -63,6 +59,18 @@ public:
         components_.push_back(std::unique_ptr<Component>(component));
         std::sort(components_.begin(), components_.end());
     }
+    inline Component* GetComponent(int tag)
+    {
+        for (auto &component : components_)
+        {
+            if (component->HasTag(tag))
+            {
+                return component.get();
+            }
+        }
+        return nullptr;
+    }
+
     // inline GameObject(GameObject &&other)
     //     : components_(std::move(other.components_))
     // {

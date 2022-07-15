@@ -16,6 +16,7 @@
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/lua/lua_loader.hpp>
 #include <supergoon_engine/lua/lua_helper.hpp>
+#include <supergoon_engine/engine/level.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
@@ -46,15 +47,20 @@ void World::Initialize()
     Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
-    auto tilemap = Lua::LoadTiledMap("level_1");
-    tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
-    auto actor_params = tilemap->actors;
-    for (auto &&actor_param : actor_params)
-    {
-        auto actor = Objects::SpawnActor(actor_param);
-        if (actor)
-            actors.push_back(actor);
-    }
+
+    level = new Level("level_1", content);
+    level->Initialize();
+
+
+    // auto tilemap = Lua::LoadTiledMap("level_1");
+    // tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
+    // auto actor_params = tilemap->actors;
+    // for (auto &&actor_param : actor_params)
+    // {
+    //     auto actor = Objects::SpawnActor(actor_param);
+    //     if (actor)
+    //         actors.push_back(actor);
+    // }
     sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 
@@ -131,28 +137,30 @@ void World::Update(Gametime &gametime)
     main_camera->Update(gametime);
 
     Sound::Update();
-    for (auto &&tile : tiles)
-    {
-        tile->Update(gametime);
-    }
-    auto guy = actors;
-    for (size_t i = 0; i < actors.size() ; i++)
-    {
-        actors[i]->Update(gametime);
-    }
+    level->Update(gametime);
+    // for (auto &&tile : tiles)
+    // {
+    //     tile->Update(gametime);
+    // }
+    // auto guy = actors;
+    // for (size_t i = 0; i < actors.size() ; i++)
+    // {
+    //     actors[i]->Update(gametime);
+    // }
 
 }
 
 void World::Render()
 {
     sprite_batch->Begin();
+    level->Draw(*sprite_batch);
 
-    for (auto &&tile : tiles)
-    {
-        tile->Draw(*sprite_batch);
-    }
-    std::for_each(actors.begin(), actors.end(), [&](auto &actor)
-                  { actor->Draw(*sprite_batch); });
+    // for (auto &&tile : tiles)
+    // {
+    //     tile->Draw(*sprite_batch);
+    // }
+    // std::for_each(actors.begin(), actors.end(), [&](auto &actor)
+    //               { actor->Draw(*sprite_batch); });
     sprite_batch->End();
 }
 

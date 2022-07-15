@@ -1,7 +1,6 @@
 #include <vector>
 #include <supergoon_engine/primitives/rectangle.hpp>
 
-class GameObject;
 struct Sprite;
 
 namespace Graphics
