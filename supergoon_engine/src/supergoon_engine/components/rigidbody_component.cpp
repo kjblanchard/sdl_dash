@@ -17,6 +17,7 @@ Components::RigidbodyComponent::~RigidbodyComponent()
 void Components::RigidbodyComponent::Update(const Gametime &gametime)
 {
     std::cout << "Velocity| X: " << velocity.x << " Y: " << velocity.y << std::endl;
+    std::cout << "Location| X: " << owner_->location.x << " Y: " << owner_->location.y << std::endl;
     if (gravity_enabled)
         Gravity::ApplyGravity(*this, owner_->GetLevel()->gravity_params, gametime);
     ApplyVelocity(gametime);
@@ -34,7 +35,7 @@ void Components::RigidbodyComponent::ApplyVelocityByStepSolidsX(double step)
     auto minimum_step = minimum_x_step;
     auto &loc_to_alter = owner_->location.x;
     auto &velocity_to_alter = velocity.x;
-    auto thing = TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter);
+    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, true);
 
 }
 void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
@@ -42,20 +43,26 @@ void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
     auto minimum_step = minimum_y_step;
     auto &loc_to_alter = owner_->location.y;
     auto &velocity_to_alter = velocity.y;
-    auto thing = TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter);
+    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false);
 
 }
-bool Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter)
+bool Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, double& location_to_alter, double& velocity_to_alter, bool x_step)
 {
     auto step_speed = (full_step > 0) ? 1 : -1;
     bool collision = false;
 
-    while (full_step >= minimum_step || full_step <= -minimum_step)
+    while ((full_step >= minimum_step || full_step <= -minimum_step) && !collision)
     {
-        auto move_step = (full_step >= step_speed) ? 1 : full_step;
+        auto move_step = (full_step >= step_speed) ? step_speed : full_step;
         auto box_location = box_collider->GetCurrentSdlRect();
-        box_location.x += move_step;
-        collision = TryMovementStep(box_location);
+        SDL_FRect float_rect;
+        float_rect.x = box_location.x;
+        float_rect.y = box_location.y;
+        float_rect.w = box_location.w;
+        float_rect.h = box_location.h;
+        auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
+        *box_loc_to_change += move_step;
+        collision = TryMovementStep(float_rect);
         if (collision)
         {
             velocity_to_alter = 0;
@@ -66,13 +73,19 @@ bool Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
     }
 }
 
-bool Components::RigidbodyComponent::TryMovementStep(SDL_Rect &rect)
+bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)
 {
     auto solid_tiles = owner_->GetLevel()->solid_tiles;
     for (auto tile : solid_tiles)
     {
         auto tile_rect = tile->box_collider_component->rectangle.sdl_rectangle;
-        if (SDL_HasIntersection(&rect, &tile_rect))
+        SDL_FRect float_rect;
+        float_rect.x = tile_rect.x;
+        float_rect.y = tile_rect.y;
+        float_rect.w = tile_rect.w;
+        float_rect.h = tile_rect.h;
+
+        if (SDL_HasIntersectionF(&rect, &float_rect))
         {
             return true;
         }
