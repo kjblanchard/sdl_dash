@@ -19,15 +19,9 @@ namespace Graphics
 
 class SUPERGOON_ENGINE_EXPORT World
 {
-    struct dir
-    {
-        bool up, down, left, right = false;
-    };
 
 private:
     bool isRunning;
-    // TODO remove this after testing camera.
-    dir this_frame_directions;
 
     // TODO store this in a level machine
     Level *level;
@@ -57,7 +51,6 @@ public:
         return level;
     }
     void Run();
-    // ConfigReader *config_reader;
     static World *GetWorld()
     {
         return instance;

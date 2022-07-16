@@ -31,8 +31,6 @@ void Gravity::GravityConstraintY(Components::RigidbodyComponent &rb, GravityPara
 void Gravity::GravityConstraintX(Components::RigidbodyComponent &rb, GravityParams &params, double friction_step)
 {
     auto desired_velocity_x =  rb.velocity.x - friction_step;
-    std::cout << "Velocity is: " << rb.velocity.x << std::endl;
-    std::cout << "Desired Velocity is: " << desired_velocity_x << std::endl;
 
     if (desired_velocity_x > 0)
     {

@@ -17,6 +17,7 @@
 #include <supergoon_engine/lua/lua_loader.hpp>
 #include <supergoon_engine/lua/lua_helper.hpp>
 #include <supergoon_engine/engine/level.hpp>
+#include <supergoon_engine/input/input.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
@@ -41,7 +42,7 @@ void World::Initialize()
     auto temp_loading_state = new sol::state();
     auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config", temp_loading_state);
     auto level_data_name = "levels";
-    auto& level_data = Lua::LoadLuaTableIntoGlobalState("./assets/config/levels.lua",level_data_name);
+    auto &level_data = Lua::LoadLuaTableIntoGlobalState("./assets/config/levels.lua", level_data_name);
     sol::table level_global_table = level_data[level_data_name]["levels"];
 
     graphics = new Graphics::GraphicsDevice(table);
@@ -54,10 +55,9 @@ void World::Initialize()
     sol::table level_1_global_table = level_global_table[1];
     // std::string level_name = level_global_table[1]["name"];
 
-
     level = new Level(level_1_global_table, content);
     level->Initialize();
-
+    Input::Startup();
 
     // auto tilemap = Lua::LoadTiledMap("level_1");
     // tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
@@ -87,40 +87,22 @@ void World::InitializeSdl()
 
 void World::ProcessInput()
 {
+    Input::UpdatePreviousJoystickState();
+
     SDL_Event sdlEvent;
-    while (SDL_PollEvent(&sdlEvent))
+    while (SDL_PollEvent(&sdlEvent) != 0)
     {
-        switch (sdlEvent.type)
-        {
-        case SDL_QUIT:
-            isRunning = false;
-            break;
-        case SDL_KEYDOWN:
+        if (sdlEvent.type == SDL_KEYDOWN)
             if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
             {
                 isRunning = false;
             }
-            break;
-        }
+        if (sdlEvent.type == SDL_QUIT)
+            isRunning = false;
+        Input::HandleJoystickEvent(sdlEvent);
     }
-    this_frame_directions.down = this_frame_directions.left = this_frame_directions.up = this_frame_directions.right = false;
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_A])
-    {
-        this_frame_directions.left = true;
-    }
-    if (state[SDL_SCANCODE_D])
-    {
-        this_frame_directions.right = true;
-    }
-    if (state[SDL_SCANCODE_W])
-    {
-        this_frame_directions.up = true;
-    }
-    if (state[SDL_SCANCODE_S])
-    {
-        this_frame_directions.down = true;
-    }
+
+    Input::UpdateKeyboardStates();
 }
 
 void World::Setup()
@@ -131,43 +113,15 @@ void World::Setup()
 
 void World::Update(Gametime &gametime)
 {
-    auto speed = 50;
-
-    auto move_speed_right = (this_frame_directions.right) ? gametime.ElapsedTimeInSeconds() * speed : 0;
-    auto move_speed_left = (this_frame_directions.left) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
-    auto move_speed_up = (this_frame_directions.up) ? gametime.ElapsedTimeInSeconds() * speed : 0;
-    auto move_speed_down = (this_frame_directions.down) ? gametime.ElapsedTimeInSeconds() * -speed : 0;
-    main_camera->MoveCamera(Vector2(
-        move_speed_right + move_speed_left,
-        move_speed_up + move_speed_down));
-
     main_camera->Update(gametime);
-
     Sound::Update();
     level->Update(gametime);
-    // for (auto &&tile : tiles)
-    // {
-    //     tile->Update(gametime);
-    // }
-    // auto guy = actors;
-    // for (size_t i = 0; i < actors.size() ; i++)
-    // {
-    //     actors[i]->Update(gametime);
-    // }
-
 }
 
 void World::Render()
 {
     sprite_batch->Begin();
     level->Draw(*sprite_batch);
-
-    // for (auto &&tile : tiles)
-    // {
-    //     tile->Draw(*sprite_batch);
-    // }
-    // std::for_each(actors.begin(), actors.end(), [&](auto &actor)
-    //               { actor->Draw(*sprite_batch); });
     sprite_batch->End();
 }
 
