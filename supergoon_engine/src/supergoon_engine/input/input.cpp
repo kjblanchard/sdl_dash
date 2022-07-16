@@ -1,5 +1,6 @@
 #include <iostream>
 #include <supergoon_engine/input/input.hpp>
+#include <supergoon_engine/input/player_controller.hpp>
 
 namespace Input
 {
@@ -10,7 +11,7 @@ namespace Input
     Uint8 _currentKeyboardState[SDL_NUM_SCANCODES];
     Uint8 _previousKeyboardState[SDL_NUM_SCANCODES];
     std::vector<SDL_GameController *> _connectedControllers;
-    // std::vector<std::unique_ptr<SG::PlayerController>> Input::PlayerControllers;
+    std::vector<PlayerController*> PlayerControllers;
 
     void Startup()
     {
@@ -19,10 +20,10 @@ namespace Input
         AddPluggedInControllersToVector();
         InitializeJoystickVectors();
 
-        // for (size_t i = 0; i < 4; i++)
-        // {
-        //     PlayerControllers.push_back(std::make_unique<PlayerController>(i));
-        // }
+        for (size_t i = 0; i < 4; i++)
+        {
+            PlayerControllers.push_back(new PlayerController(i));
+        }
     }
     void HandleJoystickEvent(const SDL_Event &event)
     {
@@ -188,9 +189,9 @@ namespace Input
         memcpy(_currentKeyboardState, SDL_GetKeyboardState(NULL), sizeof(Uint8) * SDL_NUM_SCANCODES);
     }
 
-    // PlayerController *Input::GetPlayerController(int controllerToGet)
-    // {
-    //     return PlayerControllers.at(controllerToGet).get();
-    // }
+    PlayerController *Input::GetPlayerController(int controllerToGet)
+    {
+        return PlayerControllers.at(controllerToGet);
+    }
 
 }

@@ -8,6 +8,7 @@ namespace Components
 {
     class AnimationComponent;
     class RigidbodyComponent;
+    class InputComponent;
 }
 namespace Objects
 {
@@ -19,15 +20,15 @@ namespace Objects
         std::string actor_name;
     };
 
-    class  SUPERGOON_ENGINE_EXPORT Actor : public GameObject
+    class SUPERGOON_ENGINE_EXPORT Actor : public GameObject
     {
     private:
     protected:
         Actor(ActorParams params);
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
         Components::AnimationComponent *animation_component;
-        Components::RigidbodyComponent * rigidbody_component;
-
+        Components::RigidbodyComponent *rigidbody_component;
+        Components::InputComponent *input_component;
 
     public:
         ~Actor() override;

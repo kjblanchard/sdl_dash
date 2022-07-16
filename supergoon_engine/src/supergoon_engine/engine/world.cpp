@@ -46,6 +46,7 @@ void World::Initialize()
     sol::table level_global_table = level_data[level_data_name]["levels"];
 
     graphics = new Graphics::GraphicsDevice(table);
+    Input::Startup();
     auto fps = graphics->fps;
     world_gametime = Gametime(fps);
     main_camera = new Camera(Vector2(), graphics);
@@ -57,7 +58,6 @@ void World::Initialize()
 
     level = new Level(level_1_global_table, content);
     level->Initialize();
-    Input::Startup();
 
     // auto tilemap = Lua::LoadTiledMap("level_1");
     // tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
@@ -73,7 +73,7 @@ void World::Initialize()
 
 void World::InitializeSdl()
 {
-    auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO);
+    auto sdl_video_init_result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
     if (sdl_video_init_result != 0)
         throw std::runtime_error(SDL_GetError());
     int flags = IMG_INIT_PNG;
@@ -93,16 +93,17 @@ void World::ProcessInput()
     while (SDL_PollEvent(&sdlEvent) != 0)
     {
         if (sdlEvent.type == SDL_KEYDOWN)
+        {
             if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
             {
                 isRunning = false;
             }
-        if (sdlEvent.type == SDL_QUIT)
+        }
+        else if (sdlEvent.type == SDL_QUIT)
             isRunning = false;
+        // else if (sdlEvent.type == SDL_CONTROLLERDEVICEADDED || sdlEvent.type == SDL_CONTROLLERBUTTONDOWN)
         Input::HandleJoystickEvent(sdlEvent);
     }
-
-    Input::UpdateKeyboardStates();
 }
 
 void World::Setup()

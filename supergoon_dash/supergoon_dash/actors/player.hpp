@@ -9,5 +9,6 @@ public:
     Player(Objects::ActorParams params);
     ~Player() override;
     static Objects::Actor* ActorFactory(Objects::ActorParams& params);
+    void Update(const Gametime &gametime) override;
 };
 

@@ -10,8 +10,11 @@ struct GamePad
     int axis[SDL_CONTROLLER_AXIS_MAX];
 };
 
+
 namespace Input
 {
+    class PlayerController;
+
     extern Uint8 _previousKeyboardState[SDL_NUM_SCANCODES];
     extern Uint8 _currentKeyboardState[SDL_NUM_SCANCODES];
     extern std::vector<GamePad> _controllerInputs;
@@ -26,8 +29,8 @@ namespace Input
     bool KeyJustReleased(SDL_Scancode key);
     bool KeyJustReleased(int controllerNum, SDL_GameControllerButton button);
 
-    // PlayerController *GetPlayerController(int controllerToGet);
-    // extern std::vector<std::unique_ptr<SG::PlayerController>> PlayerControllers;
+    PlayerController *GetPlayerController(int controllerToGet);
+    extern std::vector<PlayerController *> PlayerControllers;
 
     void Startup();
     /**

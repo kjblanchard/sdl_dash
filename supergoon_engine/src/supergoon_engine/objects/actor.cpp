@@ -2,6 +2,7 @@
 #include <supergoon_engine/objects/actor.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
 #include <supergoon_engine/components/rigidbody_component.hpp>
+#include <supergoon_engine/components/input_component.hpp>
 #include <cstring>
 
 std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
@@ -10,6 +11,7 @@ Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
     animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
     //TODO get the right size.
     rigidbody_component = new Components::RigidbodyComponent(this,Point(32));
+    input_component = new Components::InputComponent(this, nullptr);
 }
 
 Objects::Actor::~Actor()
