@@ -11,8 +11,8 @@ struct Point;
 struct SUPERGOON_ENGINE_EXPORT Vector2
 
 {
-    double x = 0;
-    double y = 0;
+    float x = 0;
+    float y = 0;
 
     Vector2()
     {
