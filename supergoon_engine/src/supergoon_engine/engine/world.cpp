@@ -104,6 +104,7 @@ void World::ProcessInput()
         // else if (sdlEvent.type == SDL_CONTROLLERDEVICEADDED || sdlEvent.type == SDL_CONTROLLERBUTTONDOWN)
         Input::HandleJoystickEvent(sdlEvent);
     }
+    Input::UpdateKeyboardStates();
 }
 
 void World::Setup()

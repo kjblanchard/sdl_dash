@@ -11,3 +11,5 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 include(CPack)
 add_subdirectory(supergoon_engine)
 add_subdirectory(supergoon_dash)
+# Build OSX universal
+set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
