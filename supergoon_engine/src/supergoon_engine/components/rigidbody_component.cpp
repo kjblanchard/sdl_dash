@@ -16,8 +16,6 @@ Components::RigidbodyComponent::~RigidbodyComponent()
 }
 void Components::RigidbodyComponent::Update(const Gametime &gametime)
 {
-    std::cout << "Velocity| X: " << velocity.x << " Y: " << velocity.y << std::endl;
-    std::cout << "Location| X: " << owner_->location.x << " Y: " << owner_->location.y << std::endl;
     if (gravity_enabled)
         Gravity::ApplyGravity(*this, owner_->GetLevel()->gravity_params, gametime);
     ApplyVelocity(gametime);

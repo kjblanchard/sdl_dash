@@ -15,7 +15,7 @@ namespace Gravity
     {
     public:
         int gravity = 0;
-        int friction = 0;
+        double friction = 0;
         bool enabled = true;
         Vector2 min_velocity;
         Vector2 max_velocity;
@@ -24,6 +24,6 @@ namespace Gravity
 
     void ApplyGravity(Components::RigidbodyComponent &rb, GravityParams &gravity_params, const Gametime &gametime);
     void GravityConstraintY(Components::RigidbodyComponent& rb, GravityParams& gravity_params, double gravity_step);
-    void GravityConstraintX();
+    void GravityConstraintX(Components::RigidbodyComponent& rb, GravityParams& gravity_params, double gravity_step);
 
 }
