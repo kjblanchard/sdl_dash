@@ -15,15 +15,18 @@ namespace Components
     private:
         BoxColliderComponent *box_collider;
         const double minimum_y_step = 0.2;
+        const double minimum_x_step = 0.2;
+        bool gravity_enabled = true;
 
     public:
         RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~RigidbodyComponent() override;
         void Update(const Gametime &) override;
         void ApplyVelocity(const Gametime &);
-        void ApplyYVelocity(double step, std::vector<Tile*> solid_Tiles);
-        bool TryMovement(double full_step, std::vector<Tile*>& solid_tiles);
-        bool TryMovementStep(double current_step, std::vector<Tile*>& solid_tiles);
+        void ApplyVelocityByStepSolidsX(double step);
+        void ApplyVelocityByStepSolidsY(double step);
+        bool TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter);
+        bool TryMovementStep(SDL_Rect& rect_to_check);
         void ApplyForce(Vector2 force, Vector2 constraint = Vector2());
         Vector2 velocity;
     };
