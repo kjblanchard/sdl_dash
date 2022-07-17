@@ -9,12 +9,12 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     auto first_controller = Input::GetPlayerController(0);
 
     input_component->TakeControl(first_controller);
-    speed = 500;
+    speed = 190;
     jump_speed = 100;
     max_jump_length = 1.0;
     initial_jump_multiplier = 10;
-    //TODO make it so that we can just set one.
-    UpdateMaxVelocity(Vector2(200,1000));
+    // TODO make it so that we can just set one.
+    UpdateMaxVelocity(Vector2(200, 1000));
 }
 void Player::Update(const Gametime &gametime)
 {
@@ -28,7 +28,8 @@ void Player::Update(const Gametime &gametime)
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Right) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Right))
     {
-        auto frame_speed = speed * gametime.ElapsedTimeInSeconds();
+        //Get a speed boost when you aren't moving, to overcome initial friction.
+        auto frame_speed = (rigidbody_component->velocity.x == 0) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
     }
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::A) ||

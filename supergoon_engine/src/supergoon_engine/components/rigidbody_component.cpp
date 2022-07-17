@@ -30,7 +30,7 @@ void Components::RigidbodyComponent::Update(const Gametime &gametime)
 
 void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 {
-    // Keep velocity in range.
+    // Keep velocity in range, used for running speeds and fall/jump speeds.
     velocity.x = (velocity.x > max_velocity.x) ? max_velocity.x : velocity.x;
     velocity.x = (velocity.x < -max_velocity.x) ? -max_velocity.x : velocity.x;
     velocity.y = (velocity.y > max_velocity.y) ? max_velocity.y : velocity.y;
@@ -79,21 +79,39 @@ bool Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
         collision = TryMovementStep(float_rect);
         if (collision)
         {
+            printf("Collision");
             velocity_to_alter = 0;
             if (!x_step && step_speed > 0)
+            {
+                printf("Make on ground true");
                 on_ground = true;
+            }
             break;
         }
         location_to_alter += move_step;
         full_step -= move_step;
-        if (full_step > 100 || full_step < -100)
-        {
-            // printf("Why");
-        }
     }
     // Returns if we are on the ground, useful for y conversions as this will set that variable.
     // If it is not x direction, and there is a collision, and we are moving downward.
     // return (!x_step && collision && step_speed > 0);
+
+    if (on_ground && !collision && !x_step)
+    {
+        SDL_FRect float_rect;
+        auto box_location = box_collider->GetCurrentSdlRect();
+        float_rect.x = box_location.x;
+        float_rect.y = box_location.y;
+        float_rect.w = box_location.w;
+        float_rect.h = box_location.h;
+        auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
+        *box_loc_to_change += 0.1f;
+        collision = TryMovementStep(float_rect);
+        if (!collision)
+        {
+            printf("Switch onground to false");
+            on_ground = false;
+        }
+    }
 }
 
 bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)

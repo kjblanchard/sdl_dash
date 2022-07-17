@@ -4,7 +4,7 @@
 void Gravity::ApplyGravity(Components::RigidbodyComponent &rb, GravityParams &gravity_params, const Gametime &gametime)
 {
     auto gravity_step = gravity_params.gravity * gametime.ElapsedTimeInSeconds();
-    auto friction_step = rb.velocity.x * gravity_params.friction * gametime.ElapsedTimeInSeconds();
+    auto friction_step = rb.velocity.x * gravity_params.friction * gametime.ElapsedTimeInSeconds() * 2.0;
 
     GravityConstraintY(rb, gravity_params, gravity_step);
     GravityConstraintX(rb, gravity_params, friction_step);
@@ -43,7 +43,7 @@ void Gravity::GravityConstraintX(Components::RigidbodyComponent &rb, GravityPara
     if (desired_velocity_x < 0)
     {
         desired_velocity_x = (desired_velocity_x < -params.max_velocity.x) ? -params.max_velocity.y : desired_velocity_x;
-        desired_velocity_x = (desired_velocity_x > params.min_velocity.x) ? 0 : desired_velocity_x;
+        desired_velocity_x = (desired_velocity_x > -params.min_velocity.x) ? 0 : desired_velocity_x;
     }
     rb.velocity.x = desired_velocity_x;
 }
