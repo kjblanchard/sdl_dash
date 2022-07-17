@@ -1,10 +1,11 @@
 #pragma once
+#include <supergoon_engine_export.h>
 
 #include <supergoon_engine/input/controller.hpp>
 
 namespace Input
 {
-    class PlayerController : public Controller
+    class SUPERGOON_ENGINE_EXPORT  PlayerController : public Controller
     {
     public:
         PlayerController()

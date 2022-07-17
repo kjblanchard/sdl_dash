@@ -1,4 +1,5 @@
 #pragma once
+#include <supergoon_engine_export.h>
 #include <vector>
 #include <SDL_gamecontroller.h>
 #include <SDL_scancode.h>
@@ -29,7 +30,7 @@ namespace Input
     bool KeyJustReleased(SDL_Scancode key);
     bool KeyJustReleased(int controllerNum, SDL_GameControllerButton button);
 
-    PlayerController *GetPlayerController(int controllerToGet);
+   SUPERGOON_ENGINE_EXPORT PlayerController *GetPlayerController(int controllerToGet);
     extern std::vector<PlayerController *> PlayerControllers;
 
     void Startup();

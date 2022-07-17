@@ -25,8 +25,8 @@ private:
     std::string map_name;
     Content* content;
 
-    std::vector<std::shared_ptr<Objects::Actor>>
-    LoadActorsFromTilemap(Tiled::Tilemap *tilemap);
+    // std::vector<std::shared_ptr<Objects::Actor>>
+    // LoadActorsFromTilemap(Tiled::Tilemap *tilemap);
 
 public:
     Level(sol::table& current_level_table, Content* content_ptr);

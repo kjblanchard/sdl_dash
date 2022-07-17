@@ -1,4 +1,5 @@
 #pragma once
+#include <supergoon_engine_export.h>
 #include <limits>
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/component.hpp>
@@ -11,7 +12,7 @@ namespace Components
 {
     class BoxColliderComponent;
 
-    class RigidbodyComponent : public Component
+    class SUPERGOON_ENGINE_EXPORT RigidbodyComponent : public Component
     {
     private:
         BoxColliderComponent *box_collider;
@@ -26,7 +27,7 @@ namespace Components
         void ApplyVelocity(const Gametime &);
         void ApplyVelocityByStepSolidsX(double step);
         void ApplyVelocityByStepSolidsY(double step);
-        bool TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter, bool x_step);
+        void TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter, bool x_step);
         bool TryMovementStep(SDL_FRect& rect_to_check);
         void ApplyForce(Vector2 force);
         Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());

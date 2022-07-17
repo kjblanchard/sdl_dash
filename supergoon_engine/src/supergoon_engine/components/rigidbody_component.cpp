@@ -55,7 +55,7 @@ void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
     auto &velocity_to_alter = velocity.y;
     TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false);
 }
-bool Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step)
+void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step)
 {
     auto step_speed = (full_step > 0) ? 1 : -1;
     bool collision = false;

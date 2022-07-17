@@ -1,4 +1,5 @@
 #pragma once
+#include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/component.hpp>
 
 namespace Input{
@@ -10,7 +11,7 @@ namespace Components
 {
 
 
-	class InputComponent : Component
+	class SUPERGOON_ENGINE_EXPORT InputComponent : Component
 	{
 	public:
 		InputComponent(GameObject* owner, Input::Controller *controller);

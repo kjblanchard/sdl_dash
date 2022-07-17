@@ -89,6 +89,7 @@ void Level::Draw(Graphics::SpriteBatch &spritebatch)
     }
 }
 
-std::vector<std::shared_ptr<Objects::Actor>> Level::LoadActorsFromTilemap(Tiled::Tilemap *tilemap)
-{
-}
+// std::vector<std::shared_ptr<Objects::Actor>> Level::LoadActorsFromTilemap(Tiled::Tilemap *tilemap)
+// {
+//     return nullptr;
+// }
