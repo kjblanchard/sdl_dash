@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <supergoon_engine/input/input.hpp>
 #include <supergoon_engine/input/player_controller.hpp>
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <supergoon_engine_export.h>
+#include <algorithm>
 #include <vector>
 #include <cstdarg>
 
@@ -23,11 +24,17 @@ public:
 
     inline bool HasTag(int search_tag)
     {
-        for (auto i : tags)
-        {
-            if (i == search_tag)
-                return true;
-            return false;
-        }
+
+        auto thing = std::find(tags.begin(), tags.end(), search_tag);
+        if(thing != tags.end())
+        return true;
+        return false;
+
+        // for (auto i : tags)
+        // {
+        //     if (i == search_tag)
+        //         return true;
+        //     return false;
+        // }
     }
 };
