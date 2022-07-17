@@ -19,7 +19,7 @@ SDL_Rect Components::BoxColliderComponent::GetCurrentSdlRect()
     rect.h = rectangle.GetSize().y;
     return rect;
 }
-void Components::BoxColliderComponent::Update(const Gametime &gametime)
+void Components::BoxColliderComponent::Update(const Gametime &)
 {
     rectangle.sdl_rectangle.x = (owner_->location.x + static_cast<int>(offset_.x)) ;
     rectangle.sdl_rectangle.y = (owner_->location.y + static_cast<int>(offset_.y)) ;

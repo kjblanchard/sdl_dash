@@ -39,7 +39,7 @@ namespace Input
         KeyMapping<SDL_Scancode> _keyboardMapping{*DefaultKeyboardMap};
         KeyMapping<SDL_GameControllerButton> _joystickMapping{*DefaultJoystickMap};
         bool _isUsingGamePad{false};
-        uint8_t _playerNum{0};
+        unsigned char _playerNum{0};
     };
 
 }

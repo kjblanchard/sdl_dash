@@ -5,7 +5,7 @@ namespace Input
 {
 	PlayerController::PlayerController(int num)
 	{
-		_playerNum = num;
+		_playerNum = static_cast<unsigned char>(num);
 	}
 	bool PlayerController::IsButtonPressed(ControllerButtons controllerButton)
 	{

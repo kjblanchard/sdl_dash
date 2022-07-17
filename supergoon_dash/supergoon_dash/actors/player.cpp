@@ -10,7 +10,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 
     input_component->TakeControl(first_controller);
     speed = 190;
-    jump_speed = 100;
+    jump_speed = 1000;
     max_jump_length = 1.0;
     initial_jump_multiplier = 10;
     // TODO make it so that we can just set one.

@@ -17,7 +17,7 @@ Components::RigidbodyComponent::~RigidbodyComponent()
 void Components::RigidbodyComponent::Update(const Gametime &gametime)
 {
     accel_applied_this_frame = false;
-    if (acceleration.x != 0 || acceleration.y != 0)
+    if (acceleration.x != 0.f || acceleration.y != 0.f)
     {
         velocity += acceleration;
         acceleration = Vector2();

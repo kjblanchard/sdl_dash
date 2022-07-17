@@ -120,8 +120,8 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
         while (true)
         {
             // We don't know how big the table is in lua, so test to see if the layer exists, if not, break from the while loop.
-            sol::optional<sol::lua_table> hasLayer = layers[iLayer];
-            if (hasLayer == sol::nullopt)
+            sol::optional<sol::lua_table> hasLayers = layers[iLayer];
+            if (hasLayers == sol::nullopt)
                 break;
             // Check to see if this is a layer group.
             sol::table layer_group_lua_ref = layers[iLayer];

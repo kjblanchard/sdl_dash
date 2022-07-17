@@ -18,8 +18,8 @@ void Sound::play_sfx_oneshot()
 }
 void Sound::restart()
 {
-    auto result = current_music->stop(FMOD_STUDIO_STOP_IMMEDIATE);
-    result = current_music->start();
+    current_music->stop(FMOD_STUDIO_STOP_IMMEDIATE);
+    current_music->start();
 }
 
 FMOD::Studio::System *
@@ -33,7 +33,7 @@ Sound::Setup()
     system->initialize(1024, FMOD_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr);
     FMOD::Studio::Bank *mainBank = nullptr;
     result = system->loadBankFile("assets/sfx/Desktop/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &mainBank);
-    FMOD::Studio::Bank *stringsBank = nullptr;
+    // FMOD::Studio::Bank *stringsBank = nullptr;
     result = system->loadBankFile("assets/sfx/Desktop/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &mainBank);
     FMOD::Studio::EventDescription *loadedEventDescription = nullptr;
     result = system->getEvent("event:/main", &loadedEventDescription);

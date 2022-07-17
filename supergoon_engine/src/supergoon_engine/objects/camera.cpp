@@ -13,7 +13,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::Update(const Gametime &gametime)
+void Camera::Update(const Gametime &)
 {
     rect.x = location.ToPoint().x;
     rect.y = location.ToPoint().y;

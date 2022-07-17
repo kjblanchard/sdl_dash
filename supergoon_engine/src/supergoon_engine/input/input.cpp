@@ -21,7 +21,7 @@ namespace Input
         AddPluggedInControllersToVector();
         InitializeJoystickVectors();
 
-        for (size_t i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             PlayerControllers.push_back(new PlayerController(i));
         }
@@ -187,7 +187,7 @@ namespace Input
     void UpdateKeyboardStates()
     {
         memcpy(_previousKeyboardState, _currentKeyboardState, sizeof(Uint8) * SDL_NUM_SCANCODES);
-        memcpy(_currentKeyboardState, SDL_GetKeyboardState(NULL), sizeof(Uint8) * SDL_NUM_SCANCODES);
+        memcpy(_currentKeyboardState, SDL_GetKeyboardState(nullptr), sizeof(Uint8) * SDL_NUM_SCANCODES);
     }
 
     PlayerController *GetPlayerController(int controllerToGet)

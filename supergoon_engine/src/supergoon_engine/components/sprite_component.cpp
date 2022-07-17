@@ -29,7 +29,7 @@ void SpriteComponent::Initialize()
 {
 }
 
-void SpriteComponent::Update(const Gametime &gametime)
+void SpriteComponent::Update(const Gametime &)
 {
     dst_rect_.sdl_rectangle.x = static_cast<int>(static_cast<double>(owner_->location.x + offset_.x)) ;
     dst_rect_.sdl_rectangle.y = static_cast<int>(static_cast<double>(owner_->location.y + offset_.y)) ;

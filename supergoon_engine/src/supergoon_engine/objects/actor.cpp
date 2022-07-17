@@ -42,7 +42,7 @@ void Objects::Actor::Jump(const Gametime &gametime)
         is_jumping = true;
         rigidbody_component->on_ground = false;
         auto force = jump_speed * initial_jump_multiplier * gametime.ElapsedTimeInSeconds();
-        rigidbody_component->ApplyForce(Vector2(0, -jump_speed));
+        rigidbody_component->ApplyForce(Vector2(0, -force));
         current_jump_length += gametime.ElapsedTimeInSeconds();
     }
     if (is_jumping && !rigidbody_component->on_ground)
@@ -51,10 +51,6 @@ void Objects::Actor::Jump(const Gametime &gametime)
         if (current_jump_length >= max_jump_length)
         {
             JumpEnd();
-        }
-        else
-        {
-            auto force = jump_speed * gametime.ElapsedTimeInSeconds();
         }
     }
 }

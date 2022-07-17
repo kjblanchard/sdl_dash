@@ -20,10 +20,8 @@ namespace Components
     private:
         SpriteComponent *sprite_component;
         Aseprite::AsepriteSheet *aseprite_sheet;
-        float animation_speed = 1.0f;
         double ms_this_frame = 0.0;
         int current_frame_in_animation = 0;
-        int layer = 0;
 
     public:
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer = 0, Vector2 offset = Vector2());

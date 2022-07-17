@@ -15,6 +15,7 @@ namespace Components
 	{
 	public:
 		InputComponent(GameObject* owner, Input::Controller *controller);
+		~InputComponent() override;
 
 		void TakeControl(Input::Controller *controllerToUse);
 

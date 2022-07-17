@@ -6,6 +6,10 @@ namespace Components
     InputComponent::InputComponent(GameObject* owner, Input::Controller *controller) : Component(owner), CurrentController(controller)
     {
     }
+    InputComponent::~InputComponent()
+    {
+
+    }
 
     void InputComponent::TakeControl(Input::Controller *controllerToUse)
     {
