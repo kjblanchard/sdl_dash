@@ -184,13 +184,13 @@ namespace Input
         return !_controllerInputs[controllerNum].buttons[button] && _lastControllerInputs[controllerNum].buttons[button];
     }
 
-    void Input::UpdateKeyboardStates()
+    void UpdateKeyboardStates()
     {
         memcpy(_previousKeyboardState, _currentKeyboardState, sizeof(Uint8) * SDL_NUM_SCANCODES);
         memcpy(_currentKeyboardState, SDL_GetKeyboardState(NULL), sizeof(Uint8) * SDL_NUM_SCANCODES);
     }
 
-    PlayerController *Input::GetPlayerController(int controllerToGet)
+    PlayerController *GetPlayerController(int controllerToGet)
     {
         return PlayerControllers.at(controllerToGet);
     }

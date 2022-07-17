@@ -27,4 +27,8 @@ namespace Input
         SDL_SCANCODE_RETURN,
         SDL_SCANCODE_TAB};
 
+    Controller::~Controller()
+    {
+    }
+
 }

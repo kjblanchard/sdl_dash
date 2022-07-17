@@ -11,6 +11,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 build/**
+cmake.sh
 # Cpp stuff
 # Prerequisites
 *.d

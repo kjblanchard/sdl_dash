@@ -17,10 +17,11 @@ Component::Component(GameObject *owner, Vector2 offset)
     owner_->AddComponent(this);
 }
 
-Component::~Component()
+Vector2 Component::GetLocation()
 {
+    return owner_->location + offset_;
 }
 
-Vector2 Component::GetLocation(){
-    return owner_->location + offset_;
+Component::~Component()
+{
 }

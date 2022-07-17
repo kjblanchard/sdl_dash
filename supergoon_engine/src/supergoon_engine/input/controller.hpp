@@ -38,7 +38,7 @@ namespace Input
     class Controller
     {
     public:
-        virtual ~Controller() = default;
+        virtual ~Controller();
         virtual bool IsButtonPressed(ControllerButtons controllerButton) = 0;
         virtual bool IsButtonReleased(ControllerButtons controllerButton) = 0;
         virtual bool IsButtonHeld(ControllerButtons controllerButton) = 0;

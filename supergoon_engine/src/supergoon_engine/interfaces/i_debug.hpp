@@ -4,6 +4,9 @@
 class IDebug
 {
 public:
+    IDebug() = default;
     virtual ~IDebug();
     bool debug = false;
+    IDebug(IDebug &) = default;
+    IDebug(IDebug &&) = default;
 };

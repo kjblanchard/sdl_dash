@@ -22,15 +22,15 @@ void Player::Update(const Gametime &gametime)
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Left) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
-        auto frame_speed = speed * gametime.ElapsedTimeInSeconds();
-        rigidbody_component->ApplyForce(Vector2(-frame_speed, 0));
+        auto frame_speed = static_cast<double>(speed) * gametime.ElapsedTimeInSeconds();
+        rigidbody_component->ApplyForce(Vector2(-static_cast<float>(frame_speed), 0));
     }
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Right) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Right))
     {
         //Get a speed boost when you aren't moving, to overcome initial friction.
-        auto frame_speed = (rigidbody_component->velocity.x == 0) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
-        rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
+        auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
+        rigidbody_component->ApplyForce(Vector2(static_cast<float>(frame_speed), 0));
     }
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::A) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::A))

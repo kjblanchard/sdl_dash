@@ -50,7 +50,7 @@ public:
     void Update(const Gametime &gametime) override;
     /**
      * Calls Draw all components on this gameobject.
-     * @param Spritebatch the spritebatch
+     * @param spritebatch the spritebatch
      */
     void Draw(Graphics::SpriteBatch &spritebatch) override;
     /**

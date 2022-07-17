@@ -36,7 +36,7 @@ namespace Objects
         float max_jump_length = 0;
         float jump_speed = 0;
         float max_run_speed = 200;
-        float speed = 0;
+        double speed = 0;
 
         void UpdateMaxVelocity(Vector2 new_max);
 

@@ -46,5 +46,7 @@ public:
             return std::move(*this);
         return std::move(rhs);
     }
-    inline virtual void Draw(Graphics::SpriteBatch& spritebatch) override {}
+    inline virtual void Draw(Graphics::SpriteBatch&) override {}
+    Component( Component & ) = default;
+    Component( Component && ) = default;
 };
