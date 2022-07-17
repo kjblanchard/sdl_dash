@@ -30,6 +30,21 @@ namespace Objects
         Components::RigidbodyComponent *rigidbody_component;
         Components::InputComponent *input_component;
 
+        bool is_jumping = false;
+        int initial_jump_multiplier = 0;
+        float current_jump_length;
+        float max_jump_length = 0;
+        float jump_speed = 0;
+        float max_run_speed = 200;
+        float speed = 0;
+
+        void UpdateMaxVelocity(Vector2 new_max);
+
+        void ApplyMovement(const Gametime &gametime);
+
+        void Jump(const Gametime &gametime);
+        void JumpEnd();
+
     public:
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;

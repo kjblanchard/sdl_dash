@@ -9,8 +9,8 @@ std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
 Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
     animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
-    //TODO get the right size.
-    rigidbody_component = new Components::RigidbodyComponent(this,Point(32));
+    // TODO get the right size.
+    rigidbody_component = new Components::RigidbodyComponent(this, Point(32));
     input_component = new Components::InputComponent(this, nullptr);
 }
 
@@ -33,4 +33,36 @@ Objects::Actor *Objects::SpawnActor(ActorParams params)
         }
     }
     return nullptr;
+}
+
+void Objects::Actor::Jump(const Gametime &gametime)
+{
+    if (rigidbody_component->on_ground && !is_jumping)
+    {
+        is_jumping = true;
+        rigidbody_component->on_ground = false;
+        auto force = jump_speed * initial_jump_multiplier * gametime.ElapsedTimeInSeconds();
+        rigidbody_component->ApplyForce(Vector2(0, -jump_speed));
+        current_jump_length += gametime.ElapsedTimeInSeconds();
+    }
+    if (is_jumping && !rigidbody_component->on_ground)
+    {
+        current_jump_length += gametime.ElapsedTimeInSeconds();
+        if (current_jump_length >= max_jump_length)
+        {
+            JumpEnd();
+        }
+        else
+        {
+            auto force = jump_speed * gametime.ElapsedTimeInSeconds();
+        }
+    }
+}
+void Objects::Actor::JumpEnd()
+{
+    is_jumping = false;
+}
+void Objects::Actor::UpdateMaxVelocity(Vector2 new_max)
+{
+    rigidbody_component->max_velocity = new_max;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/component.hpp>
 #include <supergoon_engine/primitives/point.hpp>
@@ -27,7 +28,11 @@ namespace Components
         void ApplyVelocityByStepSolidsY(double step);
         bool TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter, bool x_step);
         bool TryMovementStep(SDL_FRect& rect_to_check);
-        void ApplyForce(Vector2 force, Vector2 constraint = Vector2());
-        Vector2 velocity;
+        void ApplyForce(Vector2 force);
+        Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());
+        Vector2 velocity = Vector2();
+        bool accel_applied_this_frame = false;
+        bool on_ground = false;
+        Vector2 acceleration = Vector2();
     };
 }
