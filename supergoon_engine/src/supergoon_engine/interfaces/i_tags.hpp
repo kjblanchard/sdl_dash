@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstdarg>
 
-class ITags
+class SUPERGOON_ENGINE_EXPORT ITags
 {
 public:
     std::vector<int> tags;

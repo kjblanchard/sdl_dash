@@ -6,7 +6,7 @@ namespace Graphics
     class SpriteBatch;
 }
 
-class IDraw
+class SUPERGOON_ENGINE_EXPORT IDraw
 {
 public:
     IDraw() = default;

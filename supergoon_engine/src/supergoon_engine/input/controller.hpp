@@ -1,4 +1,5 @@
 #pragma once
+#include <supergoon_engine_export.h>
 #include <SDL_scancode.h>
 #include <SDL_gamecontroller.h>
 
@@ -35,7 +36,7 @@ namespace Input
         T SelectButton;
     };
 
-    class Controller
+    class SUPERGOON_ENGINE_EXPORT Controller
     {
     public:
         virtual ~Controller();
