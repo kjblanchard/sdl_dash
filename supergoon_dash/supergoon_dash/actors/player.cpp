@@ -13,13 +13,13 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 
     input_component->TakeControl(first_controller);
     speed = 190;
-    jump_speed = 1000;
-    max_jump_length = 1.0;
-    initial_jump_multiplier = 10;
+    jump_speed = 100;
+    max_jump_length = 0.5;
+    initial_jump_multiplier = 100;
     // TODO make it so that we can just set one.
     UpdateMaxVelocity(Vector2(200, 1000));
-    auto boom = new CameraBoomComponent(this, *main_camera);
-    AddComponent(boom);
+    // auto boom = new CameraBoomComponent(this, *main_camera);
+    // AddComponent(boom);
 }
 void Player::Update(const Gametime &gametime)
 {
@@ -46,8 +46,6 @@ void Player::Update(const Gametime &gametime)
     {
         JumpEnd();
     }
-    std::cout << "Velocity is X: " << rigidbody_component->velocity.x << " Y: " << rigidbody_component->velocity.y << std::endl;
-    std::cout << "On ground is : " << rigidbody_component->on_ground << std::endl;
 }
 
 Player::~Player()
