@@ -5,6 +5,7 @@
 #include <supergoon_engine/objects/camera.hpp>
 #include <supergoon_engine/aseprite/aseprite_sheet.hpp>
 #include <supergoon_engine/graphics/sprite_batch.hpp>
+#include <cmath>
 #include <SDL_rect.h>
 
 using namespace Components;
@@ -31,25 +32,20 @@ void SpriteComponent::Initialize()
 
 void SpriteComponent::Update(const Gametime &)
 {
-    dst_rect_.sdl_rectangle.x = static_cast<int>(static_cast<double>(owner_->location.x + offset_.x)) ;
-    dst_rect_.sdl_rectangle.y = static_cast<int>(static_cast<double>(owner_->location.y + offset_.y)) ;
+    //Doesn't seem to do much on its own.
+    dst_rect_.sdl_rectangle.x = round(static_cast<double>(owner_->location.x + offset_.x)) ;
+    dst_rect_.sdl_rectangle.y = round(static_cast<double>(owner_->location.y + offset_.y)) ;
 }
 
 void SpriteComponent::Draw( Graphics::SpriteBatch& spritebatch)
 {
 
     temp_dst_rect = dst_rect_;
-    // temp_dst_rect.sdl_rectangle.x = temp_dst_rect.sdl_rectangle.x * main_camera->GetResolutionScaleSizeX() - main_camera->rect.x;
-    // temp_dst_rect.sdl_rectangle.y = temp_dst_rect.sdl_rectangle.y * main_camera->GetResolutionScaleSizeY() - main_camera->rect.y;
-    temp_dst_rect.sdl_rectangle.x = temp_dst_rect.sdl_rectangle.x * static_cast<int>(main_camera->GetResolutionScaleSizeX()) - main_camera->rect.x * static_cast<int>(main_camera->GetResolutionScaleSizeX());
-    temp_dst_rect.sdl_rectangle.y = temp_dst_rect.sdl_rectangle.y * static_cast<int>(main_camera->GetResolutionScaleSizeY()) - main_camera->rect.y * static_cast<int>(main_camera->GetResolutionScaleSizeY());
-    temp_dst_rect.sdl_rectangle.w *= static_cast<int>(main_camera->GetResolutionScaleSizeX());
-    temp_dst_rect.sdl_rectangle.h *= static_cast<int>(main_camera->GetResolutionScaleSizeY());
+    temp_dst_rect.sdl_rectangle.x = round((temp_dst_rect.sdl_rectangle.x - main_camera->rect.x) * round(main_camera->GetResolutionScaleSizeX()));
+    temp_dst_rect.sdl_rectangle.y = round((temp_dst_rect.sdl_rectangle.y - main_camera->rect.y) * round(main_camera->GetResolutionScaleSizeY()));
+    temp_dst_rect.sdl_rectangle.w *= round(main_camera->GetResolutionScaleSizeX());
+    temp_dst_rect.sdl_rectangle.h *= round(main_camera->GetResolutionScaleSizeY());
     spritebatch.Draw(sprite,temp_dst_rect,src_rect_,layer);
-
-
-
-    // SDL_RenderCopy(renderer, sprite.texture.get(), &src_rect_.sdl_rectangle, &temp_dst_rect.sdl_rectangle);
 }
 void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)
 {

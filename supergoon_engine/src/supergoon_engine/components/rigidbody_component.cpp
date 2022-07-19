@@ -79,7 +79,6 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
         collision = TryMovementStep(float_rect);
         if (collision)
         {
-            printf("Collision");
             velocity_to_alter = 0;
             if (!x_step && step_speed > 0)
             {

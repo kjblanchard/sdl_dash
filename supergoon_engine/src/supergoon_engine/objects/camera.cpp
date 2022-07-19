@@ -50,6 +50,10 @@ void Camera::MoveCamera(Vector2 move_amount)
             location.x = Level::current_level_size.x - rect.w;
         }
     }
+
+// seems to do nothing on its own.
+    rect.x = location.ToPoint().x;
+    rect.y = location.ToPoint().y;
 }
 
 Vector2 Camera::GetWorldSize()

@@ -16,7 +16,7 @@ class Level;
 /**
  * Base class for all objects in the engine, has a location, and a list of components.
  */
-class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize, public IDebug, public IDraw
+class SUPERGOON_ENGINE_EXPORT GameObject : public IUpdate, public IInitialize, public IDebug, public IDraw, public ITags
 {
 private:
 protected:

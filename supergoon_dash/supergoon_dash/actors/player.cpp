@@ -16,10 +16,10 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     jump_speed = 100;
     max_jump_length = 0.5;
     initial_jump_multiplier = 100;
+    AddTag(25);
     // TODO make it so that we can just set one.
     UpdateMaxVelocity(Vector2(200, 1000));
-    // auto boom = new CameraBoomComponent(this, *main_camera);
-    // AddComponent(boom);
+    auto boom = new CameraBoomComponent(this, *main_camera);
 }
 void Player::Update(const Gametime &gametime)
 {
