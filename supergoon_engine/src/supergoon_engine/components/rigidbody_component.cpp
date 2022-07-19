@@ -83,7 +83,6 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
             velocity_to_alter = 0;
             if (!x_step && step_speed > 0)
             {
-                printf("Make on ground true");
                 on_ground = true;
             }
             break;
@@ -108,7 +107,6 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
         collision = TryMovementStep(float_rect);
         if (!collision)
         {
-            printf("Switch onground to false");
             on_ground = false;
         }
     }

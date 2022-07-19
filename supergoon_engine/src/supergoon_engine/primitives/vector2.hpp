@@ -38,6 +38,19 @@ struct SUPERGOON_ENGINE_EXPORT Vector2
     {
         return Vector2(x + rhs.x, y + rhs.y);
     }
+    inline bool operator==(const Vector2 rhs) const
+    {
+        return x == rhs.x && y == rhs.y;
+    }
+    inline bool operator!=(const Vector2 rhs) const
+    {
+        return x != rhs.x || y != rhs.y;
+    }
+
+    inline static Vector2 Zero()
+    {
+        return Vector2();
+    }
 
     /**
      * Makes a new point with the values from the vec2.  Decimal places will be lost (does not round.)

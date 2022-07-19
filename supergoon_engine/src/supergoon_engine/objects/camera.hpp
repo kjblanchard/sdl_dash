@@ -20,6 +20,7 @@ public:
     void Update(const Gametime &gametime) override;
     double GetResolutionScaleSizeX();
     double GetResolutionScaleSizeY();
+    Vector2 GetWorldSize();
     void MoveCamera(Vector2 move_amount);
 
 };

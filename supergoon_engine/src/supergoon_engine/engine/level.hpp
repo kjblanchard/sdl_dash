@@ -19,6 +19,7 @@ namespace Tiled
 class Content;
 
 class Level : public IInitialize, public IUpdate, public IDraw
+
 {
 private:
     Tiled::Tilemap *tilemap;
@@ -31,6 +32,9 @@ private:
 public:
     Level(sol::table& current_level_table, Content* content_ptr);
     ~Level() override;
+
+    //TODO make this in a namespace, or not static here.
+    static Vector2 current_level_size;
     std::vector<Tile*> tiles;
     std::vector<Tile*> solid_tiles;
     std::vector<Objects::Actor*> actors;

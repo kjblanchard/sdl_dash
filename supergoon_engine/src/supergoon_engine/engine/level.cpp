@@ -9,7 +9,9 @@
 #include <supergoon_engine/components/box_collider_component.hpp>
 #include <supergoon_engine/engine/engine_tags.hpp>
 
-Level::Level(sol::table& current_level_table, Content *content_ptr) : tilemap{nullptr}, content{content_ptr}
+Vector2 Level::current_level_size = Vector2();
+
+Level::Level(sol::table &current_level_table, Content *content_ptr) : tilemap{nullptr}, content{content_ptr}
 {
     // get the level name to load from tiled.
     map_name = current_level_table["name"];
@@ -18,14 +20,10 @@ Level::Level(sol::table& current_level_table, Content *content_ptr) : tilemap{nu
     gravity_params.friction = current_level_table["friction"];
     gravity_params.min_velocity = Vector2(
         current_level_table["min_x_velocity"],
-        current_level_table["min_y_velocity"]
-    );
+        current_level_table["min_y_velocity"]);
     gravity_params.max_velocity = Vector2(
         current_level_table["max_x_velocity"],
-        current_level_table["max_y_velocity"]
-    );
-
-
+        current_level_table["max_y_velocity"]);
 }
 
 Level::~Level()
@@ -35,6 +33,9 @@ Level::~Level()
 void Level::Initialize()
 {
     tilemap = Lua::LoadTiledMap(map_name);
+    auto map_width = tilemap->tile_width * tilemap->width;
+    Level::current_level_size.x = map_width;
+
     auto unsorted_tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
     for (auto i : unsorted_tiles)
     {

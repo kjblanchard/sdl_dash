@@ -60,7 +60,8 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     -Wno-global-constructors -Wno-constant-conversion  -Wno-sign-conversion -Wno-float-conversion -Wno-double-promotion -Wno-implicit-float-conversion)
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     target_compile_options(supergoon_engine PRIVATE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-newline-eof -Wno-padded -Wno-exit-time-destructors
-    -Wno-global-constructors -Wno-constant-conversion  -Wno-sign-conversion -Wno-float-conversion -Wno-double-promotion -Wno-implicit-float-conversion)
+    -Wno-global-constructors -Wno-constant-conversion  -Wno-sign-conversion -Wno-float-conversion -Wno-double-promotion
+    -Wno-implicit-float-conversion "-Wno-float-equal")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     target_compile_options(supergoon_engine PRIVATE /EHsc /W2 /c)
 endif()

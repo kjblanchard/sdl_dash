@@ -3,6 +3,9 @@
 #include <supergoon_engine/input/input.hpp>
 #include <supergoon_engine/input/player_controller.hpp>
 #include <supergoon_engine/components/rigidbody_component.hpp>
+#include <supergoon_engine/components/camera_boom_component.hpp>
+
+using namespace Components;
 
 Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 {
@@ -15,6 +18,8 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     initial_jump_multiplier = 10;
     // TODO make it so that we can just set one.
     UpdateMaxVelocity(Vector2(200, 1000));
+    auto boom = new CameraBoomComponent(this, *main_camera);
+    AddComponent(boom);
 }
 void Player::Update(const Gametime &gametime)
 {

@@ -35,6 +35,7 @@ protected:
     void Update(Gametime &gametime);
     void Render();
     void Destroy();
+
     Graphics::SpriteBatch *sprite_batch;
     static World *instance;
     Gametime world_gametime;
