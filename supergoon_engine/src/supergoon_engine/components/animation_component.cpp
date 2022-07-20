@@ -23,5 +23,4 @@ void Components::AnimationComponent::Update(const Gametime &gametime)
         auto frame = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
         sprite_component->UpdateFromAnimationComponent(frame.source_rect);
     }
-    sprite_component->Update(gametime);
 }

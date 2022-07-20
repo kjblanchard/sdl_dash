@@ -33,7 +33,7 @@ protected:
     GameObject *owner_;
 
 public:
-    unsigned char update_order = 255;
+    int update_order = 0;
     Vector2 GetLocation();
     Component(GameObject *owner, Vector2 offset = Vector2());
     virtual ~Component() override;

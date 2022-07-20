@@ -7,8 +7,6 @@
 Components::RigidbodyComponent::RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}
 {
     box_collider = new BoxColliderComponent(owner, box_size, offset);
-    // gravity_enabled = false;
-    ApplyForce(Vector2(150, 0));
 }
 
 Components::RigidbodyComponent::~RigidbodyComponent()
@@ -55,7 +53,7 @@ void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
     auto &velocity_to_alter = velocity.y;
     TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false);
 }
-void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step)
+void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, double &location_to_alter, double &velocity_to_alter, bool x_step)
 {
     auto step_speed = (full_step > 0) ? 1 : -1;
     bool collision = false;
