@@ -52,14 +52,15 @@ void SpriteBatch::End()
     {
         if (!i.sprite)
         {
-            SDL_RenderDrawRect(graphics_device->renderer, &i.dst_rect->sdl_rectangle);
+            SDL_RenderDrawRectF(graphics_device->renderer, &i.dst_rect->sdl_rectangle);
         }
         else
         {
-            SDL_RenderCopy(
+            auto src_rect = i.src_rect->GetRect();
+            SDL_RenderCopyF(
                 graphics_device->renderer,
                 i.sprite->texture.get(),
-                &i.src_rect->sdl_rectangle,
+                &src_rect,
                 &i.dst_rect->sdl_rectangle);
         }
     }

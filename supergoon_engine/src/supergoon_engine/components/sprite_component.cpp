@@ -34,19 +34,18 @@ void SpriteComponent::Initialize()
 
 void SpriteComponent::Update(const Gametime &)
 {
-    //Doesn't seem to do much on its own.
-    dst_rect_.sdl_rectangle.x = round(static_cast<double>(owner_->location.x + offset_.x)) ;
-    dst_rect_.sdl_rectangle.y = round(static_cast<double>(owner_->location.y + offset_.y)) ;
+    dst_rect_.sdl_rectangle.x = owner_->location.x + offset_.x ;
+    dst_rect_.sdl_rectangle.y = owner_->location.y + offset_.y ;
 }
 
 void SpriteComponent::Draw( Graphics::SpriteBatch& spritebatch)
 {
 
     temp_dst_rect = dst_rect_;
-    temp_dst_rect.sdl_rectangle.x = round((temp_dst_rect.sdl_rectangle.x - main_camera->rect.x) * round(main_camera->GetResolutionScaleSizeX()));
-    temp_dst_rect.sdl_rectangle.y = round((temp_dst_rect.sdl_rectangle.y - main_camera->rect.y) * round(main_camera->GetResolutionScaleSizeY()));
-    temp_dst_rect.sdl_rectangle.w *= round(main_camera->GetResolutionScaleSizeX());
-    temp_dst_rect.sdl_rectangle.h *= round(main_camera->GetResolutionScaleSizeY());
+    temp_dst_rect.sdl_rectangle.x = (temp_dst_rect.sdl_rectangle.x - main_camera->rect.x) * main_camera->GetResolutionScaleSizeX();
+    temp_dst_rect.sdl_rectangle.y = (temp_dst_rect.sdl_rectangle.y - main_camera->rect.y) * main_camera->GetResolutionScaleSizeY();
+    temp_dst_rect.sdl_rectangle.w *= main_camera->GetResolutionScaleSizeX();
+    temp_dst_rect.sdl_rectangle.h *= main_camera->GetResolutionScaleSizeY();
     spritebatch.Draw(sprite,temp_dst_rect,src_rect_,layer);
 }
 void SpriteComponent::UpdateFromAnimationComponent(Rectangle src_rectangle)

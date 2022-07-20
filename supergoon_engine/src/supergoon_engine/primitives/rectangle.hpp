@@ -11,7 +11,7 @@
  */
 struct SUPERGOON_ENGINE_EXPORT Rectangle
 {
-    SDL_Rect sdl_rectangle;
+    SDL_FRect sdl_rectangle;
 
     inline Rectangle()
     {
@@ -30,4 +30,14 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
     inline Vector2 GetLocation(){
         return Vector2(sdl_rectangle.x, sdl_rectangle.y);
     }
+
+    inline SDL_Rect GetRect(){
+        SDL_Rect rect;
+        rect.x = sdl_rectangle.x;
+        rect.y = sdl_rectangle.y;
+        rect.w = sdl_rectangle.w;
+        rect.h = sdl_rectangle.h;
+        return rect;
+    }
 };
+

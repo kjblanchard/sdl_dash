@@ -27,7 +27,7 @@ namespace Components
         void ApplyVelocity(const Gametime &);
         void ApplyVelocityByStepSolidsX(double step);
         void ApplyVelocityByStepSolidsY(double step);
-        void TryAllMovementSteps(double full_step, double minimum_step, double& location_to_alter, double& velocity_to_alter, bool x_step);
+        void TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter, bool x_step);
         bool TryMovementStep(SDL_FRect& rect_to_check);
         void ApplyForce(Vector2 force);
         Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());
