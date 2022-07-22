@@ -4,18 +4,19 @@
 #include <sol2/sol.hpp>
 #include <algorithm>
 #include <supergoon_engine/tiled/tilemap.hpp>
+#include <supergoon_engine/aseprite/aseprite_sheet.hpp>
 #include <supergoon_engine/aseprite/aseprite_frame.hpp>
+#include <supergoon_engine/aseprite/aseprite_animation.hpp>
 #include <sstream>
 
 sol::state Lua::lua_global_state;
 using namespace Tiled;
 
-std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(std::string files)
+void Lua::LoadDataFromAsepriteFile(Aseprite::AsepriteSheet &aseprite_sheet, std::string file)
 {
     sol::state temp_state;
     auto thing = sol::this_state(temp_state);
-    auto full_path = "./assets/actors/" + files;
-    std::vector<Aseprite::AsepriteFrame> aseprite_frames;
+    auto full_path = "./assets/actors/" + file;
 
     auto char_sprite_sheet = Lua::l_read_json(full_path, thing);
     if (char_sprite_sheet != sol::lua_nil)
@@ -25,25 +26,55 @@ std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(std::string files)
             auto lua_table = char_sprite_sheet.as<sol::lua_table>();
             if (lua_table != sol::lua_nil)
             {
-                sol::table frames = lua_table["frames"];
-                for (const auto &key_value_pair : frames)
-                {
-                    Aseprite::AsepriteFrame frame;
-                    auto key = key_value_pair.first.as<std::string>();
-                    frame.frame_num = Lua::ParseIntFromString(key);
-                    sol::table value = key_value_pair.second;
-                    frame.millisecond_length = value["duration"];
-                    sol::table frame_rect = value["frame"];
-                    frame.source_rect = Rectangle(
-                        Point(frame_rect["x"], frame_rect["y"]),
-                        Point(frame_rect["w"], frame_rect["h"]));
-                    aseprite_frames.push_back(frame);
-                }
-                std::sort(aseprite_frames.begin(), aseprite_frames.end());
+                aseprite_sheet.sprite_sheet_frames = Lua::LoadAsepriteFrames(lua_table);
+                aseprite_sheet.sprite_sheed_animations = Lua::LoadAsepriteAnimations(lua_table);
             }
         }
     }
+}
+
+std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(sol::table &lua_table)
+{
+    std::vector<Aseprite::AsepriteFrame> aseprite_frames;
+    sol::table frames = lua_table["frames"];
+    for (const auto &key_value_pair : frames)
+    {
+        Aseprite::AsepriteFrame frame;
+        auto key = key_value_pair.first.as<std::string>();
+        frame.frame_num = Lua::ParseIntFromString(key);
+        sol::table value = key_value_pair.second;
+        frame.millisecond_length = value["duration"];
+        sol::table frame_rect = value["frame"];
+        frame.source_rect = Rectangle(
+            Point(frame_rect["x"], frame_rect["y"]),
+            Point(frame_rect["w"], frame_rect["h"]));
+        aseprite_frames.push_back(frame);
+    }
+    std::sort(aseprite_frames.begin(), aseprite_frames.end());
     return aseprite_frames;
+}
+
+std::vector<Aseprite::AsepriteAnimation> Lua::LoadAsepriteAnimations(sol::table &lua_table)
+{
+    std::vector<Aseprite::AsepriteAnimation> aseprite_animations;
+    sol::table meta_table = lua_table["meta"];
+    if (meta_table != sol::lua_nil)
+    {
+        sol::table frame_tabs = meta_table["frameTags"];
+        if (frame_tabs != sol::lua_nil)
+        {
+            for (auto &i : frame_tabs)
+            {
+                Aseprite::AsepriteAnimation animation;
+                sol::table thing2 = i.second;
+                animation.frame_begin = thing2["from"];
+                animation.frame_end = thing2["to"];
+                animation.name = thing2["name"];
+                aseprite_animations.push_back(animation);
+            }
+        }
+    }
+    return aseprite_animations;
 }
 
 unsigned int Lua::ParseIntFromString(std::string aseprite_key_name)

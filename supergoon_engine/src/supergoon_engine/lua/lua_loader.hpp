@@ -5,6 +5,8 @@
 
 namespace Aseprite{
     struct AsepriteFrame;
+    struct AsepriteAnimation;
+    class AsepriteSheet;
 }
 namespace Tiled{
     class Tilemap;
@@ -13,7 +15,9 @@ namespace Tiled{
 
 namespace Lua
 {
-    std::vector<Aseprite::AsepriteFrame> LoadAsepriteFrames(std::string files);
+    void LoadDataFromAsepriteFile(Aseprite::AsepriteSheet& aseprite_sheet, std::string file);
+    std::vector<Aseprite::AsepriteFrame> LoadAsepriteFrames(sol::table& aseprite_lua_table);
+    std::vector<Aseprite::AsepriteAnimation> LoadAsepriteAnimations(sol::table& aseprite_lua_table);
     Tiled::Tilemap* LoadTiledMap(std::string filename);
     unsigned int ParseIntFromString(std::string aseprite_key_name);
     sol::state& LoadLuaTableIntoGlobalState(const char *file_name, const char *table_name);

@@ -1,6 +1,9 @@
 #pragma once
+#include <vector>
 #include <supergoon_engine/primitives/point.hpp>
 #include <supergoon_engine/engine/component.hpp>
+#include <supergoon_engine/animation/animation.hpp>
+#include <supergoon_engine/animation/animation_transition.hpp>
 
 class GameObject;
 namespace Aseprite
@@ -11,11 +14,11 @@ namespace Aseprite
 namespace Components
 {
     class SpriteComponent;
-    // private Animator _animator = new Animator();
-    // private string _currentAnimationTag;
 
     class AnimationComponent : public Component
     {
+        std::vector<Animations::Animation> animations;
+        Animations::Animation* current_animation = nullptr;
 
     private:
         SpriteComponent *sprite_component;
@@ -26,5 +29,9 @@ namespace Components
     public:
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer = 0, Vector2 offset = Vector2());
         void Update(const Gametime &) override;
+        inline void AddAnimation(Animations::Animation &animation)
+        {
+            animations.push_back(animation);
+        }
     };
 }
