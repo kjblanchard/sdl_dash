@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <supergoon_engine/animation/animation_transition.hpp>
+#include <supergoon_engine/aseprite/aseprite_animation.hpp>
 
 namespace Animations
 {
@@ -12,7 +13,12 @@ namespace Animations
         std::string name;
         bool looping;
         std::vector<Animations::AnimationTransition> transitions;
-        Animation(std::string name, bool looping = true);
+        Aseprite::AsepriteAnimation aseprite_animation;
+
+        inline Animation(std::string name_of_anim, bool should_loop = true){
+            name = name_of_anim;
+            looping = should_loop;
+        }
 
         inline void AddTransition(const Animations::AnimationTransition& transition)
         {
