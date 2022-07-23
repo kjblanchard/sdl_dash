@@ -18,6 +18,11 @@ Objects::Actor::~Actor()
 {
 }
 
+bool Objects::Actor::OnGround()
+{
+    return rigidbody_component->on_ground;
+}
+
 Objects::Actor *Objects::SpawnActor(ActorParams params)
 {
     // auto parser = Json::JsonParser();
@@ -45,7 +50,7 @@ void Objects::Actor::Jump(const Gametime &gametime)
         auto force = jump_speed * initial_jump_multiplier * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(0, -force));
     }
-    if (is_jumping && !rigidbody_component->on_ground)
+    else if (is_jumping && !rigidbody_component->on_ground)
     {
         auto force = jump_speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(0, -force));
@@ -58,7 +63,10 @@ void Objects::Actor::Jump(const Gametime &gametime)
 }
 void Objects::Actor::JumpEnd()
 {
-    is_jumping = false;
+    if (is_jumping)
+    {
+        is_jumping = false;
+    }
 }
 void Objects::Actor::UpdateMaxVelocity(Vector2 new_max)
 {

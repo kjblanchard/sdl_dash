@@ -6,18 +6,12 @@ Components::AnimationComponent::AnimationComponent(GameObject *owner, const char
 {
     aseprite_sheet = new Aseprite::AsepriteSheet(aseprite_file_name);
     sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect, layer_id);
-    // current_animation_name = "idle";
-    // auto idle_anim = Animations::Animation(current_animation_name,true);
-    // AddAnimation(idle_anim);
-    // current_animation = GetAnimationByName(current_animation_name);
 }
 
 void Components::AnimationComponent::Update(const Gametime &gametime)
 {
     if (current_animation.name == "")
         return;
-
-    // Check to see if we should change animations.
 
     for (auto &&i : current_animation.transitions)
     {
@@ -29,16 +23,20 @@ void Components::AnimationComponent::Update(const Gametime &gametime)
         }
     }
 
-    ms_this_frame += gametime.ElapsedTimeInMilliseconds();
-    if (ms_this_frame > aseprite_sheet->sprite_sheet_frames[current_frame_in_animation].millisecond_length)
+    if (current_animation.looping)
     {
-        ms_this_frame = 0;
-        ++current_frame_in_animation;
-        if (current_frame_in_animation >= static_cast<int>(current_animation.aseprite_animation.frame_end))
+        ms_this_frame += gametime.ElapsedTimeInMilliseconds();
+        if (ms_this_frame > aseprite_sheet->sprite_sheet_frames[current_frame_in_animation].millisecond_length)
         {
-            current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
+            ms_this_frame = 0;
+            ++current_frame_in_animation;
+            if (current_frame_in_animation >= static_cast<int>(current_animation.aseprite_animation.frame_end))
+            {
+                current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
+            }
         }
-        auto frame = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
-        sprite_component->UpdateFromAnimationComponent(frame.source_rect);
     }
+
+    auto frame = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
+    sprite_component->UpdateFromAnimationComponent(frame.source_rect);
 }

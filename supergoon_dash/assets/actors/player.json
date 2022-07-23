@@ -182,18 +182,35 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 50
+   },
+   "mask-dude 23.aseprite": {
+    "frame": { "x": 736, "y": 0, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 50
+   },
+   "mask-dude 24.aseprite": {
+    "frame": { "x": 768, "y": 0, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 50
    }
  },
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.2.38-x64",
-  "image": "player.png",
   "format": "RGBA8888",
-  "size": { "w": 736, "h": 32 },
+  "size": { "w": 800, "h": 32 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 10, "direction": "forward" },
-   { "name": "run", "from": 11, "to": 22, "direction": "forward" }
+   { "name": "run", "from": 11, "to": 22, "direction": "forward" },
+   { "name": "jump", "from": 23, "to": 23, "direction": "forward" },
+   { "name": "fall", "from": 24, "to": 24, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }

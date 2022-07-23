@@ -56,12 +56,17 @@ void SpriteBatch::End()
         }
         else
         {
+            auto mirror = (i.sprite->mirror) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
             auto src_rect = i.src_rect->GetRect();
-            SDL_RenderCopyF(
+            SDL_RenderCopyExF(
                 graphics_device->renderer,
                 i.sprite->texture.get(),
                 &src_rect,
-                &i.dst_rect->sdl_rectangle);
+                &i.dst_rect->sdl_rectangle,
+                NULL,
+                NULL,
+                mirror
+                );
         }
     }
 

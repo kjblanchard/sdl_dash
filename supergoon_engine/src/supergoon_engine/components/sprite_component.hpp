@@ -21,6 +21,7 @@ namespace Components
         Rectangle src_rect_;
         Sprite sprite;
         int layer;
+        bool mirror = false;
 
     public:
         SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size = Point(), Point src_loc = Point(), int layer = 0);

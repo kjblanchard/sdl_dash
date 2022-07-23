@@ -45,6 +45,7 @@ namespace Objects
         void Jump(const Gametime &gametime);
         void JumpEnd();
 
+        bool OnGround();
     public:
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;

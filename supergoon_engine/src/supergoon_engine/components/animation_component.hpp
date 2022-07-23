@@ -5,6 +5,7 @@
 #include <supergoon_engine/animation/animation.hpp>
 #include <supergoon_engine/animation/animation_transition.hpp>
 #include <supergoon_engine/aseprite/aseprite_sheet.hpp>
+#include <supergoon_engine/components/sprite_component.hpp>
 #include <algorithm>
 
 class GameObject;
@@ -15,7 +16,6 @@ namespace Aseprite
 
 namespace Components
 {
-    class SpriteComponent;
 
     class AnimationComponent : public Component
     {
@@ -54,6 +54,10 @@ namespace Components
         inline void SetEntryAnim(std::string entry_anim_name)
         {
             current_animation = GetAnimationByName(entry_anim_name);
+        }
+        inline void SetMirror(bool mirror_val)
+        {
+            sprite_component->sprite.mirror = mirror_val;
         }
     };
 }
