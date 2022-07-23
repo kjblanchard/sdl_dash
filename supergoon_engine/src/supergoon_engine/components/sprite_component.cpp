@@ -13,16 +13,16 @@ using namespace Components;
 SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Point size, Point src_loc, int layer_id) : Component(owner), sprite{Sprite(texture)}, layer{layer_id}
 {
     update_order = 255;
-    src_rect_ = Rectangle{src_loc, size};
-    dst_rect_ = Rectangle{owner->location.ToPoint(), size};
-    temp_dst_rect = Rectangle{owner->location.ToPoint(), size};
+    src_rect_ = Rectangle{src_loc.ToVector2(), size};
+    dst_rect_ = Rectangle{owner->location, size};
+    temp_dst_rect = Rectangle{owner->location, size};
 }
 SpriteComponent::SpriteComponent(GameObject *owner, std::shared_ptr<SDL_Texture> texture, Rectangle src_rectangle, int layer_id) : Component(owner), sprite{Sprite(texture)}, layer{layer_id}
 {
     update_order = 255;
     src_rect_ = src_rectangle;
-    dst_rect_ = Rectangle{owner->location.ToPoint(), src_rectangle.GetSize()};
-    temp_dst_rect = Rectangle{owner->location.ToPoint(), src_rectangle.GetSize()};
+    dst_rect_ = Rectangle{owner->location, src_rectangle.GetSize()};
+    temp_dst_rect = Rectangle{owner->location, src_rectangle.GetSize()};
 }
 SpriteComponent::~SpriteComponent()
 {

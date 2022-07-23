@@ -17,27 +17,33 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
     {
         sdl_rectangle.x = sdl_rectangle.y = sdl_rectangle.h = sdl_rectangle.w;
     }
-    inline Rectangle(Point loc, Point rect_size){
+    inline Rectangle(Vector2 loc, Point rect_size)
+    {
         sdl_rectangle.x = loc.x;
         sdl_rectangle.y = loc.y;
         sdl_rectangle.h = rect_size.y;
         sdl_rectangle.w = rect_size.x;
     }
+    inline Rectangle(Point loc, Point rect_size) : Rectangle{loc.ToVector2(), rect_size}
+    {
+    }
 
-    inline Point GetSize(){
+    inline Point GetSize()
+    {
         return Point(sdl_rectangle.w, sdl_rectangle.h);
     }
-    inline Vector2 GetLocation(){
+    inline Vector2 GetLocation()
+    {
         return Vector2(sdl_rectangle.x, sdl_rectangle.y);
     }
 
-    inline SDL_Rect GetRect(){
+    inline SDL_Rect GetRect()
+    {
         SDL_Rect rect;
-        rect.x = sdl_rectangle.x;
-        rect.y = sdl_rectangle.y;
-        rect.w = sdl_rectangle.w;
-        rect.h = sdl_rectangle.h;
+        rect.x = round(sdl_rectangle.x);
+        rect.y = round(sdl_rectangle.y);
+        rect.w = round(sdl_rectangle.w);
+        rect.h = round(sdl_rectangle.h);
         return rect;
     }
 };
-

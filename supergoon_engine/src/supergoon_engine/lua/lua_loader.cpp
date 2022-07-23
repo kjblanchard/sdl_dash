@@ -46,7 +46,7 @@ std::vector<Aseprite::AsepriteFrame> Lua::LoadAsepriteFrames(sol::table &lua_tab
         frame.millisecond_length = value["duration"];
         sol::table frame_rect = value["frame"];
         frame.source_rect = Rectangle(
-            Point(frame_rect["x"], frame_rect["y"]),
+            Vector2(frame_rect["x"], frame_rect["y"]),
             Point(frame_rect["w"], frame_rect["h"]));
         aseprite_frames.push_back(frame);
     }

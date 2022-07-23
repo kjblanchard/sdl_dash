@@ -2,7 +2,7 @@
 #include <supergoon_engine/graphics/sprite_batch.hpp>
 #include <supergoon_engine/engine/engine_tags.hpp>
 
-Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}, rectangle{Point(owner->location.x + offset.x, owner->location.y + offset.y), box_size}
+Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}, rectangle{Vector2(owner->location.x + offset.x, owner->location.y + offset.y), box_size}
 {
     AddTag(Tags::ComponentTags::Box);
 }
@@ -21,8 +21,8 @@ SDL_Rect Components::BoxColliderComponent::GetCurrentSdlRect()
 }
 void Components::BoxColliderComponent::Update(const Gametime &)
 {
-    rectangle.sdl_rectangle.x = (owner_->location.x + static_cast<int>(offset_.x)) ;
-    rectangle.sdl_rectangle.y = (owner_->location.y + static_cast<int>(offset_.y)) ;
+    rectangle.sdl_rectangle.x = owner_->location.x + offset_.x ;
+    rectangle.sdl_rectangle.y = owner_->location.y + offset_.y ;
 }
 
 void Components::BoxColliderComponent::Draw(Graphics::SpriteBatch &spritebatch)

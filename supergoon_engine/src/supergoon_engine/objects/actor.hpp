@@ -46,6 +46,7 @@ namespace Objects
         void JumpEnd();
 
         bool OnGround();
+        bool IsFalling();
     public:
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;

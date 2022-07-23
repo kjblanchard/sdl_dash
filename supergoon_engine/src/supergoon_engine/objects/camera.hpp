@@ -16,7 +16,7 @@ private:
 public:
     Camera(Vector2 loc, Graphics::GraphicsDevice *graphics);
     ~Camera() override;
-    SDL_Rect rect;
+    SDL_FRect rect;
     void Update(const Gametime &gametime) override;
     double GetResolutionScaleSizeX();
     double GetResolutionScaleSizeY();

@@ -22,6 +22,10 @@ bool Objects::Actor::OnGround()
 {
     return rigidbody_component->on_ground;
 }
+bool Objects::Actor::IsFalling()
+{
+    return !rigidbody_component->on_ground && !is_jumping;
+}
 
 Objects::Actor *Objects::SpawnActor(ActorParams params)
 {

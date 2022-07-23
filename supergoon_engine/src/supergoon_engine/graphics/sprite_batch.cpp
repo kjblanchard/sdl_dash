@@ -63,7 +63,7 @@ void SpriteBatch::End()
                 i.sprite->texture.get(),
                 &src_rect,
                 &i.dst_rect->sdl_rectangle,
-                NULL,
+                0.0,
                 NULL,
                 mirror
                 );

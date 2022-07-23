@@ -18,8 +18,8 @@ Camera::~Camera()
 
 void Camera::Update(const Gametime &)
 {
-    rect.x = location.ToPoint().x;
-    rect.y = location.ToPoint().y;
+    rect.x = location.x;
+    rect.y = location.y;
 }
 
 double Camera::GetResolutionScaleSizeX()
@@ -52,8 +52,8 @@ void Camera::MoveCamera(Vector2 move_amount)
     }
 
 // seems to do nothing on its own.
-    rect.x = location.ToPoint().x;
-    rect.y = location.ToPoint().y;
+    // rect.x = location.ToPoint().x;
+    // rect.y = location.ToPoint().y;
 }
 
 Vector2 Camera::GetWorldSize()

@@ -10,7 +10,6 @@ class  Player : public Objects::Actor
     private:
     void CreateAllAnimations();
 
-    bool IdleToRunTransition();
 
 public:
     Player(Objects::ActorParams params);
