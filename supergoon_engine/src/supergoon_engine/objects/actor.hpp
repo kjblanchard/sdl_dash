@@ -3,15 +3,11 @@
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
 #include <supergoon_engine/components/rigidbody_component.hpp>
+#include <supergoon_engine/components/animation_component.hpp>
+#include <supergoon_engine/components/input_component.hpp>
 #include <vector>
 #include <functional>
 
-namespace Components
-{
-    class AnimationComponent;
-    class RigidbodyComponent;
-    class InputComponent;
-}
 namespace Objects
 {
 
@@ -27,6 +23,11 @@ namespace Objects
     {
     private:
     protected:
+        const char *idle_animation_name = "idle";
+        const char *run_animation_name = "run";
+        const char *jump_animation_name = "jump";
+        const char *fall_animation_name = "fall";
+
         Actor(ActorParams params);
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
         Components::AnimationComponent *animation_component;
@@ -37,18 +38,6 @@ namespace Objects
         {
             return rigidbody_component->is_moving_x;
         }
-        // inline bool GetJustStartedMoving()
-        // {
-        //     return rigidbody_component->just_started_moving;
-        // }
-        // inline void SetIsMoving(bool moving)
-        // {
-        //     rigidbody_component->is_moving = moving;
-        // }
-        // inline void SetJustStartedMoving(bool started_moving)
-        // {
-        //     rigidbody_component->just_started_moving = started_moving;
-        // }
         bool is_jumping = false;
         int initial_jump_multiplier = 0;
         float current_jump_length;
@@ -57,7 +46,19 @@ namespace Objects
         float max_run_speed = 200;
         double speed = 0;
 
-        void UpdateMaxVelocity(Vector2 new_max);
+        inline void UpdateMaxVelocity(Vector2 new_max)
+        {
+            rigidbody_component->max_velocity = new_max;
+        }
+        inline void UpdateMaxXVelocity(float new_max)
+        {
+            rigidbody_component->max_velocity.x = new_max;
+        }
+
+        inline void UpdateMaxYVelocity(float new_max)
+        {
+            rigidbody_component->max_velocity.y = new_max;
+        }
 
         void ApplyMovement(const Gametime &gametime);
 
@@ -72,6 +73,10 @@ namespace Objects
     public:
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
+        void Update(const Gametime &gametime) override;
+        inline virtual void ProcessInput(const Gametime &)
+        {
+        }
     };
 
     Actor *SpawnActor(ActorParams params);

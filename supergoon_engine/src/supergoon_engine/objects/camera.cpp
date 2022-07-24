@@ -18,6 +18,20 @@ Camera::~Camera()
 
 void Camera::Update(const Gametime &)
 {
+    location += next_frame_move;
+    next_frame_move = Vector2::Zero();
+    // Keep camera in level bounds.
+    if (location.x < 0)
+    {
+        location.x = 0;
+    }
+    if (Level::current_level_size.x != 0.f)
+    {
+        if (location.x + (rect.w) >= Level::current_level_size.x)
+        {
+            location.x = Level::current_level_size.x - rect.w;
+        }
+    }
     rect.x = location.x;
     rect.y = location.y;
 }
@@ -33,27 +47,7 @@ double Camera::GetResolutionScaleSizeY()
 
 void Camera::MoveCamera(Vector2 move_amount)
 {
-    if (move_amount == Vector2::Zero())
-        return;
-    location.x += move_amount.x;
-    location.y += move_amount.y;
-
-    // Keep camera in level bounds.
-    if (location.x < 0)
-    {
-        location.x = 0;
-    }
-    if (Level::current_level_size.x != 0.f)
-    {
-        if (location.x + (rect.w) >= Level::current_level_size.x)
-        {
-            location.x = Level::current_level_size.x - rect.w;
-        }
-    }
-
-// seems to do nothing on its own.
-    // rect.x = location.ToPoint().x;
-    // rect.y = location.ToPoint().y;
+    next_frame_move += move_amount;
 }
 
 Vector2 Camera::GetWorldSize()

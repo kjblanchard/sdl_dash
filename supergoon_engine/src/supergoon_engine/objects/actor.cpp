@@ -1,8 +1,5 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/objects/actor.hpp>
-#include <supergoon_engine/components/animation_component.hpp>
-#include <supergoon_engine/components/rigidbody_component.hpp>
-#include <supergoon_engine/components/input_component.hpp>
 #include <cstring>
 
 std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
@@ -41,14 +38,31 @@ Objects::Actor *Objects::SpawnActor(ActorParams params)
     }
     return nullptr;
 }
+void Objects::Actor::Update(const Gametime &gametime)
+
+{
+    // Handle mirroring
+    if (rigidbody_component->velocity.x != 0.f)
+    {
+        if (rigidbody_component->velocity.x < 0)
+        {
+            animation_component->SetMirror(true);
+        }
+        else
+        {
+            animation_component->SetMirror(false);
+        }
+    }
+    PrintValues();
+    GameObject::Update(gametime);
+}
 
 void Objects::Actor::PrintValues()
 {
-    std::string print_value = (is_jumping) ? "True" : "False";
     // std::string print_value = (is_jumping) ? "True" : "False";
-    std::cout << "Our jumping value is " << print_value << std::endl;
-    print_value = (OnGround()) ? "True" : "False";
-    std::cout << "Our on ground value is " << print_value << std::endl;
+    // std::cout << "Our jumping value is " << print_value << std::endl;
+    // print_value = (OnGround()) ? "True" : "False";
+    // std::cout << "Our on ground value is " << print_value << std::endl;
 }
 
 void Objects::Actor::Jump(const Gametime &gametime)
@@ -75,12 +89,5 @@ void Objects::Actor::Jump(const Gametime &gametime)
 }
 void Objects::Actor::JumpEnd()
 {
-    // if (is_jumping)
-    // {
     is_jumping = false;
-    // }
-}
-void Objects::Actor::UpdateMaxVelocity(Vector2 new_max)
-{
-    rigidbody_component->max_velocity = new_max;
 }

@@ -12,6 +12,7 @@ class Camera : public GameObject
 {
 private:
     Graphics::GraphicsDevice *graphics_device;
+    Vector2 next_frame_move = Vector2();
 
 public:
     Camera(Vector2 loc, Graphics::GraphicsDevice *graphics);

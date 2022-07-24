@@ -70,6 +70,7 @@ void Level::Update(const Gametime &gametime)
     }
     for (auto i : actors)
     {
+        i->ProcessInput(gametime);
         i->Update(gametime);
     }
 }

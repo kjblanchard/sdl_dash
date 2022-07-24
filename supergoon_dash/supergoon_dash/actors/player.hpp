@@ -1,21 +1,24 @@
 #pragma once
 #include <supergoon_engine/objects/actor.hpp>
 
-namespace Components{
+namespace Components
+{
     class CameraBoomComponent;
 }
 
-class  Player : public Objects::Actor
+class Player : public Objects::Actor
 {
-    private:
+private:
     void CreateAllAnimations();
-
+    void CreateIdleAnimation();
+    void CreateRunAnimation();
+    void CreateFallAnimation();
+    void CreateJumpAnimation();
 
 public:
     Player(Objects::ActorParams params);
     ~Player() override;
-    static Objects::Actor* ActorFactory(Objects::ActorParams& params);
+    static Objects::Actor *ActorFactory(Objects::ActorParams &params);
     void Update(const Gametime &gametime) override;
-
+    void ProcessInput(const Gametime &) override;
 };
-

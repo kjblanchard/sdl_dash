@@ -12,19 +12,34 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 {
     auto first_controller = Input::GetPlayerController(0);
     input_component->TakeControl(first_controller);
+    // TODO move these to a player.lua.
     speed = 220;
     jump_speed = 210;
     max_jump_length = 0.35f;
     initial_jump_multiplier = 60;
+    // TODO make this a variable that is equal to the player.
     AddTag(25);
-    // TODO make it so that we can just set one.
-    UpdateMaxVelocity(Vector2(200, 1000));
+    // TODO make this automatic from the lua file.
+    UpdateMaxXVelocity(200);
     new CameraBoomComponent(this, *main_camera);
     CreateAllAnimations();
 }
 void Player::Update(const Gametime &gametime)
 {
-    // SetIsMoving(false);
+    Actor::Update(gametime);
+}
+
+Player::~Player()
+{
+}
+
+Objects::Actor *Player::ActorFactory(Objects::ActorParams &params)
+{
+    return new Player(params);
+}
+
+void Player::ProcessInput(const Gametime &gametime)
+{
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Left) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
@@ -34,7 +49,6 @@ void Player::Update(const Gametime &gametime)
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Right) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Right))
     {
-        // Get a speed boost when you aren't moving, to overcome initial friction.
         auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
     }
@@ -48,131 +62,66 @@ void Player::Update(const Gametime &gametime)
     {
         JumpEnd();
     }
-
-    // Handle mirroring
-    if (rigidbody_component->velocity.x != 0.f)
-    {
-        if (rigidbody_component->velocity.x < 0)
-        {
-            animation_component->SetMirror(true);
-        }
-        else
-        {
-            animation_component->SetMirror(false);
-        }
-    }
-    PrintValues();
-    // This updates all components
-    Actor::Update(gametime);
-}
-
-Player::~Player()
-{
-}
-Objects::Actor *Player::ActorFactory(Objects::ActorParams &params)
-{
-    return new Player(params);
 }
 void Player::CreateAllAnimations()
 {
-    // Animation names;
-    auto idle_animation_name = "idle";
-    auto run_animation_name = "run";
-    auto jump_animation_name = "jump";
-    auto fall_animation_name = "fall";
-    // Create Animations
+    CreateIdleAnimation();
+    CreateRunAnimation();
+    CreateJumpAnimation();
+    CreateFallAnimation();
+    animation_component->SetEntryAnim(idle_animation_name);
+}
+void Player::CreateIdleAnimation()
+{
     auto idle_animation = new Animations::Animation(idle_animation_name);
-    auto run_animation = new Animations::Animation(run_animation_name);
-    auto jump_animation = new Animations::Animation(jump_animation_name, false);
-    auto fall_animation = new Animations::Animation(fall_animation_name, false);
 
-    // Idle to run transition
-    Animations::AnimationTransition idle_to_run_transition;
-    idle_to_run_transition.new_transition = run_animation_name;
-    idle_to_run_transition.transition_function = [this]()
-    {
-        return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep() ||
-                rigidbody_component->velocity.x <= -rigidbody_component->GetMinimumXStep();
-    };
-    idle_animation->AddTransition(idle_to_run_transition);
+    auto idle_to_run_transition = Animations::AnimationTransition(run_animation_name, [this]()
+                                                                  { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep() ||
+                                                                           rigidbody_component->velocity.x <= -rigidbody_component->GetMinimumXStep(); });
 
-    // Idle to jump transition
-    Animations::AnimationTransition idle_to_jump_transition;
-    idle_to_jump_transition.new_transition = jump_animation_name;
-    idle_to_jump_transition.transition_function = [this]()
-    {
-        return is_jumping;
-    };
-    idle_animation->AddTransition(idle_to_jump_transition);
-    // Idle to fall transition
-    Animations::AnimationTransition idle_to_fall_transition;
-    idle_to_fall_transition.new_transition = fall_animation_name;
-    idle_to_fall_transition.transition_function = [this]()
-    {
-        return IsFalling() == true;
-    };
+    auto idle_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+                                                                   { return is_jumping; });
+
+    auto idle_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]()
+                                                                   { return IsFalling() == true; });
     idle_animation->AddTransition(idle_to_fall_transition);
+    idle_animation->AddTransition(idle_to_run_transition);
+    idle_animation->AddTransition(idle_to_jump_transition);
+    animation_component->AddAnimation(*idle_animation);
+}
+void Player::CreateRunAnimation()
+{
+    auto run_animation = new Animations::Animation(run_animation_name);
+    auto run_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
+                                                                  { return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f; });
 
-    // jump to fall transition
-    Animations::AnimationTransition jump_to_fall_transition;
-    jump_to_fall_transition.new_transition = fall_animation_name;
-    jump_to_fall_transition.transition_function = [this]()
-    {
-        return is_jumping == false;
-    };
-    jump_animation->AddTransition(jump_to_fall_transition);
+    auto run_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+                                                                  { return is_jumping == true; });
 
-    // fall to idle transition
-    Animations::AnimationTransition fall_to_idle_transition;
-    fall_to_idle_transition.new_transition = idle_animation_name;
-    fall_to_idle_transition.transition_function = [this]()
-    {
-        return is_jumping == false && OnGround() == true;
-    };
+    auto run_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]
+                                                                  { return IsFalling() == true; });
+    run_animation->AddTransition(run_to_fall_transition);
+    run_animation->AddTransition(run_to_idle_transition);
+    run_animation->AddTransition(run_to_jump_transition);
+    animation_component->AddAnimation(*run_animation);
+}
+void Player::CreateFallAnimation()
+{
+    auto fall_animation = new Animations::Animation(fall_animation_name, false);
+    auto fall_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
+                                                                   { return is_jumping == false && OnGround() == true; });
     fall_animation->AddTransition(fall_to_idle_transition);
 
-    // fall to jump transition
-    Animations::AnimationTransition fall_to_jump_transition;
-    fall_to_jump_transition.new_transition = jump_animation_name;
-    fall_to_jump_transition.transition_function = [this]()
-    {
-        return is_jumping == true && OnGround() == true;
-    };
+    auto fall_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+                                                                   { return is_jumping == true && OnGround() == true; });
     fall_animation->AddTransition(fall_to_jump_transition);
-
-    // Run to idle transition
-    Animations::AnimationTransition run_to_idle_transition;
-    run_to_idle_transition.new_transition = idle_animation_name;
-    run_to_idle_transition.transition_function = [this]()
-    {
-        return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f;
-    };
-    run_animation->AddTransition(run_to_idle_transition);
-
-    // Run to jump transition
-    Animations::AnimationTransition run_to_jump_transition;
-    run_to_jump_transition.new_transition = jump_animation_name;
-    run_to_jump_transition.transition_function = [this]()
-    {
-        return is_jumping == true;
-    };
-    run_animation->AddTransition(run_to_jump_transition);
-
-    // Run to fall transition
-    Animations::AnimationTransition run_to_fall_transition;
-    run_to_fall_transition.new_transition = fall_animation_name;
-    run_to_fall_transition.transition_function = [this]()
-    {
-        return IsFalling() == true;
-    };
-    run_animation->AddTransition(run_to_fall_transition);
-
-    // Add animations
-    animation_component->AddAnimation(*idle_animation);
-    animation_component->AddAnimation(*run_animation);
-    animation_component->AddAnimation(*jump_animation);
     animation_component->AddAnimation(*fall_animation);
-
-    // Add the entry animation
-    animation_component->SetEntryAnim(idle_animation_name);
+}
+void Player::CreateJumpAnimation()
+{
+    auto jump_animation = new Animations::Animation(jump_animation_name, false);
+    auto jump_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]()
+                                                                   { return is_jumping == false; });
+    jump_animation->AddTransition(jump_to_fall_transition);
+    animation_component->AddAnimation(*jump_animation);
 }

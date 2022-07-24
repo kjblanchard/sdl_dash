@@ -1,12 +1,10 @@
 #pragma once
 #include <supergoon_engine_export.h>
 #include <limits>
-#include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/component.hpp>
 #include <supergoon_engine/primitives/point.hpp>
 
 class GameObject;
-class Tile;
 
 namespace Components
 {
@@ -26,7 +24,6 @@ namespace Components
             return minimum_x_step;
         }
         bool is_moving_x;
-        // bool just_started_moving = false;
         RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~RigidbodyComponent() override;
         void Update(const Gametime &) override;

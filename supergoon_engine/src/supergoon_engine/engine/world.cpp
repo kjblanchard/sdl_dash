@@ -116,8 +116,8 @@ void World::Setup()
 void World::Update(Gametime &gametime)
 {
     Sound::Update();
-    level->Update(gametime);
     main_camera->Update(gametime);
+    level->Update(gametime);
 }
 
 void World::Render()
