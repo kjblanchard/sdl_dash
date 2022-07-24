@@ -190,6 +190,11 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.loc.x = actor["x"];
                     actor_params.loc.y = actor["y"];
                     actor_params.layer = layer_depth;
+
+                    sol::lua_table actor_properties = actor["properties"];
+                    actor_params.box_rect = Rectangle(
+                        Vector2(actor_properties["box_x"], actor_properties["box_y"]),
+                        Point(actor_properties["box_w"], actor_properties["box_h"]));
                     tile_map_ptr->actors.push_back(actor_params);
                 }
                 ++layer_depth;

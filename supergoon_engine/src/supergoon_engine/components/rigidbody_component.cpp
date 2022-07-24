@@ -3,10 +3,12 @@
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/engine/gravity.hpp>
 #include <supergoon_engine/engine/level.hpp>
+#include <algorithm>
 
-Components::RigidbodyComponent::RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}
+Components::RigidbodyComponent::RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset, 1}
 {
     box_collider = new BoxColliderComponent(owner, box_size, offset);
+
 }
 
 Components::RigidbodyComponent::~RigidbodyComponent()
@@ -15,24 +17,24 @@ Components::RigidbodyComponent::~RigidbodyComponent()
 void Components::RigidbodyComponent::Update(const Gametime &gametime)
 {
     accel_applied_this_frame = false;
-    if (acceleration.x != 0.f || acceleration.y != 0.f)
+    if (acceleration != Vector2::Zero())
     {
         velocity += acceleration;
-        acceleration = Vector2();
+        acceleration = Vector2::Zero();
         accel_applied_this_frame = true;
     }
     if (gravity_enabled)
         Gravity::ApplyGravity(*this, owner_->GetLevel()->gravity_params, gametime);
-    ApplyVelocity(gametime);
+
+    if (velocity != Vector2::Zero())
+        ApplyVelocity(gametime);
 }
 
 void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 {
-    // Keep velocity in range, used for running speeds and fall/jump speeds.
-    velocity.x = (velocity.x > max_velocity.x) ? max_velocity.x : velocity.x;
-    velocity.x = (velocity.x < -max_velocity.x) ? -max_velocity.x : velocity.x;
-    velocity.y = (velocity.y > max_velocity.y) ? max_velocity.y : velocity.y;
-    velocity.y = (velocity.y < -max_velocity.y) ? -max_velocity.y : velocity.y;
+
+    velocity.x = (velocity.x > 0) ? std::clamp(velocity.x, 0.f, max_velocity.x) : std::clamp(velocity.x, -max_velocity.x, 0.f);
+    velocity.y = (velocity.y >= 0) ? std::clamp(velocity.y, 0.f, max_velocity.y) : std::clamp(velocity.y, -max_velocity.y, 0.f);
 
     auto x_step = velocity.x * gametime.ElapsedTimeInSeconds();
     auto y_step = velocity.y * gametime.ElapsedTimeInSeconds();
@@ -55,16 +57,17 @@ void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
 }
 void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step)
 {
-    auto step_speed = (full_step > 0) ? 1 : -1;
+    auto steps_left = full_step;
+    auto step_speed = (steps_left > 0) ? 1 : -1;
     bool collision = false;
 
-    while ((full_step >= minimum_step || full_step <= -minimum_step) && !collision)
+    while ((steps_left >= minimum_step || steps_left <= -minimum_step) && !collision)
     {
         double move_step = 0;
-        if (full_step > 0)
-            move_step = (full_step >= step_speed) ? step_speed : full_step;
+        if (steps_left > 0)
+            move_step = (steps_left >= step_speed) ? step_speed : steps_left;
         else
-            move_step = (full_step <= step_speed) ? step_speed : full_step;
+            move_step = (steps_left <= step_speed) ? step_speed : steps_left;
         // auto move_step = (full_step >= step_speed) ? step_speed : friction_stepfull_step;
         auto box_location = box_collider->GetCurrentSdlRect();
         SDL_FRect float_rect;
@@ -82,14 +85,17 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
             {
                 on_ground = true;
             }
+            if(x_step)
+            {
+                is_moving_x = false;
+            }
             break;
         }
         location_to_alter += move_step;
-        full_step -= move_step;
+        steps_left -= move_step;
     }
     // Returns if we are on the ground, useful for y conversions as this will set that variable.
     // If it is not x direction, and there is a collision, and we are moving downward.
-    // return (!x_step && collision && step_speed > 0);
 
     if (on_ground && !collision && !x_step)
     {
@@ -107,6 +113,9 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
             on_ground = false;
         }
     }
+
+    //Handles checking to see if we are moving on the x axis
+    // if(full_step !=0 && !collision)
 }
 
 bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)

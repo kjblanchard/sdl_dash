@@ -6,7 +6,7 @@
 World *Component::world = nullptr;
 Camera *Component::main_camera = nullptr;
 
-Component::Component(GameObject *owner, Vector2 offset)
+Component::Component(GameObject *owner, Vector2 offset, int update_override)
 {
     if (world == nullptr)
         world = World::GetWorld();
@@ -14,6 +14,7 @@ Component::Component(GameObject *owner, Vector2 offset)
         main_camera = World::GetWorld()->main_camera;
     offset_ = offset;
     owner_ = owner;
+    update_order = update_override;
     owner_->AddComponent(this);
 }
 

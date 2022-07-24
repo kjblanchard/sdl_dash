@@ -33,9 +33,9 @@ protected:
     GameObject *owner_;
 
 public:
-    int update_order = 0;
+    int update_order = 2;
     Vector2 GetLocation();
-    Component(GameObject *owner, Vector2 offset = Vector2());
+    Component(GameObject *owner, Vector2 offset = Vector2(), int update_override = 2);
     virtual ~Component() override;
 
     inline void Initialize() override {}

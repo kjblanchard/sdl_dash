@@ -21,14 +21,20 @@ namespace Components
         bool gravity_enabled = true;
 
     public:
+        inline double GetMinimumXStep() const
+        {
+            return minimum_x_step;
+        }
+        bool is_moving_x;
+        // bool just_started_moving = false;
         RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~RigidbodyComponent() override;
         void Update(const Gametime &) override;
         void ApplyVelocity(const Gametime &);
         void ApplyVelocityByStepSolidsX(double step);
         void ApplyVelocityByStepSolidsY(double step);
-        void TryAllMovementSteps(double full_step, double minimum_step, float& location_to_alter, float& velocity_to_alter, bool x_step);
-        bool TryMovementStep(SDL_FRect& rect_to_check);
+        void TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step);
+        bool TryMovementStep(SDL_FRect &rect_to_check);
         void ApplyForce(Vector2 force);
         Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());
         Vector2 velocity = Vector2();

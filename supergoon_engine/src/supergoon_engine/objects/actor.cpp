@@ -9,8 +9,7 @@ std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
 Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
     animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
-    // TODO get the right size.
-    rigidbody_component = new Components::RigidbodyComponent(this, Point(32));
+    rigidbody_component = new Components::RigidbodyComponent(this, params.box_rect.GetSize(), params.box_rect.GetLocation());
     input_component = new Components::InputComponent(this, nullptr);
 }
 
@@ -29,7 +28,6 @@ bool Objects::Actor::IsFalling()
 
 Objects::Actor *Objects::SpawnActor(ActorParams params)
 {
-    // auto parser = Json::JsonParser();
     for (auto &&factory : Objects::Actor::actor_listing_vector)
     {
         auto name = factory.first;
@@ -44,6 +42,15 @@ Objects::Actor *Objects::SpawnActor(ActorParams params)
     return nullptr;
 }
 
+void Objects::Actor::PrintValues()
+{
+    std::string print_value = (is_jumping) ? "True" : "False";
+    std::string print_value = (is_jumping) ? "True" : "False";
+    std::cout << "Our jumping value is " << print_value << std::endl;
+     print_value = (OnGround()) ? "True" : "False";
+    std::cout << "Our on ground value is " << print_value << std::endl;
+}
+
 void Objects::Actor::Jump(const Gametime &gametime)
 {
     if (rigidbody_component->on_ground && !is_jumping)
@@ -53,6 +60,7 @@ void Objects::Actor::Jump(const Gametime &gametime)
         rigidbody_component->on_ground = false;
         auto force = jump_speed * initial_jump_multiplier * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(0, -force));
+        animation_component->ForceAnimationChange("jump");
     }
     else if (is_jumping && !rigidbody_component->on_ground)
     {
@@ -63,6 +71,9 @@ void Objects::Actor::Jump(const Gametime &gametime)
         {
             JumpEnd();
         }
+    }
+    else{
+        JumpEnd();
     }
 }
 void Objects::Actor::JumpEnd()

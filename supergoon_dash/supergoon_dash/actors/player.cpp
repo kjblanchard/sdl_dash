@@ -2,7 +2,6 @@
 #include <supergoon_engine/components/input_component.hpp>
 #include <supergoon_engine/input/input.hpp>
 #include <supergoon_engine/input/player_controller.hpp>
-#include <supergoon_engine/components/rigidbody_component.hpp>
 #include <supergoon_engine/components/camera_boom_component.hpp>
 #include <supergoon_engine/animation/animation.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
@@ -12,7 +11,6 @@ using namespace Components;
 Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 {
     auto first_controller = Input::GetPlayerController(0);
-
     input_component->TakeControl(first_controller);
     speed = 220;
     jump_speed = 210;
@@ -26,7 +24,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 }
 void Player::Update(const Gametime &gametime)
 {
-    Actor::Update(gametime);
+    // SetIsMoving(false);
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Left) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
@@ -50,7 +48,7 @@ void Player::Update(const Gametime &gametime)
         JumpEnd();
     }
 
-    //Handle mirroring
+    // Handle mirroring
     if (rigidbody_component->velocity.x != 0.f)
     {
         if (rigidbody_component->velocity.x < 0)
@@ -62,6 +60,9 @@ void Player::Update(const Gametime &gametime)
             animation_component->SetMirror(false);
         }
     }
+    PrintValues();
+    // This updates all components
+    Actor::Update(gametime);
 }
 
 Player::~Player()
@@ -89,9 +90,11 @@ void Player::CreateAllAnimations()
     idle_to_run_transition.new_transition = run_animation_name;
     idle_to_run_transition.transition_function = [this]()
     {
-        return rigidbody_component->velocity.x != 0.f;
+        return (rigidbody_component->acceleration.x != 0.f &&  (rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep()) ||
+                rigidbody_component->velocity.x < -rigidbody_component->GetMinimumXStep());
     };
     idle_animation->AddTransition(idle_to_run_transition);
+
     // Idle to jump transition
     Animations::AnimationTransition idle_to_jump_transition;
     idle_to_jump_transition.new_transition = jump_animation_name;
@@ -100,10 +103,11 @@ void Player::CreateAllAnimations()
         return is_jumping;
     };
     idle_animation->AddTransition(idle_to_jump_transition);
-    //Idle to fall transition
+    // Idle to fall transition
     Animations::AnimationTransition idle_to_fall_transition;
     idle_to_fall_transition.new_transition = fall_animation_name;
-    idle_to_fall_transition.transition_function = [this](){
+    idle_to_fall_transition.transition_function = [this]()
+    {
         return IsFalling() == true;
     };
     idle_animation->AddTransition(idle_to_fall_transition);
@@ -111,40 +115,53 @@ void Player::CreateAllAnimations()
     // jump to fall transition
     Animations::AnimationTransition jump_to_fall_transition;
     jump_to_fall_transition.new_transition = fall_animation_name;
-    jump_to_fall_transition.transition_function = [this](){
+    jump_to_fall_transition.transition_function = [this]()
+    {
         return is_jumping == false;
     };
     jump_animation->AddTransition(jump_to_fall_transition);
 
-    //fall to idle transition
+    // fall to idle transition
     Animations::AnimationTransition fall_to_idle_transition;
     fall_to_idle_transition.new_transition = idle_animation_name;
-    fall_to_idle_transition.transition_function = [this](){
+    fall_to_idle_transition.transition_function = [this]()
+    {
         return is_jumping == false && OnGround() == true;
     };
     fall_animation->AddTransition(fall_to_idle_transition);
+
+    // fall to jump transition
+    Animations::AnimationTransition fall_to_jump_transition;
+    fall_to_jump_transition.new_transition = jump_animation_name;
+    fall_to_jump_transition.transition_function = [this]()
+    {
+        return is_jumping == true && OnGround() == true;
+    };
+    fall_animation->AddTransition(fall_to_jump_transition);
 
     // Run to idle transition
     Animations::AnimationTransition run_to_idle_transition;
     run_to_idle_transition.new_transition = idle_animation_name;
     run_to_idle_transition.transition_function = [this]()
     {
-        return rigidbody_component->velocity.x == 0.f;
+        return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f;
     };
     run_animation->AddTransition(run_to_idle_transition);
 
-    //Run to jump transition
+    // Run to jump transition
     Animations::AnimationTransition run_to_jump_transition;
     run_to_jump_transition.new_transition = jump_animation_name;
-    run_to_jump_transition.transition_function = [this](){
+    run_to_jump_transition.transition_function = [this]()
+    {
         return is_jumping == true;
     };
     run_animation->AddTransition(run_to_jump_transition);
 
-    //Run to fall transition
+    // Run to fall transition
     Animations::AnimationTransition run_to_fall_transition;
     run_to_fall_transition.new_transition = fall_animation_name;
-    run_to_fall_transition.transition_function = [this](){
+    run_to_fall_transition.transition_function = [this]()
+    {
         return IsFalling() == true;
     };
     run_animation->AddTransition(run_to_fall_transition);
@@ -158,4 +175,3 @@ void Player::CreateAllAnimations()
     // Add the entry animation
     animation_component->SetEntryAnim(idle_animation_name);
 }
-

@@ -17,8 +17,7 @@ void Components::AnimationComponent::Update(const Gametime &gametime)
     {
         if (i.transition_function())
         {
-            current_animation = GetAnimationByName(i.new_transition);
-            current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
+            ChangeAnimation(i.new_transition);
             break;
         }
     }

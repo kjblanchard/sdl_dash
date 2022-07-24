@@ -175,7 +175,12 @@ return {
           height = 0,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["box_h"] = 24,
+            ["box_w"] = 24,
+            ["box_x"] = 4,
+            ["box_y"] = 4
+          }
         }
       }
     }

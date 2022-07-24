@@ -1,6 +1,8 @@
 #pragma once
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/gameobject.hpp>
+#include <supergoon_engine/primitives/rectangle.hpp>
+#include <supergoon_engine/components/rigidbody_component.hpp>
 #include <vector>
 #include <functional>
 
@@ -17,6 +19,7 @@ namespace Objects
     {
         Vector2 loc;
         int layer;
+        Rectangle box_rect;
         std::string actor_name;
     };
 
@@ -30,6 +33,22 @@ namespace Objects
         Components::RigidbodyComponent *rigidbody_component;
         Components::InputComponent *input_component;
 
+        inline bool GetIsMoving()
+        {
+            return rigidbody_component->is_moving_x;
+        }
+        // inline bool GetJustStartedMoving()
+        // {
+        //     return rigidbody_component->just_started_moving;
+        // }
+        // inline void SetIsMoving(bool moving)
+        // {
+        //     rigidbody_component->is_moving = moving;
+        // }
+        // inline void SetJustStartedMoving(bool started_moving)
+        // {
+        //     rigidbody_component->just_started_moving = started_moving;
+        // }
         bool is_jumping = false;
         int initial_jump_multiplier = 0;
         float current_jump_length;
@@ -47,6 +66,9 @@ namespace Objects
 
         bool OnGround();
         bool IsFalling();
+
+        void PrintValues();
+
     public:
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
