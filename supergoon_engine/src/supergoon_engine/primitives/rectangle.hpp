@@ -3,6 +3,7 @@
 #include <supergoon_engine/primitives/point.hpp>
 #include <supergoon_engine/primitives/vector2.hpp>
 #include <SDL_rect.h>
+#include <math.h>
 
 /**
  * Sdl_rect wrapper.
