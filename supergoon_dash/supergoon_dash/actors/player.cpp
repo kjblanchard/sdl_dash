@@ -38,12 +38,13 @@ void Player::Update(const Gametime &gametime)
         auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
     }
+
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::A) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::A))
     {
         Jump(gametime);
     }
-    if (input_component->CurrentController->IsButtonReleased(Input::ControllerButtons::A))
+    else if (input_component->CurrentController->IsButtonReleased(Input::ControllerButtons::A))
     {
         JumpEnd();
     }
@@ -90,8 +91,8 @@ void Player::CreateAllAnimations()
     idle_to_run_transition.new_transition = run_animation_name;
     idle_to_run_transition.transition_function = [this]()
     {
-        return (rigidbody_component->acceleration.x != 0.f &&  (rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep()) ||
-                rigidbody_component->velocity.x < -rigidbody_component->GetMinimumXStep());
+        return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep() ||
+                rigidbody_component->velocity.x <= -rigidbody_component->GetMinimumXStep();
     };
     idle_animation->AddTransition(idle_to_run_transition);
 

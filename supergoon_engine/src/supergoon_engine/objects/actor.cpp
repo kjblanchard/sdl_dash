@@ -45,9 +45,9 @@ Objects::Actor *Objects::SpawnActor(ActorParams params)
 void Objects::Actor::PrintValues()
 {
     std::string print_value = (is_jumping) ? "True" : "False";
-    std::string print_value = (is_jumping) ? "True" : "False";
+    // std::string print_value = (is_jumping) ? "True" : "False";
     std::cout << "Our jumping value is " << print_value << std::endl;
-     print_value = (OnGround()) ? "True" : "False";
+    print_value = (OnGround()) ? "True" : "False";
     std::cout << "Our on ground value is " << print_value << std::endl;
 }
 
@@ -67,21 +67,18 @@ void Objects::Actor::Jump(const Gametime &gametime)
         auto force = jump_speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(0, -force));
         current_jump_length += gametime.ElapsedTimeInSeconds();
-        if (current_jump_length >= max_jump_length)
-        {
-            JumpEnd();
-        }
     }
-    else{
+    if (current_jump_length >= max_jump_length)
+    {
         JumpEnd();
     }
 }
 void Objects::Actor::JumpEnd()
 {
-    if (is_jumping)
-    {
-        is_jumping = false;
-    }
+    // if (is_jumping)
+    // {
+    is_jumping = false;
+    // }
 }
 void Objects::Actor::UpdateMaxVelocity(Vector2 new_max)
 {

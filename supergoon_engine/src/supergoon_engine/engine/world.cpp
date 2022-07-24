@@ -138,9 +138,9 @@ void World::Run()
         Uint64 elapsed = current - previous;
         previous = current;
         lag += elapsed;
-        ProcessInput();
         while (lag >= world_gametime.ElapsedTimeInMilliseconds())
         {
+            ProcessInput();
             Update(world_gametime);
             lag -= world_gametime.ElapsedTimeInMilliseconds();
         }
