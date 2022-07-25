@@ -7,7 +7,7 @@ struct SDL_Texture;
 struct SUPERGOON_ENGINE_EXPORT Sprite{
     Sprite(std::shared_ptr<SDL_Texture> texture_ptr);
     ~Sprite();
-    bool mirror;
+    bool mirror = false;
     std::shared_ptr<SDL_Texture> texture;
 
 };
