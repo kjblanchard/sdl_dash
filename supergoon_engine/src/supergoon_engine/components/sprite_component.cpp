@@ -42,8 +42,8 @@ void SpriteComponent::Draw( Graphics::SpriteBatch& spritebatch)
 {
 
     temp_dst_rect = dst_rect_;
-    temp_dst_rect.sdl_rectangle.x = (temp_dst_rect.sdl_rectangle.x - main_camera->rect.x) * main_camera->GetResolutionScaleSizeX();
-    temp_dst_rect.sdl_rectangle.y = (temp_dst_rect.sdl_rectangle.y - main_camera->rect.y) * main_camera->GetResolutionScaleSizeY();
+    temp_dst_rect.sdl_rectangle.x = (temp_dst_rect.sdl_rectangle.x - main_camera->rect.x) * (round(main_camera->GetResolutionScaleSizeX() * 1000) / 1000);
+    temp_dst_rect.sdl_rectangle.y = (temp_dst_rect.sdl_rectangle.y - main_camera->rect.y) * (round(main_camera->GetResolutionScaleSizeY() * 1000) / 1000);
     temp_dst_rect.sdl_rectangle.w *= main_camera->GetResolutionScaleSizeX();
     temp_dst_rect.sdl_rectangle.h *= main_camera->GetResolutionScaleSizeY();
     spritebatch.Draw(sprite,temp_dst_rect,src_rect_,layer);

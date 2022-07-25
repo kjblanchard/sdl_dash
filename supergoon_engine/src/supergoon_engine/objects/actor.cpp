@@ -72,7 +72,7 @@ void Objects::Actor::Jump(const Gametime &gametime)
         is_jumping = true;
         current_jump_length = 0.0;
         rigidbody_component->on_ground = false;
-        auto force = jump_speed * initial_jump_multiplier * gametime.ElapsedTimeInSeconds();
+        auto force = (jump_speed * initial_jump_multiplier) * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(0, -force));
         animation_component->ForceAnimationChange("jump");
     }
