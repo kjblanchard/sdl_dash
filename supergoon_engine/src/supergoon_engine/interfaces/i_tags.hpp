@@ -12,29 +12,13 @@ public:
     inline void AddTag(int tag)
     {
         tags.push_back(tag);
-        // va_list var_args;
-        // va_start(var_args, tag);
-        // for (int i = 0; i < tag; i++)
-        // {
-            // tags.push_back(va_arg(var_args, int));
-        // }
-
-        // va_end(var_args);
     }
 
     inline bool HasTag(int search_tag)
     {
-
         auto thing = std::find(tags.begin(), tags.end(), search_tag);
         if(thing != tags.end())
-        return true;
+            return true;
         return false;
-
-        // for (auto i : tags)
-        // {
-        //     if (i == search_tag)
-        //         return true;
-        //     return false;
-        // }
     }
 };

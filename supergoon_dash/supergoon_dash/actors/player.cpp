@@ -2,9 +2,9 @@
 #include <supergoon_engine/components/input_component.hpp>
 #include <supergoon_engine/input/input.hpp>
 #include <supergoon_engine/input/player_controller.hpp>
-#include <supergoon_engine/components/camera_boom_component.hpp>
 #include <supergoon_engine/animation/animation.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
+#include <supergoon_engine/components/camera_boom_component.hpp>
 
 using namespace Components;
 
@@ -21,7 +21,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(25);
     // TODO make this automatic from the lua file.
     UpdateMaxXVelocity(200);
-    new CameraBoomComponent(this, *main_camera);
+   auto thing =  new CameraBoomComponent(this, *main_camera);
     CreateAllAnimations();
 }
 void Player::Update(const Gametime &gametime)
@@ -93,7 +93,8 @@ void Player::CreateRunAnimation()
 {
     auto run_animation = new Animations::Animation(run_animation_name);
     auto run_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
-                                                                  { return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f; });
+                                                                //   { return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f; });
+                                                                  { return !is_moving_x; });
 
     auto run_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
                                                                   { return is_jumping == true; });

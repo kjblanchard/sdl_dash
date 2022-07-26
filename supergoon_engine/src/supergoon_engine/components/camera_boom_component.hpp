@@ -6,7 +6,7 @@ class GameObject;
 class Camera;
 namespace Components
 {
-    class CameraBoomComponent : public Component
+    class SUPERGOON_ENGINE_EXPORT  CameraBoomComponent : public Component
     {
     private:
         Camera *camera;

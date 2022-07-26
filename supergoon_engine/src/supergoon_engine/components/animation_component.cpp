@@ -2,7 +2,7 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
 
-Components::AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer_id, Vector2 offset) : Component{owner, offset}, current_animation{""}
+Components::AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer_id, Vector2 offset) : Component{owner, offset, 1}, current_animation{""}
 {
     aseprite_sheet = new Aseprite::AsepriteSheet(aseprite_file_name);
     sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect, layer_id);

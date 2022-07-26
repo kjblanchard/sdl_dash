@@ -39,6 +39,7 @@ namespace Objects
             return rigidbody_component->is_moving_x;
         }
         bool is_jumping = false;
+        bool is_moving_x = false;
         int initial_jump_multiplier = 0;
         float current_jump_length;
         float max_jump_length = 0;

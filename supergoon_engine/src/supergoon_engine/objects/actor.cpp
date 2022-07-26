@@ -41,6 +41,8 @@ Objects::Actor *Objects::SpawnActor(ActorParams params)
 void Objects::Actor::Update(const Gametime &gametime)
 
 {
+
+    is_moving_x = (rigidbody_component->acceleration.x != 0 || rigidbody_component->velocity.x != 0) ? true : false;
     // Handle mirroring
     if (rigidbody_component->velocity.x != 0.f)
     {
