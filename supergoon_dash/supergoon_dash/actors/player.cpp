@@ -14,9 +14,9 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     input_component->TakeControl(first_controller);
     // TODO move these to a player.lua.
     speed = 220;
-    jump_speed = 210;
+    jump_speed = 250;
     max_jump_length = 0.35f;
-    initial_jump_multiplier = 60;
+    initial_jump_multiplier = 35;
     // TODO make this a variable that is equal to the player.
     AddTag(25);
     // TODO make this automatic from the lua file.
@@ -43,13 +43,13 @@ void Player::ProcessInput(const Gametime &gametime)
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Left) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
-        auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
+        auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 / 100 : speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(-frame_speed, 0));
     }
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Right) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Right))
     {
-        auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 * gametime.ElapsedTimeInSeconds() : speed * gametime.ElapsedTimeInSeconds();
+        auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 / 100 : speed * gametime.ElapsedTimeInSeconds();
         rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
     }
 
