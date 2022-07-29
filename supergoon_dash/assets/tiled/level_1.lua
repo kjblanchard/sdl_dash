@@ -9,7 +9,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 2,
+  nextobjectid = 5,
   properties = {
     ["music"] = "level_1"
   },
@@ -23,6 +23,11 @@ return {
       name = "terrain",
       firstgid = 2,
       filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/terrain.tsx"
+    },
+    {
+      name = "actors",
+      firstgid = 244,
+      filename = "../../../../../../Documents/tiled/sdl_dash/tilesets/actors.tsx"
     }
   },
   layers = {
@@ -181,6 +186,48 @@ return {
             ["box_x"] = 4,
             ["box_y"] = 4
           }
+        },
+        {
+          id = 2,
+          name = "trampoline",
+          type = "",
+          shape = "rectangle",
+          x = 402,
+          y = 195,
+          width = 28,
+          height = 28,
+          rotation = 0,
+          gid = 244,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 3,
+          name = "trampoline",
+          type = "",
+          shape = "rectangle",
+          x = 412.5,
+          y = 65.5,
+          width = 28,
+          height = 28,
+          rotation = 0,
+          gid = 244,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 4,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 341.5,
+          y = -24.5,
+          width = 28,
+          height = 28,
+          rotation = 0,
+          gid = 244,
+          visible = true,
+          properties = {}
         }
       }
     }

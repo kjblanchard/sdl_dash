@@ -38,5 +38,8 @@ namespace Components
         bool accel_applied_this_frame = false;
         bool on_ground = false;
         Vector2 acceleration = Vector2();
+        inline void SetGravityEnabled(bool gravity_enabled_){
+            gravity_enabled = gravity_enabled_;
+        }
     };
 }

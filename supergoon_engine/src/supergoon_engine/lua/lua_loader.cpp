@@ -192,9 +192,20 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.layer = layer_depth;
 
                     sol::lua_table actor_properties = actor["properties"];
-                    actor_params.box_rect = Rectangle(
-                        Vector2(actor_properties["box_x"], actor_properties["box_y"]),
-                        Point(actor_properties["box_w"], actor_properties["box_h"]));
+                    if (actor_properties["box_x"] != sol::lua_nil)
+                    {
+                        actor_params.box_rect = Rectangle(
+                            Vector2(actor_properties["box_x"], actor_properties["box_y"]),
+                            Point(actor_properties["box_w"], actor_properties["box_h"]));
+                    }
+                    else{
+                        int thing = actor["width"];
+                        int thing3 = actor["height"];
+                        actor_params.box_rect = Rectangle(
+                            Vector2(0,0),
+                            Point(thing, thing3)
+                        );
+                    }
                     tile_map_ptr->actors.push_back(actor_params);
                 }
                 ++layer_depth;
@@ -204,10 +215,13 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
         sol::lua_table tilesets = root_element["tilesets"];
         for (size_t i = 1; i < tilesets.size() + 1; i++)
         {
-            auto tsx = new Tsx();
             sol::lua_table current_tileset_lua = tilesets[i];
-            tsx->first_gid = current_tileset_lua["firstgid"];
+            std::string tsx_tiled_name = current_tileset_lua["name"];
+            if (tsx_tiled_name == "actors")
+                continue;
+            auto tsx = new Tsx();
             std::string tsx_name = current_tileset_lua["filename"];
+            tsx->first_gid = current_tileset_lua["firstgid"];
             std::stringstream test(tsx_name);
             std::string segment;
             std::vector<std::string> seglist;
