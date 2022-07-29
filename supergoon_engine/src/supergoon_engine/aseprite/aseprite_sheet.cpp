@@ -6,12 +6,11 @@
 
 Aseprite::AsepriteSheet::AsepriteSheet(const char* file_name)
 {
-    std::string suffix = ".png";
+    std::string png_suffix = ".png";
     std::string json_suffix = ".json";
-    auto full_name = file_name + suffix;
-    texture = World::GetWorld()->content->LoadTexture(full_name.c_str(),LoadType::Aseprite);
+    auto png_name = file_name + png_suffix;
+    texture = World::GetWorld()->content->LoadTexture(png_name.c_str(),LoadType::Aseprite);
     Lua::LoadDataFromAsepriteFile(*this, file_name + json_suffix);
-    // sprite_sheet_frames = Lua::LoadAsepriteFrames(file_name + json_suffix);
 
 
 }

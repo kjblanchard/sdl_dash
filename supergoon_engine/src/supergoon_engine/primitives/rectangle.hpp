@@ -31,7 +31,7 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
 
     inline Point GetSize()
     {
-        return Point(sdl_rectangle.w, sdl_rectangle.h);
+        return Point(static_cast<int>(sdl_rectangle.w), static_cast<int>(sdl_rectangle.h));
     }
     inline Vector2 GetLocation()
     {
@@ -41,10 +41,10 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
     inline SDL_Rect GetRect()
     {
         SDL_Rect rect;
-        rect.x = round(sdl_rectangle.x);
-        rect.y = round(sdl_rectangle.y);
-        rect.w = round(sdl_rectangle.w);
-        rect.h = round(sdl_rectangle.h);
+        rect.x = static_cast<int>(sdl_rectangle.x);
+        rect.y = static_cast<int>(sdl_rectangle.y);
+        rect.w = static_cast<int>(sdl_rectangle.w);
+        rect.h = static_cast<int>(sdl_rectangle.h);
         return rect;
     }
 };

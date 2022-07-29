@@ -7,6 +7,10 @@
 
 namespace Animations
 {
+    /**
+     * An animation.  This animation will hold a vector of all of the different transitions that it can perform, as well if it should loop and the transitions name.
+     *
+     */
     class SUPERGOON_ENGINE_EXPORT Animation
     {
     public:
@@ -15,12 +19,11 @@ namespace Animations
         std::vector<Animations::AnimationTransition> transitions;
         Aseprite::AsepriteAnimation aseprite_animation;
 
-        inline Animation(std::string name_of_anim, bool should_loop = true){
-            name = name_of_anim;
-            looping = should_loop;
+        inline Animation(std::string name_of_anim, bool should_loop = true) : name{name_of_anim}, looping{should_loop}
+        {
         }
 
-        inline void AddTransition(const Animations::AnimationTransition& transition)
+        inline void AddTransition(const Animations::AnimationTransition &transition)
         {
             transitions.push_back(transition);
         }

@@ -4,7 +4,7 @@
 
 Components::AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer_id, Vector2 offset) : Component{owner, offset, 1}, current_animation{""}
 {
-    aseprite_sheet = new Aseprite::AsepriteSheet(aseprite_file_name);
+    aseprite_sheet = std::make_unique<Aseprite::AsepriteSheet>(aseprite_file_name);
     sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect, layer_id);
 }
 
@@ -33,9 +33,14 @@ void Components::AnimationComponent::Update(const Gametime &gametime)
             {
                 current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
             }
+            dirty = true;
         }
     }
 
-    auto frame = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
-    sprite_component->UpdateFromAnimationComponent(frame.source_rect);
+    if (dirty)
+    {
+        auto frame = aseprite_sheet->sprite_sheet_frames[current_frame_in_animation];
+        sprite_component->UpdateFromAnimationComponent(frame.source_rect);
+        dirty = false;
+    }
 }

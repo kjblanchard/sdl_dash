@@ -21,7 +21,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(25);
     // TODO make this automatic from the lua file.
     UpdateMaxXVelocity(200);
-   auto thing =  new CameraBoomComponent(this, *main_camera);
+    camera_boom_component = new CameraBoomComponent(this, *main_camera);
     CreateAllAnimations();
 }
 void Player::Update(const Gametime &gametime)
@@ -44,13 +44,13 @@ void Player::ProcessInput(const Gametime &gametime)
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
         auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 / 100 : speed * gametime.ElapsedTimeInSeconds();
-        rigidbody_component->ApplyForce(Vector2(-frame_speed, 0));
+        rigidbody_component->ApplyForce(Vector2(-static_cast<float>(frame_speed), 0));
     }
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Right) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Right))
     {
         auto frame_speed = (rigidbody_component->velocity.x == 0.f) ? speed * 10 / 100 : speed * gametime.ElapsedTimeInSeconds();
-        rigidbody_component->ApplyForce(Vector2(frame_speed, 0));
+        rigidbody_component->ApplyForce(Vector2(static_cast<float>(frame_speed), 0));
     }
 
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::A) ||
@@ -76,8 +76,8 @@ void Player::CreateIdleAnimation()
     auto idle_animation = new Animations::Animation(idle_animation_name);
 
     auto idle_to_run_transition = Animations::AnimationTransition(run_animation_name, [this]()
-                                                                  { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > rigidbody_component->GetMinimumXStep() ||
-                                                                           rigidbody_component->velocity.x <= -rigidbody_component->GetMinimumXStep(); });
+                                                                  { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > static_cast<float>(rigidbody_component->GetMinimumXStep()) ||
+                                                                           rigidbody_component->velocity.x <= -static_cast<float>(rigidbody_component->GetMinimumXStep()); });
 
     auto idle_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
                                                                    { return is_jumping; });
@@ -93,7 +93,6 @@ void Player::CreateRunAnimation()
 {
     auto run_animation = new Animations::Animation(run_animation_name);
     auto run_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
-                                                                //   { return rigidbody_component->velocity.x == 0.f && rigidbody_component->acceleration.x == 0.f; });
                                                                   { return !is_moving_x; });
 
     auto run_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()

@@ -59,7 +59,7 @@ public:
      */
     inline void AddComponent(Component *component)
     {
-        components_.push_back(std::unique_ptr<Component>(component));
+        components_.push_back(std::shared_ptr<Component>(component));
         std::sort(components_.begin(), components_.end());
     }
     inline Component* GetComponent(int tag)
@@ -74,21 +74,4 @@ public:
         return nullptr;
     }
 
-    // inline GameObject(GameObject &&other)
-    //     : components_(std::move(other.components_))
-    // {
-    // }
-
-    // inline GameObject &operator=(GameObject other)
-    // {
-    //     swap(*this, other);
-    //     return *this;
-    // }
-
-    // inline friend void swap(GameObject &lhs, GameObject &rhs)
-    // {
-    //     using std::swap;
-    //     swap(lhs.components_, rhs.components_);
-    // }
-    // friend Component;
 };

@@ -64,7 +64,7 @@ void SpriteBatch::End()
                 &src_rect,
                 &i.dst_rect->sdl_rectangle,
                 0.0,
-                NULL,
+                nullptr,
                 mirror
                 );
         }

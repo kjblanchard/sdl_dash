@@ -27,7 +27,7 @@ void Lua::LoadDataFromAsepriteFile(Aseprite::AsepriteSheet &aseprite_sheet, std:
             if (lua_table != sol::lua_nil)
             {
                 aseprite_sheet.sprite_sheet_frames = Lua::LoadAsepriteFrames(lua_table);
-                aseprite_sheet.sprite_sheed_animations = Lua::LoadAsepriteAnimations(lua_table);
+                aseprite_sheet.sprite_sheet_animations = Lua::LoadAsepriteAnimations(lua_table);
             }
         }
     }

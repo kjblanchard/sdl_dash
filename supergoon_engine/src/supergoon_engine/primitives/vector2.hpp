@@ -14,18 +14,14 @@ struct SUPERGOON_ENGINE_EXPORT Vector2
     float x = 0;
     float y = 0;
 
-    Vector2()
+    Vector2() : x{0}, y{0}
     {
-        x = y = 0;
     }
-    Vector2(float xy)
+    Vector2(float xy) : x{xy}, y{xy}
     {
-        x = y = xy;
     }
-    Vector2(float x_, float y_)
+    Vector2(float x_, float y_) : x{x_}, y{y_}
     {
-        x = x_;
-        y = y_;
     }
     inline Vector2 &operator+=(const Vector2 &rhs)
     {
@@ -34,9 +30,20 @@ struct SUPERGOON_ENGINE_EXPORT Vector2
         return *this;
     }
 
+    inline Vector2 &operator-=(const Vector2 &rhs)
+    {
+        this->x -= rhs.x;
+        this->y -= rhs.y;
+        return *this;
+    }
+
     inline Vector2 operator+(const Vector2 &rhs) const
     {
         return Vector2(x + rhs.x, y + rhs.y);
+    }
+    inline Vector2 operator-(const Vector2 &rhs) const
+    {
+        return Vector2(x - rhs.x, y - rhs.y);
     }
     inline bool operator==(const Vector2 rhs) const
     {

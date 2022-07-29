@@ -14,6 +14,8 @@ private:
     void CreateRunAnimation();
     void CreateFallAnimation();
     void CreateJumpAnimation();
+    Components::CameraBoomComponent* camera_boom_component;
+
 
 public:
     Player(Objects::ActorParams params);

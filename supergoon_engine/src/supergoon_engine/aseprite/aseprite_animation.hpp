@@ -4,6 +4,9 @@
 
 namespace Aseprite
 {
+    /**
+     * A aseprite animation, which is a "tag" within aseprite, and the frame it begins and ends on.
+     */
     struct AsepriteAnimation
     {
         std::string name;

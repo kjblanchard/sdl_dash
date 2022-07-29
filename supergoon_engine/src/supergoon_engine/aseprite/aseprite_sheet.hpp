@@ -9,14 +9,17 @@ struct SDL_Texture;
 
 namespace Aseprite
 {
+    /**
+     * Holds all the Aseprite frames (animation points) and Animation(ms per frame and tags) and the loaded texture for a aseprite file.
+     */
     class AsepriteSheet
     {
-        public:
-        AsepriteSheet(const char* file_name);
+    public:
+        AsepriteSheet(const char *file_name);
 
         Point sheet_size;
         std::vector<AsepriteFrame> sprite_sheet_frames;
-        std::vector<AsepriteAnimation> sprite_sheed_animations;
+        std::vector<AsepriteAnimation> sprite_sheet_animations;
         std::shared_ptr<SDL_Texture> texture;
     };
 }

@@ -3,6 +3,9 @@
 
 namespace Aseprite
 {
+    /**
+     * A frame that has a source_rect for within the image, and the length of the image to be shown in it's animation.
+     */
     struct AsepriteFrame
     {
         unsigned int frame_num;
@@ -19,7 +22,7 @@ namespace Aseprite
         }
         inline bool operator==(const AsepriteFrame &rhs) const
         {
-           return frame_num == rhs.frame_num;
+            return frame_num == rhs.frame_num;
         }
         inline bool operator>(const AsepriteFrame &rhs) const
         {
