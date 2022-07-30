@@ -61,6 +61,11 @@ void Objects::Actor::Update(const Gametime &gametime)
 
 void Objects::Actor::PrintValues()
 {
+    // for (auto &&actor : GetBoxCollider().last_frame_overlaps)
+    // {
+    //     std::cout << actor->id << "\n" << std::endl;
+    // }
+
     // std::string print_value = (is_jumping) ? "True" : "False";
     // std::cout << "Our jumping value is " << print_value << std::endl;
     // std::cout << "Our velocity is X: " << rigidbody_component->velocity.x << " Y: " << rigidbody_component->velocity.y <<  std::endl;
@@ -76,10 +81,9 @@ void Objects::Actor::Jump(const Gametime &gametime)
         current_jump_length = 0.0;
         rigidbody_component->on_ground = false;
         // auto force = (jump_speed * initial_jump_multiplier) * gametime.ElapsedTimeInSeconds();
-        auto force = (jump_speed * initial_jump_multiplier) /100;
+        auto force = (jump_speed * initial_jump_multiplier) / 100;
         rigidbody_component->ApplyForce(Vector2(0, -force));
         animation_component->ForceAnimationChange("jump");
-
     }
     else if (is_jumping && !rigidbody_component->on_ground)
     {

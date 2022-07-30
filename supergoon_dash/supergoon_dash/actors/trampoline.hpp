@@ -5,9 +5,10 @@
 class Trampoline : public Objects::Actor
 {
 private:
-    // void CreateAllAnimations();
-    // void CreateIdleAnimation();
-    // void CreateActionAnimation();
+    void CreateAllAnimations();
+    void CreateIdleAnimation();
+    void CreateActionAnimation();
+    bool trampoline_bouncing = false;
 
 
 public:

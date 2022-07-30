@@ -23,4 +23,10 @@ public:
     static Objects::Actor *ActorFactory(Objects::ActorParams &params);
     void Update(const Gametime &gametime) override;
     void ProcessInput(const Gametime &) override;
+
+    inline void TrampolineJump()
+    {
+        rigidbody_component->ApplyForce(Vector2(0,-600));
+
+    }
 };

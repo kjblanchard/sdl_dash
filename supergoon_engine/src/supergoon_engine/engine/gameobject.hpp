@@ -34,11 +34,13 @@ protected:
      * This is in Shared pointer, so it is destructed automatically when this gameobject is destroyed.
      */
     std::vector<std::shared_ptr<Component>> components_;
+    static unsigned long int current_id;
 
 public:
     Vector2 location;
     GameObject(Vector2 loc = Vector2());
     virtual ~GameObject() override;
+    unsigned long int id = 0;
 
     Level* GetLevel();
 
@@ -73,5 +75,15 @@ public:
         }
         return nullptr;
     }
+    inline bool operator==(const GameObject& rhs) const
+    {
+        return id == rhs.id;
+    }
+    inline bool operator!=(const GameObject& rhs) const
+    {
+        return id != rhs.id;
+    }
+
+
 
 };

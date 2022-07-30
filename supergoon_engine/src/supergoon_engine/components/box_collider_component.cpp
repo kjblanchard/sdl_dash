@@ -21,6 +21,9 @@ SDL_Rect Components::BoxColliderComponent::GetCurrentSdlRect()
 }
 void Components::BoxColliderComponent::Update(const Gametime &)
 {
+    last_frame_overlaps.clear();
+    last_frame_overlaps = this_frame_overlaps;
+    this_frame_overlaps.clear();
     rectangle.sdl_rectangle.x = owner_->location.x + offset_.x;
     rectangle.sdl_rectangle.y = owner_->location.y + offset_.y;
 }

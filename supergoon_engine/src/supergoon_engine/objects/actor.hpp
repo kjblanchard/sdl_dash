@@ -27,6 +27,7 @@ namespace Objects
         const char *run_animation_name = "run";
         const char *jump_animation_name = "jump";
         const char *fall_animation_name = "fall";
+        const char* action_animation_name = "action";
 
         Actor(ActorParams params);
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
@@ -75,6 +76,9 @@ namespace Objects
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
         void Update(const Gametime &gametime) override;
+        inline Components::BoxColliderComponent& GetBoxCollider(){
+            return rigidbody_component->GetBoxCollider();
+        }
         inline virtual void ProcessInput(const Gametime &)
         {
         }

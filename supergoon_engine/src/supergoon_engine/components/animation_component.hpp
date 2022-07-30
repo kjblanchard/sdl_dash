@@ -10,10 +10,6 @@
 #include <supergoon_engine/components/sprite_component.hpp>
 
 class GameObject;
-namespace Aseprite
-{
-    class AsepriteSheet;
-}
 
 namespace Components
 {
@@ -23,27 +19,41 @@ namespace Components
      */
     class AnimationComponent : public Component
     {
-        std::vector<Animations::Animation> animations;
-        Animations::Animation current_animation;
+        using AnimEventType = Animations::Animation::AnimationEvent::EventType;
 
     private:
+        std::vector<Animations::Animation> animations;
         SpriteComponent *sprite_component;
         std::unique_ptr<Aseprite::AsepriteSheet> aseprite_sheet;
         double ms_this_frame = 0.0;
         int current_frame_in_animation = 0;
-        std::string current_animation_name;
         bool dirty = true;
 
-        inline void ChangeAnimation(std::string change)
+        /**
+         * Changes animation, fires off events and restarts the time this frame.
+         *
+         * @param change Name of the new animation
+         */
+        void ChangeAnimation(std::string change);
+        /**
+         * Goes through all the transitions, and checks to see if we should transition to a new animation
+         */
+        void CheckForAnimationTransitions();
+        /**
+         * Updates the amount of time this frame, returns if we should change the frame
+         */
+        void UpdateSpriteComponent();
+        void FrameChange();
+        inline bool FrameJustEnded()
         {
-            current_animation = GetAnimationByName(change);
-            current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
-            dirty = true;
+            return (ms_this_frame > aseprite_sheet->sprite_sheet_frames[current_frame_in_animation].millisecond_length);
         }
 
     public:
+        Animations::Animation current_animation;
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer = 0, Vector2 offset = Vector2());
         void Update(const Gametime &) override;
+        void ChangeAnimation2(std::string change);
 
         inline void ForceAnimationChange(std::string new_anim)
         {
@@ -55,7 +65,7 @@ namespace Components
             animation.aseprite_animation = GetAsepriteAnimationByName(animation.name);
             animations.push_back(animation);
         }
-        inline Animations::Animation GetAnimationByName(std::string anim_name)
+        inline Animations::Animation &GetAnimationByName(std::string anim_name)
         {
             return *std::find_if(animations.begin(), animations.end(), [&anim_name](const Animations::Animation &anim)
                                  { return anim.name == anim_name; });
@@ -67,6 +77,7 @@ namespace Components
         }
         inline void SetEntryAnim(std::string entry_anim_name)
         {
+            // TODO debug this if it is equal to the end iterator
             current_animation = GetAnimationByName(entry_anim_name);
         }
         inline void SetMirror(bool mirror_val)

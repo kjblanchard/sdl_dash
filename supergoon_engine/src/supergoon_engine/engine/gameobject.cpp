@@ -9,8 +9,9 @@
 // statics
 World *GameObject::world = nullptr;
 Camera *GameObject::main_camera = nullptr;
+unsigned long int GameObject::current_id = 0;
 
-GameObject::GameObject(Vector2 loc) : IUpdate{}, location{loc}
+GameObject::GameObject(Vector2 loc) : IUpdate{}, location{loc}, id{++current_id}
 {
    if (world == nullptr)
       world = World::GetWorld();

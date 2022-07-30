@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <string>
 #include <vector>
+#include <functional>
 #include <supergoon_engine/animation/animation_transition.hpp>
 #include <supergoon_engine/aseprite/aseprite_animation.hpp>
 
@@ -13,9 +14,26 @@ namespace Animations
      */
     class SUPERGOON_ENGINE_EXPORT Animation
     {
+    private:
+
     public:
+        struct AnimationEvent
+        {
+            enum class EventType
+            {
+                Default,
+                Begin,
+                Frame,
+                End
+            };
+            EventType type_of_event;
+            std::function<void(float)> animation_event_func;
+        };
+        //TODO move this back to private
+        bool ended = false;
         std::string name;
-        bool looping;
+        bool looping = true;
+        std::vector<AnimationEvent> animation_events;
         std::vector<Animations::AnimationTransition> transitions;
         Aseprite::AsepriteAnimation aseprite_animation;
 
@@ -26,6 +44,40 @@ namespace Animations
         inline void AddTransition(const Animations::AnimationTransition &transition)
         {
             transitions.push_back(transition);
+        }
+
+        inline bool AnimationEnded()
+        {
+            return ended;
+        }
+
+        inline void AnimationEnd(float time)
+        {
+            ended = true;
+            FireAnimationEvent(AnimationEvent::EventType::End, time);
+        }
+        inline void AnimationBegin(float time)
+        {
+            ended = false;
+            FireAnimationEvent(AnimationEvent::EventType::Begin, time);
+        }
+
+        inline void FireAnimationEvent(AnimationEvent::EventType event_type, float current_time_in_animation)
+        {
+            for (auto &&event : animation_events)
+            {
+                if (event.type_of_event == event_type)
+                {
+                    event.animation_event_func(current_time_in_animation);
+                }
+            }
+
+            // std::for_each(animation_events.begin(), animation_events.end(), [event_type, current_time_in_animation](AnimationEvent &event)
+            //               {
+            //                       if (event.type_of_event == event_type)
+            //                       {
+            //                           event.animation_event_func(current_time_in_animation);
+            //                       } });
         }
     };
 }
