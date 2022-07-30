@@ -64,20 +64,12 @@ namespace Animations
 
         inline void FireAnimationEvent(AnimationEvent::EventType event_type, float current_time_in_animation)
         {
-            for (auto &&event : animation_events)
-            {
-                if (event.type_of_event == event_type)
-                {
-                    event.animation_event_func(current_time_in_animation);
-                }
-            }
-
-            // std::for_each(animation_events.begin(), animation_events.end(), [event_type, current_time_in_animation](AnimationEvent &event)
-            //               {
-            //                       if (event.type_of_event == event_type)
-            //                       {
-            //                           event.animation_event_func(current_time_in_animation);
-            //                       } });
+            std::for_each(animation_events.begin(), animation_events.end(), [event_type, current_time_in_animation](AnimationEvent &event)
+                          {
+                                  if (event.type_of_event == event_type)
+                                  {
+                                      event.animation_event_func(current_time_in_animation);
+                                  } });
         }
     };
 }

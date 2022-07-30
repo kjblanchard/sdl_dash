@@ -52,18 +52,12 @@ void Trampoline::CreateActionAnimation()
     start_trampoline_event.type_of_event = Animations::Animation::AnimationEvent::EventType::End;
     start_trampoline_event.animation_event_func = [this](float gametime)
     {
-        // this->trampoline_bouncing = false;
-        this->animation_component->ForceAnimationChange(idle_animation_name);
+        this->trampoline_bouncing = false;
     };
     auto action_to_idle_transition = Animations::AnimationTransition(idle_animation_name,[this](){
-        if(this->animation_component->current_animation.ended)
-        {
-            printf("hi");
-        }
-        return this->animation_component->current_animation.ended;
-        // return !trampoline_bouncing;
+        return !this->trampoline_bouncing;
     });
-    // action_animation->AddTransition(action_to_idle_transition);
+    action_animation->AddTransition(action_to_idle_transition);
 
     action_animation->animation_events.push_back(start_trampoline_event);
     action_animation->AddTransition(action_to_idle_transition);
