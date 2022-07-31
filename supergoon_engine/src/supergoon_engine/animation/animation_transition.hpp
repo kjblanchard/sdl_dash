@@ -15,7 +15,7 @@ namespace Animations
     public:
         // inline AnimationTransition(std::string transition_to, std::function<bool()> func_to_initiate_change = nullptr, TransitionType type = TransitionType::OnFunction) : new_transition{transition_to}, transition_function{func_to_initiate_change}, type_of_transition{type} {}
         inline AnimationTransition(std::string transition_to) : new_transition{transition_to} {}
-        inline virtual ~AnimationTransition(){};
+        inline virtual ~AnimationTransition(){}
         std::string new_transition;
         virtual bool ShouldTransition() = 0;
         // bool transition_on_end = false;

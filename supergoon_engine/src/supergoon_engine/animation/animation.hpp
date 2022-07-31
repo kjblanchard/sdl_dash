@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <string>
 #include <vector>
+#include <memory>
 #include <functional>
 #include <supergoon_engine/animation/animation_transition.hpp>
 #include <supergoon_engine/aseprite/aseprite_animation.hpp>
@@ -34,7 +35,7 @@ namespace Animations
         std::string name;
         bool looping = true;
         std::vector<AnimationEvent> animation_events;
-        std::vector<Animations::AnimationTransition*> transitions;
+        std::vector<std::shared_ptr<Animations::AnimationTransition>> transitions;
         Aseprite::AsepriteAnimation aseprite_animation;
 
         inline Animation(std::string name_of_anim, bool should_loop = true) : name{name_of_anim}, looping{should_loop}
@@ -43,7 +44,7 @@ namespace Animations
 
         inline void AddTransition(Animations::AnimationTransition *transition)
         {
-            transitions.push_back(transition);
+            transitions.push_back(std::shared_ptr<Animations::AnimationTransition>(transition));
         }
 
         inline bool AnimationEnded()
