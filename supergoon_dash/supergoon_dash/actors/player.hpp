@@ -26,7 +26,8 @@ public:
 
     inline void TrampolineJump()
     {
-        rigidbody_component->ApplyForce(Vector2(0,-600));
+        rigidbody_component->ChangeVelocityStatic(Vector2(rigidbody_component->velocity.x,-400));
+        animation_component->ForceAnimationChange(jump_animation_name);
 
     }
 };

@@ -34,6 +34,9 @@ namespace Components
         bool TryMovementStep(SDL_FRect &rect_to_check);
         bool TryActorStep(SDL_FRect &rect_to_check);
         void ApplyForce(Vector2 force);
+        inline void ChangeVelocityStatic(Vector2 new_velocity){
+            velocity = new_velocity;
+        }
         Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());
         Vector2 velocity = Vector2();
         bool accel_applied_this_frame = false;

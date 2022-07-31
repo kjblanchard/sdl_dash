@@ -80,12 +80,3 @@ void AnimationComponent::ChangeAnimation(std::string change)
     current_animation.AnimationBegin(static_cast<float>(ms_this_frame));
     dirty = true;
 }
-void AnimationComponent::ChangeAnimation2(std::string change)
-{
-    // TODO check to see if current animation exists.
-    current_animation = GetAnimationByName(change);
-    current_animation.ended = false;
-    ms_this_frame = 0;
-    current_frame_in_animation = 0;
-    dirty = true;
-}
