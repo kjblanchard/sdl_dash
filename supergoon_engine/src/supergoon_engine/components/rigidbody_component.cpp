@@ -167,8 +167,6 @@ bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)
     }
     return false;
 }
-int num = 0;
-int num2 = 0;
 bool Components::RigidbodyComponent::TryActorStep(SDL_FRect &rect)
 {
     auto actors = owner_->GetLevel()->actors;

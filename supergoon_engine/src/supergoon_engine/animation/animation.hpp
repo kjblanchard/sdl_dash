@@ -34,14 +34,14 @@ namespace Animations
         std::string name;
         bool looping = true;
         std::vector<AnimationEvent> animation_events;
-        std::vector<Animations::AnimationTransition> transitions;
+        std::vector<Animations::AnimationTransition*> transitions;
         Aseprite::AsepriteAnimation aseprite_animation;
 
         inline Animation(std::string name_of_anim, bool should_loop = true) : name{name_of_anim}, looping{should_loop}
         {
         }
 
-        inline void AddTransition(const Animations::AnimationTransition &transition)
+        inline void AddTransition(Animations::AnimationTransition *transition)
         {
             transitions.push_back(transition);
         }

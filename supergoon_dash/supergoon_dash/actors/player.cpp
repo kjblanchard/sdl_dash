@@ -4,6 +4,7 @@
 #include <supergoon_engine/input/player_controller.hpp>
 #include <supergoon_engine/animation/animation.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
+#include <supergoon_engine/animation/function_animation_transition.hpp>
 #include <supergoon_engine/components/camera_boom_component.hpp>
 
 using namespace Components;
@@ -75,14 +76,14 @@ void Player::CreateIdleAnimation()
 {
     auto idle_animation = new Animations::Animation(idle_animation_name);
 
-    auto idle_to_run_transition = Animations::AnimationTransition(run_animation_name, [this]()
+    auto idle_to_run_transition = new Animations::FunctionAnimationTransition(run_animation_name, [this]()
                                                                   { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > static_cast<float>(rigidbody_component->GetMinimumXStep()) ||
                                                                            rigidbody_component->velocity.x <= -static_cast<float>(rigidbody_component->GetMinimumXStep()); });
 
-    auto idle_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+    auto idle_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
                                                                    { return is_jumping; });
 
-    auto idle_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]()
+    auto idle_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]()
                                                                    { return IsFalling() == true; });
     idle_animation->AddTransition(idle_to_fall_transition);
     idle_animation->AddTransition(idle_to_run_transition);
@@ -92,13 +93,13 @@ void Player::CreateIdleAnimation()
 void Player::CreateRunAnimation()
 {
     auto run_animation = new Animations::Animation(run_animation_name);
-    auto run_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
+    auto run_to_idle_transition = new Animations::FunctionAnimationTransition(idle_animation_name, [this]()
                                                                   { return !is_moving_x; });
 
-    auto run_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+    auto run_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
                                                                   { return is_jumping == true; });
 
-    auto run_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]
+    auto run_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]
                                                                   { return IsFalling() == true; });
     run_animation->AddTransition(run_to_fall_transition);
     run_animation->AddTransition(run_to_idle_transition);
@@ -108,11 +109,11 @@ void Player::CreateRunAnimation()
 void Player::CreateFallAnimation()
 {
     auto fall_animation = new Animations::Animation(fall_animation_name, false);
-    auto fall_to_idle_transition = Animations::AnimationTransition(idle_animation_name, [this]()
+    auto fall_to_idle_transition = new Animations::FunctionAnimationTransition(idle_animation_name, [this]()
                                                                    { return is_jumping == false && OnGround() == true; });
     fall_animation->AddTransition(fall_to_idle_transition);
 
-    auto fall_to_jump_transition = Animations::AnimationTransition(jump_animation_name, [this]()
+    auto fall_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
                                                                    { return is_jumping == true && OnGround() == true; });
     fall_animation->AddTransition(fall_to_jump_transition);
     animation_component->AddAnimation(*fall_animation);
@@ -120,7 +121,7 @@ void Player::CreateFallAnimation()
 void Player::CreateJumpAnimation()
 {
     auto jump_animation = new Animations::Animation(jump_animation_name, false);
-    auto jump_to_fall_transition = Animations::AnimationTransition(fall_animation_name, [this]()
+    auto jump_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]()
                                                                    { return is_jumping == false; });
     jump_animation->AddTransition(jump_to_fall_transition);
     animation_component->AddAnimation(*jump_animation);
