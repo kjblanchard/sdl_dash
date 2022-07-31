@@ -47,19 +47,20 @@ void Trampoline::CreateIdleAnimation()
 }
 void Trampoline::CreateActionAnimation()
 {
-    auto action_animation = new Animations::Animation(action_animation_name);
-    auto start_trampoline_event = Animations::Animation::AnimationEvent();
-    start_trampoline_event.type_of_event = Animations::Animation::AnimationEvent::EventType::End;
-    start_trampoline_event.animation_event_func = [this](float gametime)
-    {
-        this->trampoline_bouncing = false;
-    };
-    auto action_to_idle_transition = Animations::AnimationTransition(idle_animation_name,[this](){
-        return !this->trampoline_bouncing;
-    });
-    action_animation->AddTransition(action_to_idle_transition);
+    auto action_animation = new Animations::Animation(action_animation_name, false);
+    // auto start_trampoline_event = Animations::Animation::AnimationEvent();
+    // start_trampoline_event.type_of_event = Animations::Animation::AnimationEvent::EventType::End;
+    // start_trampoline_event.animation_event_func = [this](float gametime)
+    // {
+    //     this->trampoline_bouncing = false;
+    // };
+    // auto action_to_idle_transition = Animations::AnimationTransition(idle_animation_name,[this](){
+    //     return !this->trampoline_bouncing;
+    // });
+    // action_animation->AddTransition(action_to_idle_transition);
+    auto action_to_idle_transition = Animations::AnimationTransition(idle_animation_name, nullptr, Animations::TransitionType::OnEnd);
 
-    action_animation->animation_events.push_back(start_trampoline_event);
+    // action_animation->animation_events.push_back(start_trampoline_event);
     action_animation->AddTransition(action_to_idle_transition);
     animation_component->AddAnimation(*action_animation);
 }

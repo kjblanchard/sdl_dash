@@ -58,9 +58,22 @@ void AnimationComponent::CheckForAnimationTransitions()
 {
     for (auto &&i : current_animation.transitions)
     {
-        if (i.transition_function())
+        switch (i.type_of_transition)
         {
-            ChangeAnimation(i.new_transition);
+        case Animations::TransitionType::OnFunction:
+            if (i.transition_function() || (current_animation.AnimationEnded() && i.transition_on_end))
+            {
+                ChangeAnimation(i.new_transition);
+            }
+            return;
+        case Animations::TransitionType::OnEnd:
+            if (current_animation.AnimationEnded())
+            {
+                ChangeAnimation(i.new_transition);
+            }
+            return;
+
+        default:
             break;
         }
     }
