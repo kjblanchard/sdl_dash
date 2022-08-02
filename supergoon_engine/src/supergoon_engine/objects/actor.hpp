@@ -5,6 +5,8 @@
 #include <supergoon_engine/components/rigidbody_component.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
 #include <supergoon_engine/components/input_component.hpp>
+#include <supergoon_engine/components/box_collider_component.hpp>
+#include <supergoon_engine/engine/engine_tags.hpp>
 #include <vector>
 #include <functional>
 
@@ -81,6 +83,19 @@ namespace Objects
         }
         inline virtual void ProcessInput(const Gametime &)
         {
+        }
+        inline std::vector<Components::BoxColliderComponent*> GetBoxColliders()
+        {
+            std::vector<Components::BoxColliderComponent*> box_colliders;
+            std::for_each(components_.begin(), components_.end(), [&](std::shared_ptr<Component> comp){
+                if( comp->HasTag(Tags::ComponentTags::Box))
+                {
+                    box_colliders.push_back(dynamic_cast<Components::BoxColliderComponent*>(comp.get()));
+
+                }
+
+            });
+            return box_colliders;
         }
     };
 

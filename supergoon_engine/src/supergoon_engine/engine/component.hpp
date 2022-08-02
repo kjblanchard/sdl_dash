@@ -13,12 +13,16 @@ class GameObject;
 class Camera;
 
 class World;
-namespace Graphics{
-class SpriteBatch;
+namespace Graphics
+{
+    class SpriteBatch;
 }
 
 class SUPERGOON_ENGINE_EXPORT Component : public IUpdate, public IInitialize, public IDebug, public IDraw, public ITags
 {
+private:
+    static unsigned long int current_id;
+
 protected:
     /**
      * Pointer to world, as a convenience function.
@@ -33,6 +37,7 @@ protected:
     GameObject *owner_;
 
 public:
+    unsigned long int id;
     int update_order = 2;
     Vector2 GetLocation();
     Component(GameObject *owner, Vector2 offset = Vector2(), int update_override = 2);
@@ -46,7 +51,7 @@ public:
             return std::move(*this);
         return std::move(rhs);
     }
-    inline virtual void Draw(Graphics::SpriteBatch&) override {}
-    Component( Component & ) = default;
-    Component( Component && ) = default;
+    inline virtual void Draw(Graphics::SpriteBatch &) override {}
+    Component(Component &) = default;
+    Component(Component &&) = default;
 };

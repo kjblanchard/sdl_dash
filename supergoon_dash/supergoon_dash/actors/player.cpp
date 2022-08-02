@@ -24,6 +24,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     UpdateMaxXVelocity(200);
     camera_boom_component = new CameraBoomComponent(this, *main_camera);
     CreateAllAnimations();
+    rigidbody_component->GetBoxCollider().debug = true;
 }
 void Player::Update(const Gametime &gametime)
 {

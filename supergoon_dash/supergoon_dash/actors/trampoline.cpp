@@ -8,17 +8,23 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(5);
     // TODO make this automatic from the lua file.
     rigidbody_component->SetGravityEnabled(false);
-    rigidbody_component->AddOverlapEvent([this](GameObject *overlapee)
+    rigidbody_component->GetBoxCollider().is_blocking = false;
+    rigidbody_component->GetBoxCollider().debug = true;
+    rigidbody_component->AddOverlapEvent([this](Components::BoxColliderEventArgs args)
                                          {
-        if (overlapee->HasTag(25))
+        if (args.overlapee->HasTag(25) )
         {
-            auto player = dynamic_cast<Player*>(overlapee);
+            auto player = dynamic_cast<Player*>(args.overlapee);
             if (player)
             {
-        std::cout << "Jump trampoline" << std::endl;
-                player->TrampolineJump();
-                trampoline_bouncing = true;
-                animation_component->ForceAnimationChange(action_animation_name);
+                    player->TrampolineJump(args.overlap_direction);
+                    if(Components::OverlapDirection::Down == args.overlap_direction)
+                    {
+                        trampoline_bouncing = true;
+                        animation_component->ForceAnimationChange(action_animation_name);
+
+                    }
+
             }
         } });
     CreateAllAnimations();
@@ -48,8 +54,8 @@ void Trampoline::CreateIdleAnimation()
 }
 void Trampoline::CreateActionAnimation()
 {
-    auto action_animation = new Animations::Animation(action_animation_name,false);
-    auto action_to_idle_transition = new Animations::FinishAnimationTransition(idle_animation_name,action_animation);
+    auto action_animation = new Animations::Animation(action_animation_name, false);
+    auto action_to_idle_transition = new Animations::FinishAnimationTransition(idle_animation_name, action_animation);
 
     action_animation->AddTransition(action_to_idle_transition);
     animation_component->AddAnimation(*action_animation);

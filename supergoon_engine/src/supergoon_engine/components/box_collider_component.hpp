@@ -10,37 +10,56 @@
 
 namespace Components
 {
+    enum struct OverlapDirection{
+        Default,
+        Up,
+        Right,
+        Down,
+        Left
+    };
+
+    struct BoxColliderEventArgs
+    {
+        GameObject *overlapee;
+        OverlapDirection overlap_direction;
+        inline BoxColliderEventArgs(GameObject *owner_, OverlapDirection direction_of_overlap) : overlapee{owner_}, overlap_direction{direction_of_overlap}
+        {
+        }
+    };
     class BoxColliderComponent : public Component
     {
 
     public:
         BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
         ~BoxColliderComponent() override;
-        std::vector<GameObject*> last_frame_overlaps;
-        std::vector<GameObject*> this_frame_overlaps;
+        std::vector<unsigned long int> last_frame_overlaps;
+        std::vector<unsigned long int> this_frame_overlaps;
         Rectangle rectangle;
         Rectangle temp_rect;
+        bool is_blocking = true;
         SDL_Rect GetCurrentSdlRect();
         void Update(const Gametime &gametime) override;
         void Draw(Graphics::SpriteBatch &spritebatch) override;
 
-        std::vector<std::function<void(GameObject*)>> overlap_events;
+        inline void AddToOverlaps(GameObject* overlap)
+        {
+            this_frame_overlaps.push_back(overlap->id);
+        }
+        inline void AddToOverlaps(Component* overlap)
+        {
+            this_frame_overlaps.push_back(overlap->id);
+        }
 
-        inline void OnOverlapBeginEvent(GameObject* overlapee)
+        std::vector<std::function<void(BoxColliderEventArgs)>> overlap_events;
+
+
+        inline void OnOverlapBeginEvent(BoxColliderEventArgs args)
         {
             for (auto &&i : overlap_events)
             {
-                i(overlapee);
+                i(args);
             }
         }
     };
 
-    // struct BoxColliderEventArgs
-    // {
-    //     GameObject *owner;
-    //     std::function<void(BoxColliderComponent &)> box_function;
-    //     inline BoxColliderEventArgs(GameObject *owner_, std::function<void(BoxColliderComponent &)> other_box) : owner{owner_}, box_function{other_box}
-    //     {
-    //     }
-    // };
 }

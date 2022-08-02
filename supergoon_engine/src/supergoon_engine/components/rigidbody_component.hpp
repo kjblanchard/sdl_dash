@@ -30,12 +30,15 @@ namespace Components
         void ApplyVelocity(const Gametime &);
         void ApplyVelocityByStepSolidsX(double step);
         void ApplyVelocityByStepSolidsY(double step);
-        void TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step);
-        bool TryMovementStep(SDL_FRect &rect_to_check);
+        void TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step, Components::OverlapDirection overlap_dir);
+        bool TryMovementStep(SDL_FRect &rect_to_check, Components::OverlapDirection overlap_dir);
         bool TryActorStep(SDL_FRect &rect_to_check);
         void ApplyForce(Vector2 force);
         inline void ChangeVelocityStatic(Vector2 new_velocity){
             velocity = new_velocity;
+        }
+        inline void ChangeAccelStatic(Vector2 new_velocity){
+            acceleration = new_velocity;
         }
         Vector2 max_velocity = Vector2(std::numeric_limits<float>::max());
         Vector2 velocity = Vector2();
@@ -49,7 +52,7 @@ namespace Components
         inline void SetGravityEnabled(bool gravity_enabled_){
             gravity_enabled = gravity_enabled_;
         }
-        inline void AddOverlapEvent(std::function<void(GameObject*)> event_function){
+        inline void AddOverlapEvent(std::function<void(Components::BoxColliderEventArgs)> event_function){
             box_collider->overlap_events.push_back(event_function);
 
         }

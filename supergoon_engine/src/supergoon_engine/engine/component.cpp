@@ -5,6 +5,7 @@
 // statics
 World *Component::world = nullptr;
 Camera *Component::main_camera = nullptr;
+    unsigned long int Component::current_id = 0;
 
 Component::Component(GameObject *owner, Vector2 offset, int update_override)
 {
@@ -14,6 +15,7 @@ Component::Component(GameObject *owner, Vector2 offset, int update_override)
         main_camera = World::GetWorld()->main_camera;
     offset_ = offset;
     owner_ = owner;
+    id = current_id++;
     update_order = update_override;
     owner_->AddComponent(this);
 }

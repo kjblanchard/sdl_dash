@@ -47,24 +47,26 @@ void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 
     auto x_step = velocity.x * gametime.ElapsedTimeInSeconds();
     auto y_step = velocity.y * gametime.ElapsedTimeInSeconds();
-    ApplyVelocityByStepSolidsY(y_step);
     ApplyVelocityByStepSolidsX(x_step);
+    ApplyVelocityByStepSolidsY(y_step);
 }
 void Components::RigidbodyComponent::ApplyVelocityByStepSolidsX(double step)
 {
     auto minimum_step = minimum_x_step;
     auto &loc_to_alter = owner_->location.x;
     auto &velocity_to_alter = velocity.x;
-    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, true);
+    Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Right : Components::OverlapDirection::Left;
+    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, true, overlap_dir);
 }
 void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
 {
     auto minimum_step = minimum_y_step;
     auto &loc_to_alter = owner_->location.y;
     auto &velocity_to_alter = velocity.y;
-    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false);
+    Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Down : Components::OverlapDirection::Up;
+    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false, overlap_dir);
 }
-void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step)
+void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step, Components::OverlapDirection overlap_dir)
 {
     auto steps_left = full_step;
     auto step_speed = (steps_left > 0) ? 1 : -1;
@@ -86,7 +88,8 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
         float_rect.h = box_location.h;
         auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
         *box_loc_to_change += move_step;
-        collision = TryMovementStep(float_rect);
+
+        collision = TryMovementStep(float_rect, overlap_dir);
         if (collision)
         {
             velocity_to_alter = 0;
@@ -117,38 +120,15 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
         float_rect.h = box_location.h;
         auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
         *box_loc_to_change += 0.1f;
-        collision = TryMovementStep(float_rect);
+        collision = TryMovementStep(float_rect, overlap_dir);
         if (!collision)
         {
             on_ground = false;
         }
     }
-    // Handle if you are moving slowly but about to collide
-    // Currently this makes it so you will change your animation, so this should be changed.
-    // TODO do this differently
-    //  if (!collision && x_step)
-    //  {
-    //      SDL_FRect float_rect;
-    //      auto box_location = box_collider->GetCurrentSdlRect();
-    //      float_rect.x = box_location.x;
-    //      float_rect.y = box_location.y;
-    //      float_rect.w = box_location.w;
-    //      float_rect.h = box_location.h;
-    //      auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
-    //      auto amount_to_change = (full_step > 0) ? 0.1f : -0.1f;
-    //      *box_loc_to_change += amount_to_change;
-    //      collision = TryMovementStep(float_rect);
-    //      if (collision)
-    //      {
-    //          velocity.x = 0;
-    //      }
-    //  }
-
-    // Handles checking to see if we are moving on the x axis
-    //  if(full_step !=0 && !collision)
 }
 
-bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)
+bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect, Components::OverlapDirection overlap_dir)
 {
     auto solid_tiles = owner_->GetLevel()->solid_tiles;
     for (auto tile : solid_tiles)
@@ -165,8 +145,43 @@ bool Components::RigidbodyComponent::TryMovementStep(SDL_FRect &rect)
             return true;
         }
     }
+    auto actors = owner_->GetLevel()->actors;
+    for (auto actor : actors)
+    {
+        if (actor->id == owner_->id)
+            continue;
+        // auto actor_rects = actor->GetBoxCollider();
+        auto actor_rects = actor->GetBoxColliders();
+
+        for (auto &&actor_rect : actor_rects)
+        {
+            if (!actor_rect->is_blocking)
+            // if (!actor_rects.is_blocking)
+                continue;
+            auto sdl_actor_rect = actor_rect->rectangle.sdl_rectangle;
+            // auto sdl_actor_rect = actor_rects.rectangle.sdl_rectangle;
+            SDL_FRect float_rect;
+            float_rect.x = sdl_actor_rect.x;
+            float_rect.y = sdl_actor_rect.y;
+            float_rect.w = sdl_actor_rect.w;
+            float_rect.h = sdl_actor_rect.h;
+
+            if (SDL_HasIntersectionF(&rect, &float_rect))
+            {
+                box_collider->AddToOverlaps(actor_rect);
+                auto overlap_start = std::find(box_collider->last_frame_overlaps.begin(), box_collider->last_frame_overlaps.end(), actor_rect->id);
+                if (overlap_start == box_collider->last_frame_overlaps.end())
+                {
+                    auto args = Components::BoxColliderEventArgs(owner_, overlap_dir);
+                    actor_rect->OnOverlapBeginEvent(args);
+                }
+                return true;
+            }
+        }
+    }
     return false;
 }
+
 bool Components::RigidbodyComponent::TryActorStep(SDL_FRect &rect)
 {
     auto actors = owner_->GetLevel()->actors;
@@ -174,27 +189,29 @@ bool Components::RigidbodyComponent::TryActorStep(SDL_FRect &rect)
     {
         if (actor->id == owner_->id)
             continue;
-        auto actor_rect = actor->GetBoxCollider().rectangle.sdl_rectangle;
-        SDL_FRect float_rect;
-        float_rect.x = actor_rect.x;
-        float_rect.y = actor_rect.y;
-        float_rect.w = actor_rect.w;
-        float_rect.h = actor_rect.h;
+        auto actor_rects = actor->GetBoxColliders();
 
-        if (SDL_HasIntersectionF(&rect, &float_rect))
+        for (auto &&actor_rect : actor_rects)
         {
-            box_collider->this_frame_overlaps.push_back(actor);
-            auto overlap_start = std::find(box_collider->last_frame_overlaps.begin(), box_collider->last_frame_overlaps.end(), actor);
-            if (overlap_start == box_collider->last_frame_overlaps.end())
-            {
-                actor->GetBoxCollider().OnOverlapBeginEvent(owner_);
-            }
+            if (actor_rect->is_blocking)
+                continue;
+            auto sdl_actor_rect = actor_rect->rectangle.sdl_rectangle;
+            SDL_FRect float_rect;
+            float_rect.x = sdl_actor_rect.x;
+            float_rect.y = sdl_actor_rect.y;
+            float_rect.w = sdl_actor_rect.w;
+            float_rect.h = sdl_actor_rect.h;
 
-            // if (std::find(box_collider->last_frame_overlaps.begin(), box_collider->last_frame_overlaps.end(), actor) != box_collider->last_frame_overlaps.end())
-            // {
-            //     actor->GetBoxCollider().OnOverlapBeginEvent(owner_);
-            // }
-            // box_collider->OnOverlapEvent(actor);
+            if (SDL_HasIntersectionF(&rect, &float_rect))
+            {
+                box_collider->AddToOverlaps(actor_rect);
+                auto overlap_start = std::find(box_collider->last_frame_overlaps.begin(), box_collider->last_frame_overlaps.end(), actor_rect->id);
+                if (overlap_start == box_collider->last_frame_overlaps.end())
+                {
+                    auto args = Components::BoxColliderEventArgs(owner_, OverlapDirection::Default);
+                    actor_rect->OnOverlapBeginEvent(args);
+                }
+            }
             return true;
         }
     }
