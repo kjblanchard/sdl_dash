@@ -89,7 +89,7 @@ void Player::CreateIdleAnimation()
     idle_animation->AddTransition(idle_to_fall_transition);
     idle_animation->AddTransition(idle_to_run_transition);
     idle_animation->AddTransition(idle_to_jump_transition);
-    animation_component->AddAnimation(*idle_animation);
+    animation_component->AddAnimation(idle_animation);
 }
 void Player::CreateRunAnimation()
 {
@@ -105,7 +105,7 @@ void Player::CreateRunAnimation()
     run_animation->AddTransition(run_to_fall_transition);
     run_animation->AddTransition(run_to_idle_transition);
     run_animation->AddTransition(run_to_jump_transition);
-    animation_component->AddAnimation(*run_animation);
+    animation_component->AddAnimation(run_animation);
 }
 void Player::CreateFallAnimation()
 {
@@ -117,7 +117,7 @@ void Player::CreateFallAnimation()
     auto fall_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
                                                                    { return is_jumping == true && OnGround() == true; });
     fall_animation->AddTransition(fall_to_jump_transition);
-    animation_component->AddAnimation(*fall_animation);
+    animation_component->AddAnimation(fall_animation);
 }
 void Player::CreateJumpAnimation()
 {
@@ -125,5 +125,5 @@ void Player::CreateJumpAnimation()
     auto jump_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]()
                                                                    { return is_jumping == false; });
     jump_animation->AddTransition(jump_to_fall_transition);
-    animation_component->AddAnimation(*jump_animation);
+    animation_component->AddAnimation(jump_animation);
 }

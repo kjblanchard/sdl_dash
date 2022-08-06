@@ -22,7 +22,7 @@ namespace Components
         using AnimEventType = Animations::Animation::AnimationEvent::EventType;
 
     private:
-        std::vector<Animations::Animation> animations;
+        std::vector<std::shared_ptr<Animations::Animation>> animations;
         SpriteComponent *sprite_component;
         std::unique_ptr<Aseprite::AsepriteSheet> aseprite_sheet;
         double ms_this_frame = 0.0;
@@ -50,7 +50,7 @@ namespace Components
         }
 
     public:
-        Animations::Animation current_animation;
+        Animations::Animation* current_animation;
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer = 0, Vector2 offset = Vector2());
         void Update(const Gametime &) override;
         void ChangeAnimation2(std::string change);
@@ -60,15 +60,15 @@ namespace Components
             ChangeAnimation(new_anim);
         }
 
-        inline void AddAnimation(Animations::Animation &animation)
+        inline void AddAnimation(Animations::Animation* animation)
         {
-            animation.aseprite_animation = GetAsepriteAnimationByName(animation.name);
-            animations.push_back(animation);
+            animation->aseprite_animation = GetAsepriteAnimationByName(animation->name);
+            animations.push_back(std::shared_ptr<Animations::Animation>(animation));
         }
-        inline Animations::Animation &GetAnimationByName(std::string anim_name)
+        inline Animations::Animation *GetAnimationByName(std::string anim_name)
         {
-            return *std::find_if(animations.begin(), animations.end(), [&anim_name](const Animations::Animation &anim)
-                                 { return anim.name == anim_name; });
+            return (*std::find_if(animations.begin(), animations.end(), [&anim_name](const std::shared_ptr<Animations::Animation> anim_shared_ptr)
+                                 { return anim_shared_ptr.get()->name == anim_name; })).get();
         }
         inline Aseprite::AsepriteAnimation GetAsepriteAnimationByName(std::string anim_name)
         {

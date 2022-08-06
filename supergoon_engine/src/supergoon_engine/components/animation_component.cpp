@@ -4,7 +4,7 @@
 
 using namespace Components;
 
-AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer_id, Vector2 offset) : Component{owner, offset, 1}, current_animation{""}
+AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer_id, Vector2 offset) : Component{owner, offset, 1}, current_animation{nullptr}
 {
     aseprite_sheet = std::make_unique<Aseprite::AsepriteSheet>(aseprite_file_name);
     sprite_component = new SpriteComponent(owner, aseprite_sheet->texture, aseprite_sheet->sprite_sheet_frames[0].source_rect, layer_id);
@@ -13,16 +13,16 @@ AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_f
 void AnimationComponent::Update(const Gametime &gametime)
 {
     // TODO debug log this.
-    if (current_animation.name == "")
+    if (current_animation == nullptr)
         return;
 
     CheckForAnimationTransitions();
-    if (!current_animation.AnimationEnded())
+    if (!current_animation->AnimationEnded())
     {
         ms_this_frame += gametime.ElapsedTimeInMilliseconds();
         if (FrameJustEnded())
             FrameChange();
-        current_animation.FireAnimationEvent(AnimEventType::Frame, ms_this_frame);
+        current_animation->FireAnimationEvent(AnimEventType::Frame, ms_this_frame);
     }
 
     if (dirty)
@@ -30,15 +30,15 @@ void AnimationComponent::Update(const Gametime &gametime)
 }
 void AnimationComponent::FrameChange()
 {
-    if (current_frame_in_animation == current_animation.aseprite_animation.frame_end)
+    if (current_frame_in_animation == current_animation->aseprite_animation.frame_end)
     {
-        if (current_animation.looping)
+        if (current_animation->looping)
         {
-            ChangeAnimation(current_animation.name);
+            ChangeAnimation(current_animation->name);
         }
         else
         {
-            current_animation.AnimationEnd(ms_this_frame);
+            current_animation->AnimationEnd(ms_this_frame);
         }
     }
     else
@@ -56,7 +56,7 @@ void AnimationComponent::UpdateSpriteComponent()
 }
 void AnimationComponent::CheckForAnimationTransitions()
 {
-    for (auto &&i : current_animation.transitions)
+    for (auto &&i : current_animation->transitions)
     {
         if (i->ShouldTransition())
         {
@@ -69,14 +69,14 @@ void AnimationComponent::CheckForAnimationTransitions()
 void AnimationComponent::ChangeAnimation(std::string change)
 {
     // TODO check to see if current animation exists.
-    if (!current_animation.AnimationEnded())
+    if (!current_animation->AnimationEnded())
     {
-        current_animation.AnimationEnd(static_cast<float>(ms_this_frame));
+        current_animation->AnimationEnd(static_cast<float>(ms_this_frame));
     }
-    if (current_animation.name != change)
+    if (current_animation->name != change)
         current_animation = GetAnimationByName(change);
     ms_this_frame = 0;
-    current_frame_in_animation = current_animation.aseprite_animation.frame_begin;
-    current_animation.AnimationBegin(static_cast<float>(ms_this_frame));
+    current_frame_in_animation = current_animation->aseprite_animation.frame_begin;
+    current_animation->AnimationBegin(static_cast<float>(ms_this_frame));
     dirty = true;
 }

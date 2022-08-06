@@ -50,7 +50,7 @@ void Trampoline::CreateAllAnimations()
 void Trampoline::CreateIdleAnimation()
 {
     auto idle_animation = new Animations::Animation(idle_animation_name, false);
-    animation_component->AddAnimation(*idle_animation);
+    animation_component->AddAnimation(idle_animation);
 }
 void Trampoline::CreateActionAnimation()
 {
@@ -58,5 +58,5 @@ void Trampoline::CreateActionAnimation()
     auto action_to_idle_transition = new Animations::FinishAnimationTransition(idle_animation_name, action_animation);
 
     action_animation->AddTransition(action_to_idle_transition);
-    animation_component->AddAnimation(*action_animation);
+    animation_component->AddAnimation(action_animation);
 }
