@@ -1,7 +1,7 @@
 #include <supergoon_engine/components/rigidbody_component.hpp>
 #include <supergoon_engine/components/box_collider_component.hpp>
 #include <supergoon_engine/objects/tile.hpp>
-#include <supergoon_engine/engine/gravity.hpp>
+#include <supergoon_engine/physics/gravity.hpp>
 #include <supergoon_engine/engine/level.hpp>
 #include <algorithm>
 
@@ -16,55 +16,55 @@ Components::RigidbodyComponent::~RigidbodyComponent()
 void Components::RigidbodyComponent::Update(const Gametime &gametime)
 {
 
-    accel_applied_this_frame = false;
-    if (acceleration != Vector2::Zero())
-    {
-        velocity += acceleration;
-        acceleration = Vector2::Zero();
-        accel_applied_this_frame = true;
-    }
-    if (gravity_enabled)
-        Gravity::ApplyGravity(*this, owner_->GetLevel()->gravity_params, gametime);
+    // accel_applied_this_frame = false;
+    // if (acceleration != Vector2::Zero())
+    // {
+    //     velocity += acceleration;
+    //     acceleration = Vector2::Zero();
+    //     accel_applied_this_frame = true;
+    // }
+    // if (gravity_enabled)
+    //     Gravity::ApplyGravity(*this, owner_->GetLevel()->gravity_params, gametime);
 
-    if (velocity != Vector2::Zero())
-        ApplyVelocity(gametime);
+    // if (velocity != Vector2::Zero())
+    //     ApplyVelocity(gametime);
 
-    // Check against actors avter moving
-    auto box_location = box_collider->GetCurrentSdlRect();
-    SDL_FRect float_rect;
-    float_rect.x = box_location.x;
-    float_rect.y = box_location.y;
-    float_rect.w = box_location.w;
-    float_rect.h = box_location.h;
-    TryActorStep(float_rect);
+    // // Check against actors avter moving
+    // auto box_location = box_collider->GetCurrentSdlRect();
+    // SDL_FRect float_rect;
+    // float_rect.x = box_location.x;
+    // float_rect.y = box_location.y;
+    // float_rect.w = box_location.w;
+    // float_rect.h = box_location.h;
+    // TryActorStep(float_rect);
 }
 
 void Components::RigidbodyComponent::ApplyVelocity(const Gametime &gametime)
 {
 
-    velocity.x = (velocity.x > 0) ? std::clamp(velocity.x, 0.f, max_velocity.x) : std::clamp(velocity.x, -max_velocity.x, 0.f);
-    velocity.y = (velocity.y >= 0) ? std::clamp(velocity.y, 0.f, max_velocity.y) : std::clamp(velocity.y, -max_velocity.y, 0.f);
+    // velocity.x = (velocity.x > 0) ? std::clamp(velocity.x, 0.f, max_velocity.x) : std::clamp(velocity.x, -max_velocity.x, 0.f);
+    // velocity.y = (velocity.y >= 0) ? std::clamp(velocity.y, 0.f, max_velocity.y) : std::clamp(velocity.y, -max_velocity.y, 0.f);
 
-    auto x_step = velocity.x * gametime.ElapsedTimeInSeconds();
-    auto y_step = velocity.y * gametime.ElapsedTimeInSeconds();
-    ApplyVelocityByStepSolidsX(x_step);
-    ApplyVelocityByStepSolidsY(y_step);
+    // auto x_step = velocity.x * gametime.ElapsedTimeInSeconds();
+    // auto y_step = velocity.y * gametime.ElapsedTimeInSeconds();
+    // ApplyVelocityByStepSolidsX(x_step);
+    // ApplyVelocityByStepSolidsY(y_step);
 }
 void Components::RigidbodyComponent::ApplyVelocityByStepSolidsX(double step)
 {
-    auto minimum_step = minimum_x_step;
-    auto &loc_to_alter = owner_->location.x;
-    auto &velocity_to_alter = velocity.x;
-    Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Right : Components::OverlapDirection::Left;
-    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, true, overlap_dir);
+    // auto minimum_step = minimum_x_step;
+    // auto &loc_to_alter = owner_->location.x;
+    // auto &velocity_to_alter = velocity.x;
+    // Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Right : Components::OverlapDirection::Left;
+    // TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, true, overlap_dir);
 }
 void Components::RigidbodyComponent::ApplyVelocityByStepSolidsY(double step)
 {
-    auto minimum_step = minimum_y_step;
-    auto &loc_to_alter = owner_->location.y;
-    auto &velocity_to_alter = velocity.y;
-    Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Down : Components::OverlapDirection::Up;
-    TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false, overlap_dir);
+    // auto minimum_step = minimum_y_step;
+    // auto &loc_to_alter = owner_->location.y;
+    // auto &velocity_to_alter = velocity.y;
+    // Components::OverlapDirection overlap_dir = (step > 0) ? Components::OverlapDirection::Down : Components::OverlapDirection::Up;
+    // TryAllMovementSteps(step, minimum_step, loc_to_alter, velocity_to_alter, false, overlap_dir);
 }
 void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step, Components::OverlapDirection overlap_dir)
 {
@@ -75,21 +75,17 @@ void Components::RigidbodyComponent::TryAllMovementSteps(double full_step, doubl
     while ((steps_left >= minimum_step || steps_left <= -minimum_step) && !collision)
     {
         double move_step = 0;
+        //Step one at a time, unless we are less than 1 in either direction.
         if (steps_left > 0)
             move_step = (steps_left >= step_speed) ? step_speed : steps_left;
         else
             move_step = (steps_left <= step_speed) ? step_speed : steps_left;
-        // auto move_step = (full_step >= step_speed) ? step_speed : friction_stepfull_step;
-        auto box_location = box_collider->GetCurrentSdlRect();
-        SDL_FRect float_rect;
-        float_rect.x = box_location.x;
-        float_rect.y = box_location.y;
-        float_rect.w = box_location.w;
-        float_rect.h = box_location.h;
-        auto box_loc_to_change = (x_step) ? &float_rect.x : &float_rect.y;
+        auto box_location = box_collider->GetCurrentSdlRectF();
+
+        auto box_loc_to_change = (x_step) ? &box_location.x : &box_location.y;
         *box_loc_to_change += move_step;
 
-        collision = TryMovementStep(float_rect, overlap_dir);
+        collision = TryMovementStep(box_location, overlap_dir);
         if (collision)
         {
             velocity_to_alter = 0;

@@ -28,7 +28,10 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
 }
 void Player::Update(const Gametime &gametime)
 {
+    std::cout << "Rigidbody vel X: " << rigidbody_component->velocity.x << " Rigidbody Vel Y: " << rigidbody_component->velocity.y << std::endl;
+    std::cout << rigidbody_component->on_ground << "On ground was" << rigidbody_component->velocity.y;
     Actor::Update(gametime);
+
 }
 
 Player::~Player()

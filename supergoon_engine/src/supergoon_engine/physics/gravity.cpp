@@ -1,4 +1,4 @@
-#include <supergoon_engine/engine/gravity.hpp>
+#include <supergoon_engine/physics/gravity.hpp>
 #include <supergoon_engine/components/rigidbody_component.hpp>
 
 void Gravity::ApplyGravity(Components::RigidbodyComponent &rb, GravityParams &gravity_params, const Gametime &gametime)
@@ -12,7 +12,7 @@ void Gravity::ApplyGravity(Components::RigidbodyComponent &rb, GravityParams &gr
 
 void Gravity::GravityConstraintY(Components::RigidbodyComponent &rb, GravityParams &params, double gravity_step)
 {
-    if (!params.enabled || rb.on_ground)
+    if (!params.enabled)
         return;
     auto desired_velocity_y = rb.velocity.y + gravity_step;
     if (desired_velocity_y > 0)

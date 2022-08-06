@@ -1,5 +1,4 @@
 #include <sol2/sol.hpp>
-#include <supergoon_engine/engine/gravity.hpp>
 #include <supergoon_engine/engine/level.hpp>
 #include <supergoon_engine/tiled/tilemap.hpp>
 #include <supergoon_engine/tiled/tiled_loader.hpp>
@@ -8,6 +7,7 @@
 #include <supergoon_engine/objects/tile.hpp>
 #include <supergoon_engine/components/box_collider_component.hpp>
 #include <supergoon_engine/engine/engine_tags.hpp>
+#include <supergoon_engine/physics/physics.hpp>
 
 Vector2 Level::current_level_size = Vector2();
 
@@ -60,6 +60,11 @@ void Level::Initialize()
 
 void Level::Update(const Gametime &gametime)
 {
+    for (auto &&i : actors)
+    {
+        Physics::ApplyPhysics(gametime, i->GetRigidbody(),solid_tiles,actors, gravity_params);
+    }
+
     for (auto i : tiles)
     {
         i->Update(gametime);

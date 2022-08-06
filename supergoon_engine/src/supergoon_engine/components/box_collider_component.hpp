@@ -38,14 +38,20 @@ namespace Components
         Rectangle temp_rect;
         bool is_blocking = true;
         SDL_Rect GetCurrentSdlRect();
+        SDL_FRect GetCurrentSdlRectF();
         void Update(const Gametime &gametime) override;
         void Draw(Graphics::SpriteBatch &spritebatch) override;
 
-        inline void AddToOverlaps(GameObject* overlap)
+        inline bool AddToOverlaps(unsigned long int overlap)
+        {
+            this_frame_overlaps.push_back(overlap);
+        }
+
+        inline bool AddToOverlaps(GameObject* overlap)
         {
             this_frame_overlaps.push_back(overlap->id);
         }
-        inline void AddToOverlaps(Component* overlap)
+        inline bool AddToOverlaps(Component* overlap)
         {
             this_frame_overlaps.push_back(overlap->id);
         }

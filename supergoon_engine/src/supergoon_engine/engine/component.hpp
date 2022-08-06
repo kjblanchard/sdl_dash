@@ -34,9 +34,9 @@ protected:
     static Camera *main_camera;
 
     Vector2 offset_;
-    GameObject *owner_;
 
 public:
+    GameObject *owner_;
     unsigned long int id;
     int update_order = 2;
     Vector2 GetLocation();

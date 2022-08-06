@@ -8,7 +8,7 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(5);
     // TODO make this automatic from the lua file.
     rigidbody_component->SetGravityEnabled(false);
-    rigidbody_component->GetBoxCollider().is_blocking = false;
+    rigidbody_component->GetBoxCollider().is_blocking = true;
     rigidbody_component->GetBoxCollider().debug = true;
     rigidbody_component->AddOverlapEvent([this](Components::BoxColliderEventArgs args)
                                          {

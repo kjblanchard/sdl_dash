@@ -5,6 +5,9 @@
 Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}, rectangle{Vector2(owner->location.x + offset.x, owner->location.y + offset.y), box_size}
 {
     AddTag(Tags::ComponentTags::Box);
+    debug = true;
+
+
 }
 
 Components::BoxColliderComponent::~BoxColliderComponent()
@@ -13,6 +16,15 @@ Components::BoxColliderComponent::~BoxColliderComponent()
 SDL_Rect Components::BoxColliderComponent::GetCurrentSdlRect()
 {
     SDL_Rect rect;
+    rect.x = owner_->location.x + offset_.x;
+    rect.y = owner_->location.y + offset_.y;
+    rect.w = rectangle.GetSize().x;
+    rect.h = rectangle.GetSize().y;
+    return rect;
+}
+SDL_FRect Components::BoxColliderComponent::GetCurrentSdlRectF()
+{
+    SDL_FRect rect;
     rect.x = owner_->location.x + offset_.x;
     rect.y = owner_->location.y + offset_.y;
     rect.w = rectangle.GetSize().x;

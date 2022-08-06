@@ -4,7 +4,7 @@
 #include <memory>
 #include <sol2/forward.hpp>
 #include <supergoon_engine_export.h>
-#include <supergoon_engine/engine/gravity.hpp>
+#include <supergoon_engine/physics/gravity.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/objects/actor.hpp>
 #include <supergoon_engine/interfaces/i_initialize.hpp>

@@ -47,4 +47,9 @@ struct SUPERGOON_ENGINE_EXPORT Rectangle
         rect.h = static_cast<int>(sdl_rectangle.h);
         return rect;
     }
+
+    inline SDL_FRect GetFRect()
+    {
+        return sdl_rectangle;
+    }
 };

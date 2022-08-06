@@ -78,8 +78,8 @@ namespace Objects
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
         void Update(const Gametime &gametime) override;
-        inline Components::BoxColliderComponent& GetBoxCollider(){
-            return rigidbody_component->GetBoxCollider();
+        inline Components::RigidbodyComponent& GetRigidbody(){
+            return *rigidbody_component;
         }
         inline virtual void ProcessInput(const Gametime &)
         {
