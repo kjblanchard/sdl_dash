@@ -32,7 +32,7 @@ namespace Physics
     class StepParams
     {
     public:
-        inline StepParams(double full_step_, double min_step, float &loc_to_alter_, float &vel_to_alter_, Components::OverlapDirection overlap_dir_, bool x_step_) : full_step{full_step_}, minimum_step{min_step}, loc_to_alter{&loc_to_alter_}, vel_to_alter{&vel_to_alter_}, overlap_dir{overlap_dir_}, x_step{x_step_}
+        inline StepParams(double full_step_, double min_step, float &loc_to_alter_, float &vel_to_alter_, Components::OverlapDirection overlap_dir_, bool x_step_) : full_step{full_step_}, minimum_step{min_step}, loc_to_alter{&loc_to_alter_}, vel_to_alter{&vel_to_alter_},  x_step{x_step_},overlap_dir{overlap_dir_}
         {
         }
         double full_step = 0;

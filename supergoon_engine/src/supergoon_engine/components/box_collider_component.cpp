@@ -5,7 +5,6 @@
 Components::BoxColliderComponent::BoxColliderComponent(GameObject *owner, Point box_size, Vector2 offset) : Component{owner, offset}, rectangle{Vector2(owner->location.x + offset.x, owner->location.y + offset.y), box_size}
 {
     AddTag(Tags::ComponentTags::Box);
-    debug = true;
 
 
 }

@@ -15,6 +15,7 @@ namespace Animations
     public:
         // inline AnimationTransition(std::string transition_to, std::function<bool()> func_to_initiate_change = nullptr, TransitionType type = TransitionType::OnFunction) : new_transition{transition_to}, transition_function{func_to_initiate_change}, type_of_transition{type} {}
         inline FunctionAnimationTransition(std::string transition_to, std::function<bool()> func_to_initiate_change) : AnimationTransition{transition_to}, change_func{func_to_initiate_change} {}
+        ~FunctionAnimationTransition() override;
         std::function<bool()> change_func;
         inline bool ShouldTransition() override
         {

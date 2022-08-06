@@ -31,15 +31,12 @@ namespace Components
         }
         bool is_moving_x;
         RigidbodyComponent(GameObject *owner, Point box_size, Vector2 offset = Vector2());
-        ~RigidbodyComponent() override;
         void Update(const Gametime &) override;
-        void ApplyVelocity(const Gametime &);
-        void ApplyVelocityByStepSolidsX(double step);
-        void ApplyVelocityByStepSolidsY(double step);
-        void TryAllMovementSteps(double full_step, double minimum_step, float &location_to_alter, float &velocity_to_alter, bool x_step, Components::OverlapDirection overlap_dir);
-        bool TryMovementStep(SDL_FRect &rect_to_check, Components::OverlapDirection overlap_dir);
-        bool TryActorStep(SDL_FRect &rect_to_check);
-        void ApplyForce(Vector2 force);
+
+        inline void ApplyForce(Vector2 force)
+        {
+            acceleration += force;
+        }
         inline void ChangeVelocityStatic(Vector2 new_velocity)
         {
             velocity = new_velocity;
@@ -66,12 +63,6 @@ namespace Components
             box_collider->overlap_events.push_back(event_function);
         }
 
-        inline bool CheckIfOverlapJustBegan(unsigned long int id)
-        {
-                 return  std::find(box_collider->last_frame_overlaps.begin(), box_collider->last_frame_overlaps.end(),id) != box_collider->last_frame_overlaps.end();
-
-        }
-
         inline void ApplyAcceleration()
         {
             accel_applied_this_frame = false;
@@ -83,5 +74,7 @@ namespace Components
                 accel_applied_this_frame = true;
             }
         }
+
+        void AddStopBoxColliderEvents();
     };
 }

@@ -10,7 +10,8 @@
 
 namespace Components
 {
-    enum struct OverlapDirection{
+    enum struct OverlapDirection
+    {
         Default,
         Up,
         Right,
@@ -42,22 +43,31 @@ namespace Components
         void Update(const Gametime &gametime) override;
         void Draw(Graphics::SpriteBatch &spritebatch) override;
 
-        inline bool AddToOverlaps(unsigned long int overlap)
+        inline void AddToOverlaps(unsigned long int overlap, BoxColliderEventArgs &args)
         {
             this_frame_overlaps.push_back(overlap);
+            if (CheckIfOverlapJustBegan(overlap))
+            {
+                OnOverlapBeginEvent(args);
+            }
         }
 
-        inline bool AddToOverlaps(GameObject* overlap)
+        inline void AddToOverlaps(GameObject *overlap, BoxColliderEventArgs &args)
         {
-            this_frame_overlaps.push_back(overlap->id);
+            AddToOverlaps(overlap->id, args);
         }
-        inline bool AddToOverlaps(Component* overlap)
+        inline void AddToOverlaps(Component *overlap, BoxColliderEventArgs &args)
         {
-            this_frame_overlaps.push_back(overlap->id);
+            AddToOverlaps(overlap->id, args);
+            // this_frame_overlaps.push_back(overlap->id);
+        }
+
+        inline bool CheckIfOverlapJustBegan(unsigned long int id_)
+        {
+            return std::find(last_frame_overlaps.begin(), last_frame_overlaps.end(), id_) == last_frame_overlaps.end();
         }
 
         std::vector<std::function<void(BoxColliderEventArgs)>> overlap_events;
-
 
         inline void OnOverlapBeginEvent(BoxColliderEventArgs args)
         {

@@ -16,6 +16,7 @@ namespace Animations
         // inline AnimationTransition(std::string transition_to, std::function<bool()> func_to_initiate_change = nullptr, TransitionType type = TransitionType::OnFunction) : new_transition{transition_to}, transition_function{func_to_initiate_change}, type_of_transition{type} {}
         inline FinishAnimationTransition(std::string transition_to, Animations::Animation* thing_to_watch) : AnimationTransition{transition_to}, thing{thing_to_watch} {}
         Animations::Animation* thing;
+        ~FinishAnimationTransition() override;
         inline bool ShouldTransition() override
         {
             return thing->ended;

@@ -24,7 +24,7 @@ void Physics::ApplyPhysics(const Gametime &gametime, Components::RigidbodyCompon
     ApplyVelocityY(physics_params);
 }
 
-void Physics::ApplyVelocityX(PhysicsParams& params)
+void Physics::ApplyVelocityX(PhysicsParams &params)
 {
     auto x_step = params.rigidbody->velocity.x * params.gametime->ElapsedTimeInSeconds();
     auto minimum_step = params.rigidbody->minimum_x_step;
@@ -34,7 +34,7 @@ void Physics::ApplyVelocityX(PhysicsParams& params)
     auto step_params = StepParams(x_step, minimum_step, loc_to_alter, velocity_to_alter, overlap_dir, true);
     TryAllMovementSteps(params, step_params);
 }
-void Physics::ApplyVelocityY(PhysicsParams& params)
+void Physics::ApplyVelocityY(PhysicsParams &params)
 {
     auto y_step = params.rigidbody->velocity.y * params.gametime->ElapsedTimeInSeconds();
     auto minimum_step = params.rigidbody->minimum_y_step;
@@ -45,7 +45,7 @@ void Physics::ApplyVelocityY(PhysicsParams& params)
     TryAllMovementSteps(params, step_params);
 }
 
-void Physics::TryAllMovementSteps(PhysicsParams& physics_params, StepParams& step_params)
+void Physics::TryAllMovementSteps(PhysicsParams &physics_params, StepParams &step_params)
 {
     auto steps_left = step_params.full_step;
     auto step_speed = (steps_left > 0) ? 1 : -1;
@@ -68,11 +68,6 @@ void Physics::TryAllMovementSteps(PhysicsParams& physics_params, StepParams& ste
         collision = TryMovementStep(physics_params, step_params);
         if (collision)
         {
-            if(step_params.x_step == false)
-            {
-                std::cout << "Here";
-
-            }
             *step_params.vel_to_alter = 0;
             if (!step_params.x_step && step_speed > 0)
             {
@@ -107,7 +102,7 @@ void Physics::TryAllMovementSteps(PhysicsParams& physics_params, StepParams& ste
     // }
 }
 
-bool Physics::TryMovementStep(PhysicsParams& physics_params, StepParams& step_params)
+bool Physics::TryMovementStep(PhysicsParams &physics_params, StepParams &step_params)
 {
     auto tiles = physics_params.tiles;
     auto rect = step_params.frect;
@@ -136,15 +131,10 @@ bool Physics::TryMovementStep(PhysicsParams& physics_params, StepParams& step_pa
 
             if (SDL_HasIntersectionF(rect, &sdl_actor_rect))
             {
+                auto args = Components::BoxColliderEventArgs(rigidbody.owner_, overlap_dir);
+                actor->GetRigidbody().box_collider->AddToOverlaps(actor_rect, args);
                 if (actor_rect->is_blocking)
                     return true;
-                rigidbody.box_collider->AddToOverlaps(actor_rect);
-                auto overlap_just_began = rigidbody.CheckIfOverlapJustBegan(actor_rect->id);
-                if (overlap_just_began)
-                {
-                    auto args = Components::BoxColliderEventArgs(rigidbody.owner_, overlap_dir);
-                    actor_rect->OnOverlapBeginEvent(args);
-                }
             }
         }
     }
