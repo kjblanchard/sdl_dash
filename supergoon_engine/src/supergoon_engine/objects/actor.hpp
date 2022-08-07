@@ -8,6 +8,7 @@
 #include <supergoon_engine/components/box_collider_component.hpp>
 #include <supergoon_engine/engine/engine_tags.hpp>
 #include <vector>
+#include <map>
 #include <functional>
 
 namespace Objects
@@ -19,6 +20,7 @@ namespace Objects
         int layer;
         Rectangle box_rect;
         std::string actor_name;
+        std::map<std::string, int> actor_props;
     };
 
     class SUPERGOON_ENGINE_EXPORT Actor : public GameObject

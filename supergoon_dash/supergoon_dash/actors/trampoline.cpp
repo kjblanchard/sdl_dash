@@ -7,6 +7,7 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     // TODO make this a variable that is equal to the player.
     AddTag(5);
     // TODO make this automatic from the lua file.
+    direction = static_cast<Direction>(params.actor_props.at("direction"));
     rigidbody_component->SetGravityEnabled(false);
     rigidbody_component->GetBoxCollider().is_blocking = true;
     rigidbody_component->GetBoxCollider().debug = true;
@@ -17,13 +18,29 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
             auto player = dynamic_cast<Player*>(args.overlapee);
             if (player)
             {
-                    player->TrampolineJump(args.overlap_direction);
+                switch (direction)
+                {
+                case Direction::Up:
                     if(Components::OverlapDirection::Down == args.overlap_direction)
                     {
+                        player->TrampolineJump(args.overlap_direction, -400);
                         trampoline_bouncing = true;
                         animation_component->ForceAnimationChange(action_animation_name);
 
                     }
+                    break;
+                case Direction::Down:
+                    if(Components::OverlapDirection::Up == args.overlap_direction)
+                    {
+                        player->TrampolineJump(args.overlap_direction, 400);
+                        trampoline_bouncing = true;
+                        animation_component->ForceAnimationChange(action_animation_name);
+                    }
+                    break;
+
+                default:
+                    break;
+                }
 
             }
         } });

@@ -192,6 +192,15 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.layer = layer_depth;
 
                     sol::lua_table actor_properties = actor["properties"];
+                    //Get all properties (string and number) and put in the map
+                    actor_properties.for_each([&actor_params](std::pair<sol::object, sol::object> key_value_pair){
+                        std::string key = key_value_pair.first.as<std::string>();
+                        int value = key_value_pair.second.as<int>();
+                        actor_params.actor_props.insert({key, value});
+                    });
+
+
+
                     if (actor_properties["box_x"] != sol::lua_nil)
                     {
                         actor_params.box_rect = Rectangle(
@@ -233,10 +242,8 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
             std::string filename_no_path = seglist.back();
             std::string filename_no_prefix = filename_no_path.erase(filename_no_path.length() - 3);
             std::string filename_lua_prefix = filename_no_prefix + "lua";
-            // auto tsx_full_name = "./assets/tiled/tilesets/" + tsx_name;
             auto tsx_full_name = "./assets/tiled/tilesets/" + filename_lua_prefix;
             Lua::LoadLuaTableIntoTempState(tsx_full_name.c_str(), tsx_name.c_str(), current_doc_lua_state.get());
-            // sol::lua_table loaded_tsx_lua = root_element[tsx_name.c_str()];
             sol::lua_table loaded_tsx_lua = (*current_doc_lua_state.get())[tsx_name.c_str()];
             tsx->layer_name = loaded_tsx_lua["name"];
             tsx->tile_height = loaded_tsx_lua["tileheight"];

@@ -5,10 +5,18 @@
 class Trampoline : public Objects::Actor
 {
 private:
+    enum class Direction{
+        Up,
+        Down,
+        Left,
+        Right
+    };
     void CreateAllAnimations();
     void CreateIdleAnimation();
     void CreateActionAnimation();
     bool trampoline_bouncing = false;
+    Direction direction;
+
 
 
 public:
