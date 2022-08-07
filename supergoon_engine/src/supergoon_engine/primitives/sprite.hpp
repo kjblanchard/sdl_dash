@@ -4,10 +4,17 @@
 
 struct SDL_Texture;
 
-struct SUPERGOON_ENGINE_EXPORT Sprite{
+enum class SpriteFlip
+{
+    Default,
+    Horizontal,
+    Vertical
+};
+struct SUPERGOON_ENGINE_EXPORT Sprite
+{
     Sprite(std::shared_ptr<SDL_Texture> texture_ptr);
     ~Sprite();
-    bool mirror = false;
+    // bool mirror = false;
+    SpriteFlip flip;
     std::shared_ptr<SDL_Texture> texture;
-
 };

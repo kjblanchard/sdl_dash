@@ -48,11 +48,11 @@ void Objects::Actor::Update(const Gametime &gametime)
     {
         if (rigidbody_component->velocity.x < 0)
         {
-            animation_component->SetMirror(true);
+            animation_component->SetMirror(SpriteFlip::Horizontal);
         }
         else
         {
-            animation_component->SetMirror(false);
+            animation_component->SetMirror(SpriteFlip::Default);
         }
     }
     PrintValues();

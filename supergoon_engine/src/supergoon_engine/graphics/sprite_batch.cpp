@@ -56,8 +56,9 @@ void SpriteBatch::End()
         }
         else
         {
-            auto mirror = (i.sprite->mirror) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+            // auto mirror = (i.sprite->mirror) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
             auto src_rect = i.src_rect->GetRect();
+            auto flip = GetFlipType(*i.sprite);
             SDL_RenderCopyExF(
                 graphics_device->renderer,
                 i.sprite->texture.get(),
@@ -65,7 +66,7 @@ void SpriteBatch::End()
                 &i.dst_rect->sdl_rectangle,
                 0.0,
                 nullptr,
-                mirror
+                flip
                 );
         }
     }
@@ -88,4 +89,17 @@ void SpriteBatch::DrawRect(Rectangle &dst_rect)
     draw_object.layer = 50;
     draw_objects.push_back(draw_object);
     // draw_rects.push_back(&dst_rect);
+}
+
+SDL_RendererFlip SpriteBatch::GetFlipType(Sprite& sprite)
+{
+        switch (sprite.flip)
+        {
+        case SpriteFlip::Default:
+            return SDL_FLIP_NONE;
+        case SpriteFlip::Horizontal:
+            return SDL_FLIP_HORIZONTAL;
+        case SpriteFlip::Vertical:
+            return SDL_FLIP_VERTICAL;
+        }
 }

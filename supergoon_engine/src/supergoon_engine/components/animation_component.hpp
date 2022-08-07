@@ -80,9 +80,9 @@ namespace Components
             // TODO debug this if it is equal to the end iterator
             current_animation = GetAnimationByName(entry_anim_name);
         }
-        inline void SetMirror(bool mirror_val)
+        inline void SetMirror(SpriteFlip flip_)
         {
-            sprite_component->sprite.mirror = mirror_val;
+            sprite_component->sprite.flip = flip_;
         }
     };
 }

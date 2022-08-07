@@ -8,6 +8,10 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(5);
     // TODO make this automatic from the lua file.
     direction = static_cast<Direction>(params.actor_props.at("direction"));
+    if(direction == Direction::Down)
+    {
+        animation_component->SetMirror(SpriteFlip::Vertical);
+    }
     rigidbody_component->SetGravityEnabled(false);
     rigidbody_component->GetBoxCollider().is_blocking = true;
     rigidbody_component->GetBoxCollider().debug = true;

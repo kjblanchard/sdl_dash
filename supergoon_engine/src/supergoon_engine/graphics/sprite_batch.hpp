@@ -1,5 +1,6 @@
 #include <vector>
 #include <supergoon_engine/primitives/rectangle.hpp>
+#include <SDL_render.h>
 
 struct Sprite;
 
@@ -31,6 +32,7 @@ namespace Graphics
         void DrawRect(Rectangle& dst_rect);
         void DrawRectUi(Rectangle& dst_rect);
         void End();
+        SDL_RendererFlip GetFlipType(Sprite& sprite);
     };
 
 }
