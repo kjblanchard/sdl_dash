@@ -19,10 +19,10 @@ void AnimationComponent::Update(const Gametime &gametime)
     CheckForAnimationTransitions();
     if (!current_animation->AnimationEnded())
     {
-        ms_this_frame += gametime.ElapsedTimeInMilliseconds();
+        ms_this_frame += (gametime.ElapsedTimeInMilliseconds() * anim_speed);
         if (FrameJustEnded())
             FrameChange();
-        current_animation->FireAnimationEvent(AnimEventType::Frame, ms_this_frame);
+        current_animation->FireAnimationEvent(AnimEventType::Frame, ms_this_frame, current_frame_in_animation);
     }
 
     if (dirty)
@@ -47,6 +47,7 @@ void AnimationComponent::FrameChange()
         ms_this_frame = 0;
         dirty = true;
     }
+    current_animation->FireAnimationEvent(AnimEventType::FrameBegin, ms_this_frame, current_frame_in_animation - current_animation->aseprite_animation.frame_begin);
 }
 void AnimationComponent::UpdateSpriteComponent()
 {
@@ -61,6 +62,7 @@ void AnimationComponent::CheckForAnimationTransitions()
         if (i->ShouldTransition())
         {
             ChangeAnimation(i->new_transition);
+            SetAnimationSpeed(1.0f);
             break;
         }
     }

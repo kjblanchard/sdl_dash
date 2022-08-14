@@ -2,6 +2,7 @@
 #include <supergoon_engine_export.h>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/primitives/rectangle.hpp>
+#include <supergoon_engine/interfaces/i_sound.hpp>
 #include <supergoon_engine/components/rigidbody_component.hpp>
 #include <supergoon_engine/components/animation_component.hpp>
 #include <supergoon_engine/components/input_component.hpp>
@@ -23,15 +24,17 @@ namespace Objects
         std::map<std::string, int> actor_props;
     };
 
-    class SUPERGOON_ENGINE_EXPORT Actor : public GameObject
+    class SUPERGOON_ENGINE_EXPORT Actor : public GameObject, public ISound
     {
     private:
+        int jump_sound = -1;
+
     protected:
         const char *idle_animation_name = "idle";
         const char *run_animation_name = "run";
         const char *jump_animation_name = "jump";
         const char *fall_animation_name = "fall";
-        const char* action_animation_name = "action";
+        const char *action_animation_name = "action";
 
         Actor(ActorParams params);
         typedef std::pair<const char *, std::function<Actor *(ActorParams &)>> actor_factory;
@@ -51,6 +54,10 @@ namespace Objects
         float jump_speed = 0;
         float max_run_speed = 200;
         double speed = 0;
+
+        inline void SetJumpSound(int sound_to_play){
+            jump_sound = sound_to_play;
+        }
 
         inline void UpdateMaxVelocity(Vector2 new_max)
         {
@@ -80,23 +87,23 @@ namespace Objects
         ~Actor() override;
         static std::vector<actor_factory> actor_listing_vector;
         void Update(const Gametime &gametime) override;
-        inline Components::RigidbodyComponent& GetRigidbody(){
+        inline Components::RigidbodyComponent &GetRigidbody()
+        {
             return *rigidbody_component;
         }
         inline virtual void ProcessInput(const Gametime &)
         {
         }
-        inline std::vector<Components::BoxColliderComponent*> GetBoxColliders()
+        inline std::vector<Components::BoxColliderComponent *> GetBoxColliders()
         {
-            std::vector<Components::BoxColliderComponent*> box_colliders;
-            std::for_each(components_.begin(), components_.end(), [&](std::shared_ptr<Component> comp){
-                if( comp->HasTag(Tags::ComponentTags::Box))
-                {
-                    box_colliders.push_back(dynamic_cast<Components::BoxColliderComponent*>(comp.get()));
-
-                }
-
-            });
+            std::vector<Components::BoxColliderComponent *> box_colliders;
+            std::for_each(components_.begin(), components_.end(), [&](std::shared_ptr<Component> comp)
+                          {
+                              if (comp->HasTag(Tags::ComponentTags::Box))
+                              {
+                                  box_colliders.push_back(dynamic_cast<Components::BoxColliderComponent *>(comp.get()));
+                              }
+                          });
             return box_colliders;
         }
     };

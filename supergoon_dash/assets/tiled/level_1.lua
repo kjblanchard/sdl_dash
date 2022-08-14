@@ -9,9 +9,9 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 6,
+  nextobjectid = 13,
   properties = {
-    ["music"] = "level_1"
+    ["music"] = "main"
   },
   tilesets = {
     {
@@ -192,30 +192,58 @@ return {
           name = "trampoline",
           type = "",
           shape = "rectangle",
-          x = 401.5,
-          y = 196.5,
+          x = 405.5,
+          y = 185.5,
           width = 28,
           height = 28,
           rotation = 0,
           gid = 244,
           visible = true,
           properties = {
+            ["box_h"] = 12,
+            ["box_w"] = 28,
+            ["box_x"] = 0,
+            ["box_y"] = 16,
             ["direction"] = 0
           }
         },
         {
-          id = 5,
+          id = 10,
           name = "trampoline",
           type = "",
           shape = "rectangle",
-          x = 428.5,
-          y = 27,
+          x = 405.5,
+          y = 185.5,
+          width = 28,
+          height = 28,
+          rotation = 0,
+          gid = 244,
+          visible = true,
+          properties = {
+            ["box_h"] = 12,
+            ["box_w"] = 28,
+            ["box_x"] = 0,
+            ["box_y"] = 16,
+            ["direction"] = 0
+          }
+        },
+        {
+          id = 12,
+          name = "trampoline",
+          type = "",
+          shape = "rectangle",
+          x = 425,
+          y = 61,
           width = 28,
           height = 28,
           rotation = 0,
           gid = 1073742068,
           visible = true,
           properties = {
+            ["box_h"] = 12,
+            ["box_w"] = 28,
+            ["box_x"] = 0,
+            ["box_y"] = 16,
             ["direction"] = 1
           }
         }

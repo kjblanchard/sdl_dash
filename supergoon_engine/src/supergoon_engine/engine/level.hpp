@@ -10,34 +10,36 @@
 #include <supergoon_engine/interfaces/i_initialize.hpp>
 #include <supergoon_engine/interfaces/i_update.hpp>
 #include <supergoon_engine/interfaces/i_draw.hpp>
+#include <supergoon_engine/interfaces/i_sound.hpp>
 
-    class Tile;
+class Tile;
 namespace Tiled
 {
     class Tilemap;
 }
 class Content;
 
-class Level : public IInitialize, public IUpdate, public IDraw
+class Level : public IInitialize, public IUpdate, public IDraw, public ISound
 
 {
 private:
     Tiled::Tilemap *tilemap;
-    std::string map_name;
-    Content* content;
+    const std::string map_name;
+    const std::string map_music;
+    Content *content;
 
     // std::vector<std::shared_ptr<Objects::Actor>>
     // LoadActorsFromTilemap(Tiled::Tilemap *tilemap);
 
 public:
-    Level(sol::table& current_level_table, Content* content_ptr);
+    Level(sol::table &current_level_table, Content *content_ptr);
     ~Level() override;
 
-    //TODO make this in a namespace, or not static here.
+    // TODO make this in a namespace, or not static here.
     static Vector2 current_level_size;
-    std::vector<Tile*> tiles;
-    std::vector<Tile*> solid_tiles;
-    std::vector<Objects::Actor*> actors;
+    std::vector<Tile *> tiles;
+    std::vector<Tile *> solid_tiles;
+    std::vector<Objects::Actor *> actors;
     Gravity::GravityParams gravity_params;
 
     void Initialize() override;

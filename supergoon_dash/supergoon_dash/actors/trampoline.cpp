@@ -11,6 +11,10 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     if(direction == Direction::Down)
     {
         animation_component->SetMirror(SpriteFlip::Vertical);
+        auto box = rigidbody_component->GetBoxCollider();
+        //TODO handle this in the spawning of it in actor instead of here, and use the params there with the looping properties.
+        box.offset_.x = 0;
+        box.offset_.y = 0;
     }
     rigidbody_component->SetGravityEnabled(false);
     rigidbody_component->GetBoxCollider().is_blocking = true;
@@ -30,6 +34,7 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
                         player->TrampolineJump(args.overlap_direction, -400);
                         trampoline_bouncing = true;
                         animation_component->ForceAnimationChange(action_animation_name);
+                        PlaySfxOneShot(2);
 
                     }
                     break;
@@ -39,6 +44,7 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
                         player->TrampolineJump(args.overlap_direction, 400);
                         trampoline_bouncing = true;
                         animation_component->ForceAnimationChange(action_animation_name);
+                        PlaySfxOneShot(2);
                     }
                     break;
 

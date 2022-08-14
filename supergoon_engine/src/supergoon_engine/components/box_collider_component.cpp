@@ -29,6 +29,8 @@ SDL_FRect Components::BoxColliderComponent::GetCurrentSdlRectF()
     rect.w = rectangle.GetSize().x;
     rect.h = rectangle.GetSize().y;
     return rect;
+    return rectangle.sdl_rectangle;
+
 }
 void Components::BoxColliderComponent::Update(const Gametime &)
 {

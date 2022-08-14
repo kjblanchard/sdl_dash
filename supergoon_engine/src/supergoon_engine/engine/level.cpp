@@ -11,10 +11,9 @@
 
 Vector2 Level::current_level_size = Vector2();
 
-Level::Level(sol::table &current_level_table, Content *content_ptr) : tilemap{nullptr}, content{content_ptr}
+Level::Level(sol::table &current_level_table, Content *content_ptr) : tilemap{nullptr}, map_name{current_level_table["name"]}, map_music{current_level_table["music"]}, content{content_ptr}
 {
-    // get the level name to load from tiled.
-    map_name = current_level_table["name"];
+
     // load gravity initial levels from the table.
     gravity_params.gravity = current_level_table["gravity"];
     gravity_params.friction = current_level_table["friction"];
@@ -56,13 +55,15 @@ void Level::Initialize()
         if (actor)
             actors.push_back(actor);
     }
+    StartMusic(map_music);
+
 }
 
 void Level::Update(const Gametime &gametime)
 {
     for (auto &&i : actors)
     {
-        Physics::ApplyPhysics(gametime, i->GetRigidbody(),solid_tiles,actors, gravity_params);
+        Physics::ApplyPhysics(gametime, i->GetRigidbody(), solid_tiles, actors, gravity_params);
     }
 
     for (auto i : tiles)

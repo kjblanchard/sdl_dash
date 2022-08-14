@@ -29,6 +29,10 @@ All of the licenses that I'm using will be listed here.
 - [Pixel art](https://pixelfrog-assets.itch.io/pixel-adventure-1) - Creative Commons License
 - FMOD - Indie License
 
+- [Trampoline Sound](https://freesound.org/people/Breviceps/sounds/493161/) - Creative Commons License
+- [Jump Sound](https://freesound.org/people/se2001/sounds/528568/) - Creative Commons License
+- [Footsteps](https://freesound.org/people/EVRetro/sounds/501102/) - Creative Commons License
+
 ## Authors
 
 - [@Kevin Blanchard](https://www.github.com/kjblanchard)

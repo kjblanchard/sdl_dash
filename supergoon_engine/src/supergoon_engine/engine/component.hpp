@@ -33,9 +33,9 @@ protected:
      */
     static Camera *main_camera;
 
-    Vector2 offset_;
-
 public:
+    // TODO make this protected after we remove it from trampoline altering it.
+    Vector2 offset_;
     GameObject *owner_;
     unsigned long int id;
     int update_order = 2;

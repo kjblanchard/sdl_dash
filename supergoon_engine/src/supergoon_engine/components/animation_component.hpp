@@ -28,6 +28,7 @@ namespace Components
         double ms_this_frame = 0.0;
         int current_frame_in_animation = 0;
         bool dirty = true;
+        float anim_speed = 1.0f;
 
         /**
          * Changes animation, fires off events and restarts the time this frame.
@@ -53,6 +54,11 @@ namespace Components
         Animations::Animation* current_animation;
         AnimationComponent(GameObject *owner, const char *aseprite_file_name, int layer = 0, Vector2 offset = Vector2());
         void Update(const Gametime &) override;
+
+        inline void SetAnimationSpeed(float speed = 1.0f){
+            anim_speed = speed;
+
+        }
         void ChangeAnimation2(std::string change);
 
         inline void ForceAnimationChange(std::string new_anim)

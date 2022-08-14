@@ -25,10 +25,11 @@ namespace Animations
                 Default,
                 Begin,
                 Frame,
+                FrameBegin,
                 End
             };
             EventType type_of_event;
-            std::function<void(float)> animation_event_func;
+            std::function<void(float, int)> animation_event_func;
         };
         //TODO move this back to private
         bool ended = false;
@@ -47,6 +48,11 @@ namespace Animations
             transitions.push_back(std::shared_ptr<Animations::AnimationTransition>(transition));
         }
 
+        inline void AddAnimationEvent(AnimationEvent event)
+        {
+            animation_events.push_back(event);
+        }
+
         inline bool AnimationEnded()
         {
             return ended;
@@ -63,13 +69,13 @@ namespace Animations
             FireAnimationEvent(AnimationEvent::EventType::Begin, time);
         }
 
-        inline void FireAnimationEvent(AnimationEvent::EventType event_type, float current_time_in_animation)
+        inline void FireAnimationEvent(AnimationEvent::EventType event_type, float current_time_in_animation = 0, int frane_num = 0)
         {
-            std::for_each(animation_events.begin(), animation_events.end(), [event_type, current_time_in_animation](AnimationEvent &event)
+            std::for_each(animation_events.begin(), animation_events.end(), [event_type, current_time_in_animation, frane_num](AnimationEvent &event)
                           {
                                   if (event.type_of_event == event_type)
                                   {
-                                      event.animation_event_func(current_time_in_animation);
+                                      event.animation_event_func(current_time_in_animation, frane_num);
                                   } });
         }
     };

@@ -40,6 +40,17 @@ void World::Initialize()
 
     InitializeSdl();
     auto temp_loading_state = new sol::state();
+
+    // TODO do this differently.
+    auto sound_table = Lua::LoadLuaTableIntoTempState("./assets/sfx/sfx.lua", "sound", temp_loading_state);
+    sol::lua_table sfx_table = (*sound_table)["sound"]["sfx"];
+    auto sound_map = Sound::AddToGameSfx;
+    sfx_table.for_each([sound_map](std::pair<sol::object, sol::object> key_value_pair)
+                       {
+                        int key = key_value_pair.first.as<int>();
+                        std::string value = key_value_pair.second.as<std::string>();
+                        sound_map({key,value}); });
+
     auto table = Lua::LoadLuaTableIntoTempState("./assets/config/cfg.lua", "config", temp_loading_state);
     auto level_data_name = "levels";
     auto &level_data = Lua::LoadLuaTableIntoGlobalState("./assets/config/levels.lua", level_data_name);
@@ -109,8 +120,8 @@ void World::ProcessInput()
 
 void World::Setup()
 {
-    Initialize();
     Sound::Setup();
+    Initialize();
 }
 
 void World::Update(Gametime &gametime)

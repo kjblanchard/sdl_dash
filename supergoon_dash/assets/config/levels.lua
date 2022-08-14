@@ -2,7 +2,7 @@ return{
     levels = {
         {
             name = "level_1",
-            music = "level_1",
+            music = "main",
             gravity = 200,
             friction = 0.94,
             min_y_velocity = 0.01,

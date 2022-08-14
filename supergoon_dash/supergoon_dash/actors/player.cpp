@@ -24,6 +24,7 @@ Player::Player(Objects::ActorParams params) : Objects::Actor{params}
     UpdateMaxXVelocity(200);
     camera_boom_component = new CameraBoomComponent(this, *main_camera);
     CreateAllAnimations();
+    SetJumpSound(1);
     rigidbody_component->GetBoxCollider().debug = true;
 }
 void Player::Update(const Gametime &gametime)
@@ -78,14 +79,14 @@ void Player::CreateIdleAnimation()
     auto idle_animation = new Animations::Animation(idle_animation_name);
 
     auto idle_to_run_transition = new Animations::FunctionAnimationTransition(run_animation_name, [this]()
-                                                                  { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > static_cast<float>(rigidbody_component->GetMinimumXStep()) ||
-                                                                           rigidbody_component->velocity.x <= -static_cast<float>(rigidbody_component->GetMinimumXStep()); });
+                                                                              { return rigidbody_component->acceleration.x != 0.f || rigidbody_component->velocity.x > static_cast<float>(rigidbody_component->GetMinimumXStep()) ||
+                                                                                       rigidbody_component->velocity.x <= -static_cast<float>(rigidbody_component->GetMinimumXStep()); });
 
     auto idle_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
-                                                                   { return is_jumping; });
+                                                                               { return is_jumping; });
 
     auto idle_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]()
-                                                                   { return IsFalling() == true; });
+                                                                               { return IsFalling() == true; });
     idle_animation->AddTransition(idle_to_fall_transition);
     idle_animation->AddTransition(idle_to_run_transition);
     idle_animation->AddTransition(idle_to_jump_transition);
@@ -95,27 +96,46 @@ void Player::CreateRunAnimation()
 {
     auto run_animation = new Animations::Animation(run_animation_name);
     auto run_to_idle_transition = new Animations::FunctionAnimationTransition(idle_animation_name, [this]()
-                                                                  { return !is_moving_x; });
+                                                                              { return !is_moving_x; });
 
     auto run_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
-                                                                  { return is_jumping == true; });
+                                                                              { return is_jumping == true; });
 
     auto run_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]
-                                                                  { return IsFalling() == true; });
+                                                                              { return IsFalling() == true; });
     run_animation->AddTransition(run_to_fall_transition);
     run_animation->AddTransition(run_to_idle_transition);
     run_animation->AddTransition(run_to_jump_transition);
+
+    Animations::Animation::AnimationEvent run_anim_step_event;
+    run_anim_step_event.type_of_event = Animations::Animation::AnimationEvent::EventType::FrameBegin;
+    run_anim_step_event.animation_event_func = [this](float, int frame)
+    {
+        if (frame == 0)
+            PlaySfxOneShot(3);
+        else if (frame == 7)
+            PlaySfxOneShot(4);
+    };
+    Animations::Animation::AnimationEvent run_anim_speed_event;
+    run_anim_speed_event.type_of_event = Animations::Animation::AnimationEvent::EventType::Frame;
+    run_anim_speed_event.animation_event_func = [this](float, int )
+    {
+        this->animation_component->SetAnimationSpeed(SetRunAnimSpeed());
+    };
+    run_animation->AddAnimationEvent(run_anim_step_event);
+    run_animation->AddAnimationEvent(run_anim_speed_event);
+
     animation_component->AddAnimation(run_animation);
 }
 void Player::CreateFallAnimation()
 {
     auto fall_animation = new Animations::Animation(fall_animation_name, false);
     auto fall_to_idle_transition = new Animations::FunctionAnimationTransition(idle_animation_name, [this]()
-                                                                   { return is_jumping == false && OnGround() == true; });
+                                                                               { return is_jumping == false && OnGround() == true; });
     fall_animation->AddTransition(fall_to_idle_transition);
 
     auto fall_to_jump_transition = new Animations::FunctionAnimationTransition(jump_animation_name, [this]()
-                                                                   { return is_jumping == true && OnGround() == true; });
+                                                                               { return is_jumping == true && OnGround() == true; });
     fall_animation->AddTransition(fall_to_jump_transition);
     animation_component->AddAnimation(fall_animation);
 }
@@ -123,7 +143,7 @@ void Player::CreateJumpAnimation()
 {
     auto jump_animation = new Animations::Animation(jump_animation_name, false);
     auto jump_to_fall_transition = new Animations::FunctionAnimationTransition(fall_animation_name, [this]()
-                                                                   { return is_jumping == false; });
+                                                                               { return is_jumping == false; });
     jump_animation->AddTransition(jump_to_fall_transition);
     animation_component->AddAnimation(jump_animation);
 }

@@ -15,7 +15,7 @@ return {
     },
 
     sound = {
-        muted = true,
+        muted = false,
     }
 
 }

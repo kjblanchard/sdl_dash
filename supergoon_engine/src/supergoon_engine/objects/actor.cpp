@@ -82,8 +82,10 @@ void Objects::Actor::Jump(const Gametime &gametime)
         rigidbody_component->on_ground = false;
         // auto force = (jump_speed * initial_jump_multiplier) * gametime.ElapsedTimeInSeconds();
         auto force = (jump_speed * initial_jump_multiplier) / 100;
-        rigidbody_component->ChangeVelocityStatic(Vector2(rigidbody_component->velocity.x,-force));
+        rigidbody_component->ChangeVelocityStatic(Vector2(rigidbody_component->velocity.x, -force));
         animation_component->ForceAnimationChange("jump");
+        if (jump_sound != -1)
+            PlaySfxOneShot(jump_sound);
     }
     else if (is_jumping && !rigidbody_component->on_ground)
     {
