@@ -15,6 +15,6 @@ struct SUPERGOON_ENGINE_EXPORT Sprite
     Sprite(std::shared_ptr<SDL_Texture> texture_ptr);
     ~Sprite();
     // bool mirror = false;
-    SpriteFlip flip;
+    SpriteFlip flip = SpriteFlip::Default;
     std::shared_ptr<SDL_Texture> texture;
 };
