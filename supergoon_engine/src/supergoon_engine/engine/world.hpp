@@ -9,7 +9,7 @@
 class Content;
 class Camera;
 class Level;
-
+class LevelStateMachine;
 
 namespace Graphics
 {
@@ -24,7 +24,8 @@ private:
     bool isRunning;
 
     // TODO store this in a level machine
-    Level *level;
+    LevelStateMachine* level_state_machine;
+    // Level *level;
 
     void InitializeSdl();
 
@@ -47,10 +48,7 @@ public:
     Camera *main_camera;
     Graphics::GraphicsDevice *graphics;
     Content *content;
-    inline Level* GetCurrentLevel()
-    {
-        return level;
-    }
+    Level* GetCurrentLevel();
     void Run();
     static World *GetWorld()
     {

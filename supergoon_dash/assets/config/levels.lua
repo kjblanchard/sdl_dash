@@ -2,6 +2,7 @@ return{
     levels = {
         {
             name = "level_1",
+            id = 1,
             music = "main",
             gravity = 200,
             friction = 0.94,

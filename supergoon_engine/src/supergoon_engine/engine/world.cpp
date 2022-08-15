@@ -18,6 +18,7 @@
 #include <supergoon_engine/lua/lua_helper.hpp>
 #include <supergoon_engine/engine/level.hpp>
 #include <supergoon_engine/input/input.hpp>
+#include <supergoon_engine/engine/level_state_machine.hpp>
 
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
@@ -64,21 +65,12 @@ void World::Initialize()
     Sound::muted = (*table)["config"]["sound"]["muted"];
     isRunning = true;
     content = new Content(graphics->renderer);
+    level_state_machine = new LevelStateMachine();
     sol::table level_1_global_table = level_global_table[1];
-    // std::string level_name = level_global_table[1]["name"];
-
-    level = new Level(level_1_global_table, content);
-    level->Initialize();
-
-    // auto tilemap = Lua::LoadTiledMap("level_1");
-    // tiles = Tiled::LoadTilesFromTilemap(tilemap, content);
-    // auto actor_params = tilemap->actors;
-    // for (auto &&actor_param : actor_params)
-    // {
-    //     auto actor = Objects::SpawnActor(actor_param);
-    //     if (actor)
-    //         actors.push_back(actor);
-    // }
+    auto level = new Level(level_1_global_table, content);
+    level_state_machine->AddToStates(level);
+    level_state_machine->InitializeStates();
+    level_state_machine->current_state = level;
     sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 
@@ -128,14 +120,21 @@ void World::Update(Gametime &gametime)
 {
     Sound::Update();
     main_camera->Update(gametime);
-    level->Update(gametime);
+    // level_state_machine.level->Update(gametime);
+    level_state_machine->Update(gametime);
 }
 
 void World::Render()
 {
     sprite_batch->Begin();
-    level->Draw(*sprite_batch);
+    // level->Draw(*sprite_batch);
+    level_state_machine->Draw(*sprite_batch);
     sprite_batch->End();
+}
+Level *World::GetCurrentLevel()
+{
+    // return level;
+    return level_state_machine->current_state;
 }
 
 void World::Run()

@@ -7,10 +7,8 @@
 #include <supergoon_engine/physics/gravity.hpp>
 #include <supergoon_engine/engine/gameobject.hpp>
 #include <supergoon_engine/objects/actor.hpp>
-#include <supergoon_engine/interfaces/i_initialize.hpp>
-#include <supergoon_engine/interfaces/i_update.hpp>
-#include <supergoon_engine/interfaces/i_draw.hpp>
 #include <supergoon_engine/interfaces/i_sound.hpp>
+#include <supergoon_engine/interfaces/i_state.hpp>
 
 class Tile;
 namespace Tiled
@@ -19,7 +17,7 @@ namespace Tiled
 }
 class Content;
 
-class Level : public IInitialize, public IUpdate, public IDraw, public ISound
+class Level : public Interfaces::IState, public ISound
 
 {
 private:
