@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include <algorithm>
 #include <supergoon_engine/animation/animation_transition.hpp>
 #include <supergoon_engine/aseprite/aseprite_animation.hpp>
 

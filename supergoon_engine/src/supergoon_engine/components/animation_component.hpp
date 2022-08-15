@@ -17,7 +17,7 @@ namespace Components
     /**
      * Creates and attaches a sprite component as well, and updates the animation based on the aseprite file loaded.
      */
-    class AnimationComponent : public Component
+    class  SUPERGOON_ENGINE_EXPORT AnimationComponent : public Component
     {
         using AnimEventType = Animations::Animation::AnimationEvent::EventType;
 

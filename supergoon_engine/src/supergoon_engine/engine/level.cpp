@@ -11,7 +11,7 @@
 
 Vector2 Level::current_level_size = Vector2();
 
-Level::Level(sol::table &current_level_table, Content *content_ptr) : IState{current_level_table.get<int>("id")}, tilemap{nullptr}, map_name{current_level_table["name"]}, map_music{current_level_table["music"]}, content{content_ptr}
+Level::Level(sol::table &current_level_table, Content *content_ptr) : IState{current_level_table.get<int>("id")}, tilemap{nullptr}, map_name{current_level_table.get<std::string>("name")}, map_music{current_level_table.get<std::string>("music")}, content{content_ptr}
 {
 
     // TODO make more of the gets like this so that we try and get the right type.

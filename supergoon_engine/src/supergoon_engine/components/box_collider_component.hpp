@@ -27,7 +27,7 @@ namespace Components
         {
         }
     };
-    class BoxColliderComponent : public Component
+    class  SUPERGOON_ENGINE_EXPORT BoxColliderComponent : public Component
     {
 
     public:
