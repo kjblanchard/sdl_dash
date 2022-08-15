@@ -66,11 +66,9 @@ void World::Initialize()
     isRunning = true;
     content = new Content(graphics->renderer);
     level_state_machine = new LevelStateMachine();
-    sol::table level_1_global_table = level_global_table[1];
-    auto level = new Level(level_1_global_table, content);
-    level_state_machine->AddToStates(level);
+    level_state_machine->ParseLevelTable(level_global_table, content);
     level_state_machine->InitializeStates();
-    level_state_machine->current_state = level;
+    level_state_machine->ChangeState(1);
     sprite_batch = new Graphics::SpriteBatch(graphics);
 }
 

@@ -25,10 +25,9 @@ public:
 
     inline float SetRunAnimSpeed()
     {
-        float multiplier;
         if (rigidbody_component->velocity.x >= 0)
         {
-            if (rigidbody_component->velocity.x * multiplier < 30 * multiplier)
+            if (rigidbody_component->velocity.x < 30)
                 return 0.25f;
             else if (rigidbody_component->velocity.x < 60)
                 return 0.5f;
@@ -50,7 +49,7 @@ public:
         }
     }
 
-    inline void TrampolineJump(Components::OverlapDirection dir, int force)
+    inline void TrampolineJump(Components::OverlapDirection, int force)
     {
         rigidbody_component->ChangeAccelStatic(Vector2(rigidbody_component->velocity.x, force));
         animation_component->ForceAnimationChange(jump_animation_name);

@@ -12,12 +12,12 @@ namespace Interfaces
     class SUPERGOON_ENGINE_EXPORT IState : public IInitialize, public IUpdate, public IBeginRun, public IDraw
     {
     public:
-        IState(int id) : state_id{(unsigned int)id} {}
-        unsigned int state_id;
+        IState(int id) : state_id{id} {}
+        int state_id;
         inline void Initialize() override {}
         inline void Update(const Gametime &) override {}
         inline void Draw(Graphics::SpriteBatch &) override {}
-        inline virtual void BeginState() {}
+        virtual void BeginState();
         inline virtual void EndState() {}
     };
 

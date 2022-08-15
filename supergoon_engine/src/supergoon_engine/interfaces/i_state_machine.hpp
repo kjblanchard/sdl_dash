@@ -48,13 +48,14 @@ template <class T>
 void Interfaces::IStateMachine<T>::ChangeState(int state_id_to_change_to)
 {
     auto found_state_it = std::find_if(states.begin(), states.end(), [state_id_to_change_to](std::shared_ptr<IState> state)
-                                       {
-                                           if (state_id_to_change_to == state->state_id)
-                                               return true;
-                                           return false;
-                                       });
+        {
+            if (state_id_to_change_to == state->state_id)
+                return true;
+            return false;
+        });
     if(found_state_it == states.end())
     {
+        //TODO add to debugger.
         std::cout << "Couldn't find the state in the states list.  State id to search for: " << state_id_to_change_to << std::endl;
         return;
     }
@@ -65,7 +66,7 @@ void Interfaces::IStateMachine<T>::ChangeState(int state_id_to_change_to)
     }
     auto dereferenced_state_it = *found_state_it;
     current_state = dynamic_cast<T*>(dereferenced_state_it.get());
-    dereferenced_state_it->BeginRun();
+    dereferenced_state_it->BeginState();
 
 
 }

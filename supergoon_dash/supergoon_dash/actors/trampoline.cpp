@@ -8,11 +8,11 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
     AddTag(5);
     // TODO make this automatic from the lua file.
     direction = static_cast<Direction>(params.actor_props.at("direction"));
-    if(direction == Direction::Down)
+    if (direction == Direction::Down)
     {
         animation_component->SetMirror(SpriteFlip::Vertical);
         auto box = rigidbody_component->GetBoxCollider();
-        //TODO handle this in the spawning of it in actor instead of here, and use the params there with the looping properties.
+        // TODO handle this in the spawning of it in actor instead of here, and use the params there with the looping properties.
         box.offset_.x = 0;
         box.offset_.y = 0;
     }
@@ -48,7 +48,8 @@ Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
                     }
                     break;
 
-                default:
+                case Direction::Left:
+                case Direction::Right:
                     break;
                 }
 

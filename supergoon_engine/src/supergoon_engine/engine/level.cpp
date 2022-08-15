@@ -14,7 +14,7 @@ Vector2 Level::current_level_size = Vector2();
 Level::Level(sol::table &current_level_table, Content *content_ptr) : IState{current_level_table.get<int>("id")}, tilemap{nullptr}, map_name{current_level_table["name"]}, map_music{current_level_table["music"]}, content{content_ptr}
 {
 
-    //TODO make more of the gets like this so that we try and get the right type.
+    // TODO make more of the gets like this so that we try and get the right type.
     gravity_params.gravity = current_level_table.get<int>("gravity");
     gravity_params.friction = current_level_table["friction"];
     gravity_params.min_velocity = Vector2(
@@ -56,7 +56,6 @@ void Level::Initialize()
             actors.push_back(actor);
     }
     StartMusic(map_music);
-
 }
 
 void Level::Update(const Gametime &gametime)
@@ -96,8 +95,3 @@ void Level::Draw(Graphics::SpriteBatch &spritebatch)
         i->Draw(spritebatch);
     }
 }
-
-// std::vector<std::shared_ptr<Objects::Actor>> Level::LoadActorsFromTilemap(Tiled::Tilemap *tilemap)
-// {
-//     return nullptr;
-// }
