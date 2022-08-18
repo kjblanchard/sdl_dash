@@ -2,6 +2,7 @@
 #include <fmod/fmod.hpp>
 #include <fmod/fmod_studio.hpp>
 #include <iostream>
+#include <supergoon_engine/engine/debug.hpp>
 
 bool Sound::muted = false;
 FMOD::Studio::System *Sound::loaded_system = nullptr;
@@ -19,7 +20,7 @@ void Sound::PlaySfxOneShot(std::string sound_name)
     FMOD_RESULT result = event->createInstance(&loaded_event);
     if (result != FMOD_OK)
     {
-        std::cout << "Could not load event from bank file, Event: " << sound << " FMOD_RESULT : " << result << std::endl;
+        Debug::LogError("Could not load event from bank file, Event, %s, FMOD_RESULT: %d", sound.c_str(), result);
         return;
     }
     loaded_event->start();
@@ -32,7 +33,7 @@ void Sound::PlaySfxOneShot(int sound_lookup_int)
         PlaySfxOneShot(sound->second);
     else
     {
-        std::cout << "Sound not found inside of the dictionary, probably need to add it to sfx.lua Sound Number: " << sound_lookup_int  << std::endl;
+        Debug::LogWarn("Sound not found inside of the dict.  Probably need to add it to sfx.lua; Sound Num %d", sound_lookup_int);
     }
 }
 void Sound::PlayBgm(std::string sound_name)
@@ -40,9 +41,8 @@ void Sound::PlayBgm(std::string sound_name)
     FMOD::Studio::EventDescription *loadedEventDescription = nullptr;
     auto sound = "event:/" + sound_name;
     auto result = loaded_system->getEvent(sound.c_str(), &loadedEventDescription);
-    // TODO use a debug logger for this
     if (result != FMOD_OK)
-        std::cout << "Could not load event " << sound << std::endl;
+        Debug::LogWarn("Could not load bgm event: %s ", sound.c_str());
     FMOD::Studio::EventInstance *loadedEventInstance = nullptr;
     result = loadedEventDescription->createInstance(&loadedEventInstance);
     current_music = loadedEventInstance;
@@ -65,9 +65,8 @@ Sound::Setup()
 {
     FMOD::Studio::System *system = nullptr;
     auto result = FMOD::Studio::System::create(&system);
-    // TODO use debug logger
     if (result != FMOD_OK)
-        std::cout << "Could not create system, error code: " << result << std::endl;
+        Debug::LogError("Could not create sound system, error code: %d", result);
     FMOD::System *coreSystem = nullptr;
     system->getCoreSystem(&coreSystem);
     coreSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_STEREO, 0);

@@ -23,7 +23,6 @@
 World *World::instance = nullptr;
 World::World() : isRunning{false}, main_camera{nullptr}
 {
-
     if (World::instance == nullptr)
         World::instance = this;
     else

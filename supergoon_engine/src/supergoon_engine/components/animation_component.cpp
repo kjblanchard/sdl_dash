@@ -1,6 +1,7 @@
 #include <supergoon_engine/components/animation_component.hpp>
 #include <supergoon_engine/components/sprite_component.hpp>
 #include <supergoon_engine/primitives/gametime.hpp>
+#include <supergoon_engine/engine/debug.hpp>
 
 using namespace Components;
 
@@ -12,9 +13,11 @@ AnimationComponent::AnimationComponent(GameObject *owner, const char *aseprite_f
 
 void AnimationComponent::Update(const Gametime &gametime)
 {
-    // TODO debug log this.
     if (current_animation == nullptr)
+    {
+        Debug::LogWarn("Current animation is empty");
         return;
+    }
 
     CheckForAnimationTransitions();
     if (!current_animation->AnimationEnded())

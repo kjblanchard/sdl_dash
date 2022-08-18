@@ -22,11 +22,7 @@ class SUPERGOON_ENGINE_EXPORT World
 
 private:
     bool isRunning;
-
-    // TODO store this in a level machine
     LevelStateMachine* level_state_machine;
-    // Level *level;
-
     void InitializeSdl();
 
 protected:
