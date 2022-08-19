@@ -7,10 +7,11 @@
 #include <supergoon_engine/aseprite/aseprite_sheet.hpp>
 #include <supergoon_engine/aseprite/aseprite_frame.hpp>
 #include <supergoon_engine/aseprite/aseprite_animation.hpp>
+#include <supergoon_engine/engine/debug.hpp>
 #include <sstream>
 
 sol::state Lua::lua_global_state;
-using namespace Tiled;
+// using namespace Tiled;
 
 void Lua::LoadDataFromAsepriteFile(Aseprite::AsepriteSheet &aseprite_sheet, std::string file)
 {
@@ -130,7 +131,7 @@ sol::state *Lua::LoadLuaTableIntoTempState(const char *file_name, const char *ta
     return state_to_load_to;
 }
 
-Tilemap *Lua::LoadTiledMap(std::string filename)
+Tiled::Tilemap *Lua::LoadTiledMap(std::string filename)
 {
     auto full_name = "./assets/tiled/" + filename + ".lua";
     // Create a unique ptr of the loaded lua state, so it will be removed after reading.
@@ -138,7 +139,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
     // If the Lua state ptr is not null
     if (current_doc_lua_state.get())
     {
-        auto tile_map_ptr = new Tilemap();
+        auto tile_map_ptr = new Tiled::Tilemap();
         auto root_element = (*current_doc_lua_state.get())["tilemap"];
         tile_map_ptr->width = root_element["width"];
         tile_map_ptr->height = root_element["height"];
@@ -159,7 +160,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
             std::string layer_name = layer_group_lua_ref["type"];
             if (layer_name == "group")
             {
-                auto layer_group_ptr = new LayerGroup();
+                auto layer_group_ptr = new Tiled::LayerGroup();
                 // Go through each layer in the group
                 layer_group_ptr->name = layer_group_lua_ref["name"];
                 sol::table layer_group_layers_lua = layer_group_lua_ref["layers"];
@@ -170,11 +171,11 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     if (hasLayer == sol::nullopt)
                         break;
                     sol::table tab = layer_group_layers_lua[j_layer];
-                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<TileLayer>(LoadTileLayer(tab, layer_depth)));
+                    layer_group_ptr->tile_layers.push_back(std::shared_ptr<Tiled::TileLayer>(LoadTileLayer(tab, layer_depth)));
                     ++j_layer;
                     ++layer_depth;
                 }
-                tile_map_ptr->layer_groups.push_back(std::shared_ptr<LayerGroup>(layer_group_ptr));
+                tile_map_ptr->layer_groups.push_back(std::shared_ptr<Tiled::LayerGroup>(layer_group_ptr));
             }
             // TODO load layers not in a group or object layer
             else if (layer_name == "objectgroup")
@@ -189,6 +190,10 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.actor_name = actor_name;
                     actor_params.loc.x = actor["x"];
                     actor_params.loc.y = actor["y"];
+                    actor_params.type = actor.get<std::string>("type");
+
+                    actor_params.size.x = actor.get<float>("width");
+                    actor_params.size.y = actor.get<float>("height");
                     actor_params.layer = layer_depth;
 
                     sol::lua_table actor_properties = actor["properties"];
@@ -207,12 +212,13 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                             Vector2(actor_properties["box_x"], actor_properties["box_y"]),
                             Point(actor_properties["box_w"], actor_properties["box_h"]));
                     }
+
                     else{
-                        int thing = actor["width"];
-                        int thing3 = actor["height"];
+                        int width = actor_params.size.x;
+                        int height = actor_params.size.y;
                         actor_params.box_rect = Rectangle(
                             Vector2(0,0),
-                            Point(thing, thing3)
+                            Point(width, height)
                         );
                     }
                     tile_map_ptr->actors.push_back(actor_params);
@@ -228,7 +234,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
             std::string tsx_tiled_name = current_tileset_lua["name"];
             if (tsx_tiled_name == "actors")
                 continue;
-            auto tsx = new Tsx();
+            auto tsx = new Tiled::Tsx();
             std::string tsx_name = current_tileset_lua["filename"];
             tsx->first_gid = current_tileset_lua["firstgid"];
             std::stringstream test(tsx_name);
@@ -261,7 +267,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
                 tsx->image_source = loaded_tsx_lua["image"];
                 tsx->collection_of_images = false;
             }
-            tile_map_ptr->tsx_in_tilemap.push_back(std::shared_ptr<Tsx>(tsx));
+            tile_map_ptr->tsx_in_tilemap.push_back(std::shared_ptr<Tiled::Tsx>(tsx));
         }
         auto guy = tile_map_ptr->tsx_in_tilemap;
         // std::sort(tile_map_ptr->tsx_in_tilemap.begin(), tile_map_ptr->tsx_in_tilemap.end());
@@ -274,7 +280,7 @@ Tilemap *Lua::LoadTiledMap(std::string filename)
 }
 Tiled::TileLayer *Lua::LoadTileLayer(sol::table &table, int layer_depth)
 {
-    auto layer_ptr = new TileLayer();
+    auto layer_ptr = new Tiled::TileLayer();
     layer_ptr->layer_name = table["name"];
     // layer_ptr->layer_id = table["id"];
     layer_ptr->layer_id = layer_depth;

@@ -9,7 +9,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 13,
+  nextobjectid = 14,
   properties = {
     ["music"] = "main"
   },
@@ -246,6 +246,19 @@ return {
             ["box_y"] = 16,
             ["direction"] = 1
           }
+        },
+        {
+          id = 13,
+          name = "level_end",
+          type = "event",
+          shape = "rectangle",
+          x = 849.5,
+          y = -7.5,
+          width = 46,
+          height = 193.5,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     }

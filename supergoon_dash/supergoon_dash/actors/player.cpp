@@ -43,6 +43,9 @@ Objects::Actor *Player::ActorFactory(Objects::ActorParams &params)
 
 void Player::ProcessInput(const Gametime &gametime)
 {
+    if (end_level)
+        return;
+
     if (input_component->CurrentController->IsButtonPressed(Input::ControllerButtons::Left) ||
         input_component->CurrentController->IsButtonHeld(Input::ControllerButtons::Left))
     {
@@ -118,7 +121,7 @@ void Player::CreateRunAnimation()
     };
     Animations::Animation::AnimationEvent run_anim_speed_event;
     run_anim_speed_event.type_of_event = Animations::Animation::AnimationEvent::EventType::Frame;
-    run_anim_speed_event.animation_event_func = [this](float, int )
+    run_anim_speed_event.animation_event_func = [this](float, int)
     {
         this->animation_component->SetAnimationSpeed(SetRunAnimSpeed());
     };

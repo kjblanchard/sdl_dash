@@ -5,7 +5,14 @@
 std::vector<Objects::Actor::actor_factory> Objects::Actor::actor_listing_vector;
 Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
-    animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
+    // TODO handle event types differently than an override here in actor.  This is here for non-images
+    if (params.type != "event")
+        animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
+    else
+    {
+        animation_component = nullptr;
+    }
+
     rigidbody_component = new Components::RigidbodyComponent(this, params.box_rect.GetSize(), params.box_rect.GetLocation());
     input_component = new Components::InputComponent(this, nullptr);
 }
@@ -83,7 +90,8 @@ void Objects::Actor::Jump(const Gametime &gametime)
         // auto force = (jump_speed * initial_jump_multiplier) * gametime.ElapsedTimeInSeconds();
         auto force = (jump_speed * initial_jump_multiplier) / 100;
         rigidbody_component->ChangeVelocityStatic(Vector2(rigidbody_component->velocity.x, -force));
-        animation_component->ForceAnimationChange("jump");
+        if (animation_component)
+            animation_component->ForceAnimationChange("jump");
         if (jump_sound != -1)
             PlaySfxOneShot(jump_sound);
     }

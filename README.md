@@ -32,6 +32,7 @@ All of the licenses that I'm using will be listed here.
 - [Trampoline Sound](https://freesound.org/people/Breviceps/sounds/493161/) - Creative Commons License
 - [Jump Sound](https://freesound.org/people/se2001/sounds/528568/) - Creative Commons License
 - [Footsteps](https://freesound.org/people/EVRetro/sounds/501102/) - Creative Commons License
+- [End of level Music](https://freesound.org/people/maxmakessounds/sounds/353546) - Creative Commons License
 
 ## Authors
 

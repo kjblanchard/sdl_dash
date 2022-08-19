@@ -15,6 +15,7 @@ private:
     void CreateFallAnimation();
     void CreateJumpAnimation();
     Components::CameraBoomComponent *camera_boom_component;
+    bool end_level = false;
 
 public:
     Player(Objects::ActorParams params);
@@ -53,5 +54,9 @@ public:
     {
         rigidbody_component->ChangeAccelStatic(Vector2(rigidbody_component->velocity.x, force));
         animation_component->ForceAnimationChange(jump_animation_name);
+    }
+    inline void EndLevel()
+    {
+        end_level = true;
     }
 };

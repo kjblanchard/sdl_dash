@@ -5,6 +5,7 @@
 Trampoline::Trampoline(Objects::ActorParams params) : Objects::Actor{params}
 {
     // TODO make this a variable that is equal to the player.
+    //TODO why does this need this tag?
     AddTag(5);
     // TODO make this automatic from the lua file.
     direction = static_cast<Direction>(params.actor_props.at("direction"));
