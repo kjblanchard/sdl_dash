@@ -7,7 +7,10 @@ Objects::Actor::Actor(ActorParams params) : GameObject(params.loc)
 {
     // TODO handle event types differently than an override here in actor.  This is here for non-images
     if (params.type != "event")
-        animation_component = new Components::AnimationComponent(this, params.actor_name.c_str(), params.layer);
+    {
+        auto file_to_load = (params.actor_string_props.contains("FileOverride")) ? params.actor_string_props.at("FileOverride") : params.actor_name;
+        animation_component = new Components::AnimationComponent(this, file_to_load.c_str(), params.layer);
+    }
     else
     {
         animation_component = nullptr;
@@ -30,6 +33,7 @@ bool Objects::Actor::IsFalling()
     return !rigidbody_component->on_ground && !is_jumping;
 }
 
+// TODO fix naming of things here.
 Objects::Actor *Objects::SpawnActor(ActorParams params)
 {
     for (auto &&factory : Objects::Actor::actor_listing_vector)

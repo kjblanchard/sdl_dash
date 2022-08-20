@@ -9,7 +9,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 15,
+  nextobjectid = 19,
   properties = {
     ["music"] = "main"
   },
@@ -181,30 +181,12 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["box_h"] = 24,
-            ["box_w"] = 24,
-            ["box_x"] = 4,
-            ["box_y"] = 4
-          }
-        },
-        {
-          id = 2,
-          name = "trampoline",
-          type = "",
-          shape = "rectangle",
-          x = 405.5,
-          y = 185.5,
-          width = 28,
-          height = 28,
-          rotation = 0,
-          gid = 244,
-          visible = true,
-          properties = {
-            ["box_h"] = 12,
-            ["box_w"] = 28,
-            ["box_x"] = 0,
-            ["box_y"] = 16,
-            ["direction"] = 0
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 4,
+              ["y"] = 4
+            }
           }
         },
         {
@@ -220,10 +202,12 @@ return {
           gid = 244,
           visible = true,
           properties = {
-            ["box_h"] = 12,
-            ["box_w"] = 28,
-            ["box_x"] = 0,
-            ["box_y"] = 16,
+            ["BoxRect"] = {
+              ["h"] = 12,
+              ["w"] = 28,
+              ["x"] = 0.1,
+              ["y"] = 16
+            },
             ["direction"] = 0
           }
         },
@@ -240,10 +224,12 @@ return {
           gid = 1073742068,
           visible = true,
           properties = {
-            ["box_h"] = 12,
-            ["box_w"] = 28,
-            ["box_x"] = 0,
-            ["box_y"] = 16,
+            ["BoxRect"] = {
+              ["h"] = 12,
+              ["w"] = 28,
+              ["x"] = 0.1,
+              ["y"] = 16
+            },
             ["direction"] = 1
           }
         },
@@ -262,11 +248,11 @@ return {
         },
         {
           id = 14,
-          name = "banana",
+          name = "fruit_pickup",
           type = "fruit_pickup",
           shape = "rectangle",
-          x = 219.372,
-          y = 139.162,
+          x = 308.422,
+          y = 169.139,
           width = 32,
           height = 32,
           rotation = 0,
@@ -279,7 +265,95 @@ return {
               ["x"] = 3,
               ["y"] = 3
             },
-            ["FruitType"] = 0
+            ["FileOverride"] = "banana"
+          }
+        },
+        {
+          id = 15,
+          name = "fruit_pickup",
+          type = "fruit_pickup",
+          shape = "rectangle",
+          x = 305.813,
+          y = 115.37,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 246,
+          visible = true,
+          properties = {
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 3,
+              ["y"] = 3
+            },
+            ["FileOverride"] = "banana"
+          }
+        },
+        {
+          id = 16,
+          name = "fruit_pickup",
+          type = "fruit_pickup",
+          shape = "rectangle",
+          x = 123.305,
+          y = 116.693,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 246,
+          visible = true,
+          properties = {
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 3,
+              ["y"] = 3
+            },
+            ["FileOverride"] = "banana"
+          }
+        },
+        {
+          id = 17,
+          name = "fruit_pickup",
+          type = "fruit_pickup",
+          shape = "rectangle",
+          x = 236.16,
+          y = 137.412,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 246,
+          visible = true,
+          properties = {
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 3,
+              ["y"] = 3
+            },
+            ["FileOverride"] = "banana"
+          }
+        },
+        {
+          id = 18,
+          name = "fruit_pickup",
+          type = "fruit_pickup",
+          shape = "rectangle",
+          x = 380.315,
+          y = 123.746,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 246,
+          visible = true,
+          properties = {
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 3,
+              ["y"] = 3
+            },
+            ["FileOverride"] = "banana"
           }
         }
       }

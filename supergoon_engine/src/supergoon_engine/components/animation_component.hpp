@@ -84,7 +84,8 @@ namespace Components
         inline void SetEntryAnim(std::string entry_anim_name)
         {
             // TODO debug this if it is equal to the end iterator
-            current_animation = GetAnimationByName(entry_anim_name);
+            ChangeAnimation(entry_anim_name);
+            // current_animation = GetAnimationByName(entry_anim_name);
         }
         inline void SetMirror(SpriteFlip flip_)
         {

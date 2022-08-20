@@ -71,17 +71,31 @@ void AnimationComponent::CheckForAnimationTransitions()
     }
 }
 
+//TODO should this be called when it is looping?  Problem when using random as it will always start with a random one.
 void AnimationComponent::ChangeAnimation(std::string change)
 {
-    // TODO check to see if current animation exists.
-    if (!current_animation->AnimationEnded())
+    //TODO handle this check better potentially.  This can be null when setting the entry anim at the beginning.
+    if (current_animation)
     {
-        current_animation->AnimationEnd(static_cast<float>(ms_this_frame));
+        if (!current_animation->AnimationEnded())
+        {
+            current_animation->AnimationEnd(static_cast<float>(ms_this_frame));
+        }
     }
-    if (current_animation->name != change)
+    if ( !current_animation || current_animation->name != change)
         current_animation = GetAnimationByName(change);
     ms_this_frame = 0;
-    current_frame_in_animation = current_animation->aseprite_animation.frame_begin;
+    auto frame = current_animation->aseprite_animation.frame_begin;
+    //TODO made this function better
+    if (current_animation->random_start_frame)
+    {
+        auto upper = current_animation->aseprite_animation.frame_end;
+        auto lower = current_animation->aseprite_animation.frame_begin;
+        auto modulus = (upper - lower + 1) + lower;
+        //TODO seed this
+        frame = rand() % modulus;
+    }
+    current_frame_in_animation = frame;
     current_animation->AnimationBegin(static_cast<float>(ms_this_frame));
     dirty = true;
 }

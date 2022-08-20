@@ -24,6 +24,7 @@ namespace Objects
         std::string actor_name;
         std::string type;
         std::map<std::string, int> actor_props;
+        std::map<std::string, std::string> actor_string_props;
     };
 
     class SUPERGOON_ENGINE_EXPORT Actor : public GameObject, public ISound

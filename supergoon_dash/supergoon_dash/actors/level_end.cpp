@@ -4,6 +4,7 @@ LevelEnd::LevelEnd(Objects::ActorParams params) : Objects::Actor{params}
 {
     rigidbody_component->SetGravityEnabled(false);
     rigidbody_component->GetBoxCollider().is_blocking = false;
+    rigidbody_component->debug = true;
     rigidbody_component->AddOverlapEvent([this](Components::BoxColliderEventArgs args)
                                          {
         if (args.overlapee->HasTag(25) )

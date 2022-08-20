@@ -200,8 +200,11 @@ Tiled::Tilemap *Lua::LoadTiledMap(std::string filename)
                     // Get all properties (string and number) and put in the map
                     actor_properties.for_each([&actor_params](std::pair<sol::object, sol::object> key_value_pair)
                                               {
-                        auto type = key_value_pair.second.get_type();
+                        sol::type type = key_value_pair.second.get_type();
                         std::string key = key_value_pair.first.as<std::string>();
+                        if(type == sol::type::string)
+                        Debug::LogWarn("The type is %d", type);
+
                         switch (type)
                         {
                         case sol::type::number:
@@ -216,26 +219,49 @@ Tiled::Tilemap *Lua::LoadTiledMap(std::string filename)
                             prop_table.for_each([&key, &actor_params](std::pair<sol::object, sol::object> prop_key_value_pair){
                                 auto prop_key = prop_key_value_pair.first.as<std::string>();
                                 auto prop_name = key + prop_key;
-                                auto value = prop_key_value_pair.second.as<int>();
-                                actor_params.actor_props.insert({prop_name, value});
+                                auto second_type = prop_key_value_pair.second.get_type();
+                                if(second_type == sol::type::number)
+                                {
+                                    if(prop_key_value_pair.second.is<int>())
+                                    {
+                                        auto value = prop_key_value_pair.second.as<int>();
+                                        actor_params.actor_props.insert({prop_name, value});
+                                    }
+                                    else{
+                                        auto value = prop_key_value_pair.second.as<float>();
+                                        int value_int = static_cast<int>(value);
+                                        actor_params.actor_props.insert({prop_name, value_int});
+
+                                    }
+                                }
+                                else if (second_type == sol::type::string)
+                                {
+                                    auto value = prop_key_value_pair.second.as<std::string>();
+                                    actor_params.actor_string_props.insert({prop_name, value});
+                                }
 
                             });
 
                             break;
                         }
+                        case sol::type::string: {
+                            auto value = key_value_pair.second.as<std::string>();
+                            actor_params.actor_string_props.insert({key, value});
+                            break;
+
+                        }
 
                         default:
                             break;
-                        }
-                         });
+                        } });
 
-                    if (actor_properties["box_x"] != sol::lua_nil)
+                    if (actor_properties["BoxRect"] != sol::lua_nil)
                     {
+                        auto rect_table = actor_properties.get<sol::table>("BoxRect");
                         actor_params.box_rect = Rectangle(
-                            Vector2(actor_properties["box_x"], actor_properties["box_y"]),
-                            Point(actor_properties["box_w"], actor_properties["box_h"]));
+                            Vector2(rect_table.get<float>("x"), rect_table.get<float>("y")),
+                            Point(rect_table.get<int>("w"), rect_table.get<int>("h")));
                     }
-
                     else
                     {
                         int width = actor_params.size.x;

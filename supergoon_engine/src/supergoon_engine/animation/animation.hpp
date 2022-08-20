@@ -39,8 +39,9 @@ namespace Animations
         std::vector<AnimationEvent> animation_events;
         std::vector<std::shared_ptr<Animations::AnimationTransition>> transitions;
         Aseprite::AsepriteAnimation aseprite_animation;
+        bool random_start_frame = false;
 
-        inline Animation(std::string name_of_anim, bool should_loop = true) : name{name_of_anim}, looping{should_loop}
+        inline Animation(std::string name_of_anim, bool should_loop = true, bool random_frame_begin = false) : name{name_of_anim}, looping{should_loop}, random_start_frame{random_frame_begin}
         {
         }
 
