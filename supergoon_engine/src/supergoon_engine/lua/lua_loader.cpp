@@ -197,14 +197,37 @@ Tiled::Tilemap *Lua::LoadTiledMap(std::string filename)
                     actor_params.layer = layer_depth;
 
                     sol::lua_table actor_properties = actor["properties"];
-                    //Get all properties (string and number) and put in the map
-                    actor_properties.for_each([&actor_params](std::pair<sol::object, sol::object> key_value_pair){
+                    // Get all properties (string and number) and put in the map
+                    actor_properties.for_each([&actor_params](std::pair<sol::object, sol::object> key_value_pair)
+                                              {
+                        auto type = key_value_pair.second.get_type();
                         std::string key = key_value_pair.first.as<std::string>();
-                        int value = key_value_pair.second.as<int>();
-                        actor_params.actor_props.insert({key, value});
-                    });
+                        switch (type)
+                        {
+                        case sol::type::number:
+                        {
+                            int value = key_value_pair.second.as<int>();
+                            actor_params.actor_props.insert({key, value});
+                            /* code */
+                            break;
+                        }
+                        case sol::type::table: {
+                            auto prop_table = key_value_pair.second.as<sol::lua_table>();
+                            prop_table.for_each([&key, &actor_params](std::pair<sol::object, sol::object> prop_key_value_pair){
+                                auto prop_key = prop_key_value_pair.first.as<std::string>();
+                                auto prop_name = key + prop_key;
+                                auto value = prop_key_value_pair.second.as<int>();
+                                actor_params.actor_props.insert({prop_name, value});
 
+                            });
 
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+                         });
 
                     if (actor_properties["box_x"] != sol::lua_nil)
                     {
@@ -213,13 +236,13 @@ Tiled::Tilemap *Lua::LoadTiledMap(std::string filename)
                             Point(actor_properties["box_w"], actor_properties["box_h"]));
                     }
 
-                    else{
+                    else
+                    {
                         int width = actor_params.size.x;
                         int height = actor_params.size.y;
                         actor_params.box_rect = Rectangle(
-                            Vector2(0,0),
-                            Point(width, height)
-                        );
+                            Vector2(0, 0),
+                            Point(width, height));
                     }
                     tile_map_ptr->actors.push_back(actor_params);
                 }

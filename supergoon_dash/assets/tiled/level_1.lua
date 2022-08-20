@@ -9,7 +9,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 14,
+  nextobjectid = 15,
   properties = {
     ["music"] = "main"
   },
@@ -172,7 +172,7 @@ return {
         {
           id = 1,
           name = "player",
-          type = "",
+          type = "player",
           shape = "point",
           x = 32,
           y = 80,
@@ -210,7 +210,7 @@ return {
         {
           id = 10,
           name = "trampoline",
-          type = "",
+          type = "trampoline",
           shape = "rectangle",
           x = 405.5,
           y = 185.5,
@@ -230,7 +230,7 @@ return {
         {
           id = 12,
           name = "trampoline",
-          type = "",
+          type = "trampoline",
           shape = "rectangle",
           x = 425,
           y = 61,
@@ -259,6 +259,28 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 14,
+          name = "banana",
+          type = "fruit_pickup",
+          shape = "rectangle",
+          x = 219.372,
+          y = 139.162,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 246,
+          visible = true,
+          properties = {
+            ["BoxRect"] = {
+              ["h"] = 24,
+              ["w"] = 24,
+              ["x"] = 3,
+              ["y"] = 3
+            },
+            ["FruitType"] = 0
+          }
         }
       }
     }
